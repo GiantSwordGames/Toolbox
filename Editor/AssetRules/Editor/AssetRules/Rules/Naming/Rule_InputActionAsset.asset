@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a595fc0efdd24b57bbf7964096c42c5c, type: 3}
+  m_Name: Rule_InputActionAsset
+  m_EditorClassIdentifier: 
+  _enabled: 1
+  _example: {fileID: -944628639613478452, guid: f617a1c3dc5b14b038b85e1e9152dcfe, type: 3}
+  _test: {fileID: 0}
+  _pathTest: 
+  _exceptions: []
+  _pathRequirements: []
+  order: 0
+  _customPrefix: Input_
+  _customPostfix: 
+  _regexValidation: 
+  _removeSpaces: 1
+  _replaceSpacesWithUnderscores: 1
+  _includeGrandparentInName: 0
+  _parentFolder: 
+  _absolutePath: 
+  _regexReplaceFromName: []
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []

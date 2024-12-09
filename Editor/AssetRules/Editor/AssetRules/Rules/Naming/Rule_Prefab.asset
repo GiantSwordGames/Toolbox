@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2392104bfd4834a40926797827f31f7b, type: 3}
+  m_Name: Rule_Prefab
+  m_EditorClassIdentifier: 
+  _enabled: 1
+  _example: {fileID: 2599034425568005952, guid: f56a617271e505940843aee32fe8af5d, type: 3}
+  _test: {fileID: 2599034425568005952, guid: f56a617271e505940843aee32fe8af5d, type: 3}
+  _pathTest: 
+  _exceptions:
+  - Kit
+  _pathRequirements: []
+  order: 15
+  _customPrefix: Prefab_
+  _customPostfix: 
+  _regexValidation: 
+  _removeSpaces: 1
+  _replaceSpacesWithUnderscores: 0
+  _includeGrandparentInName: 0
+  _parentFolder: Prefabs
+  _absolutePath: 
+  _regexReplaceFromName:
+  - description: 
+    replace: '-'
+    with: 
+    disable: 0
+  - description: 
+    replace: Variant_
+    with: 
+    disable: 0
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []
+  prefabType: 1
+  requiredComponents: []

@@ -1,0 +1,13 @@
+{
+    "name": "com.giantsword.toolbox",
+    "version": "1.0.0",
+    "displayName": "Giant Sword Toolbox",
+    "description": "Reusable code for rapid prototyping",
+    "author": {
+        "name": "Richard Pieterse",
+        "email": "giantswordgames@gmail.com",
+        "url": "https://yourcompany.com"
+    },
+    "dependencies": {
+    }
+}

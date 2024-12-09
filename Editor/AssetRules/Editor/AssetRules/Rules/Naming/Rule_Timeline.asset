@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a595fc0efdd24b57bbf7964096c42c5c, type: 3}
+  m_Name: Rule_Timeline
+  m_EditorClassIdentifier: 
+  _enabled: 1
+  _example: {fileID: 11400000, guid: 555cfdf318602c24a82e5ab48ae1864c, type: 2}
+  _test: {fileID: 11400000, guid: 2c2b6edc087de8742a57801d18ab63d6, type: 2}
+  _pathTest: 
+  _exceptions: []
+  _pathRequirements: []
+  order: 19
+  _customPrefix: Timeline_
+  _customPostfix: 
+  _regexValidation: 
+  _removeSpaces: 0
+  _replaceSpacesWithUnderscores: 1
+  _includeGrandparentInName: 0
+  _parentFolder: Timelines
+  _absolutePath: 
+  _regexReplaceFromName:
+  - description: 
+    replace: Timeline
+    with: 
+    disable: 0
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []

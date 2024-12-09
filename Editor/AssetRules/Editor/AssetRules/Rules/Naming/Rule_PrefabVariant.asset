@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2392104bfd4834a40926797827f31f7b, type: 3}
+  m_Name: Rule_PrefabVariant
+  m_EditorClassIdentifier: 
+  _enabled: 0
+  _example: {fileID: 6801735442232472507, guid: f18e92998e6e17548b5db21f698d77d5,
+    type: 3}
+  _test: {fileID: 6801735442232472507, guid: f18e92998e6e17548b5db21f698d77d5, type: 3}
+  _pathTest: 
+  _exceptions:
+  - Kit
+  _pathRequirements: []
+  order: 9
+  _customPrefix: Prefab_
+  _customPostfix: _Variant
+  _regexValidation: 
+  _removeSpaces: 1
+  _replaceSpacesWithUnderscores: 0
+  _includeGrandparentInName: 0
+  _parentFolder: Prefabs
+  _absolutePath: 
+  _regexReplaceFromName:
+  - description: 
+    replace: 'Variant '
+    with: 
+    disable: 0
+  - description: 
+    replace: Variant
+    with: 
+    disable: 0
+  - description: 
+    replace: '-'
+    with: 
+    disable: 0
+  - description: 
+    replace: Prefabs_
+    with: 
+    disable: 0
+  - description: 
+    replace: Mesh_
+    with: 
+    disable: 0
+  - description: 
+    replace: Prefab_
+    with: 
+    disable: 0
+  - description: 
+    replace: Variant_
+    with: 
+    disable: 0
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []
+  prefabType: 3
+  requiredComponents: []

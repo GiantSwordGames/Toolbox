@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2392104bfd4834a40926797827f31f7b, type: 3}
+  m_Name: Rule_Mesh
+  m_EditorClassIdentifier: 
+  _enabled: 1
+  _example: {fileID: 919132149155446097, guid: a2d37e84e4fa77d44a8fa080262995ac, type: 3}
+  _test: {fileID: 919132149155446097, guid: a2d37e84e4fa77d44a8fa080262995ac, type: 3}
+  _pathTest: 
+  _exceptions:
+  - Rigs
+  - Rig
+  - .*@.*
+  _pathRequirements: []
+  order: 2
+  _customPrefix: Mesh_
+  _customPostfix: 
+  _regexValidation: 
+  _removeSpaces: 0
+  _replaceSpacesWithUnderscores: 1
+  _includeGrandparentInName: 0
+  _parentFolder: Meshes
+  _absolutePath: 
+  _regexReplaceFromName:
+  - description: 
+    replace: Model_
+    with: 
+    disable: 0
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []
+  prefabType: 2
+  requiredComponents: []

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a595fc0efdd24b57bbf7964096c42c5c, type: 3}
+  m_Name: Rule_Attack
+  m_EditorClassIdentifier: 
+  _enabled: 1
+  _example: {fileID: 11400000, guid: 1b93e4967af9d4b9bb6439753c376cc1, type: 2}
+  _test: {fileID: 11400000, guid: 237ac51e87022485f8b8f693388fe0f8, type: 2}
+  _pathTest: 
+  _exceptions: []
+  _pathRequirements: []
+  order: 19
+  _customPrefix: Attack_
+  _customPostfix: 
+  _regexValidation: 
+  _removeSpaces: 1
+  _replaceSpacesWithUnderscores: 1
+  _includeGrandparentInName: 0
+  _parentFolder: 
+  _absolutePath: 
+  _regexReplaceFromName: []
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []
