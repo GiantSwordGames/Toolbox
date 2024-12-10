@@ -9,5 +9,7 @@
         "url": "https://yourcompany.com"
     },
     "dependencies": {
+        "com.unity.timeline": "1.0.0",
+        "com.unity.textmeshpro": "1.0.0"
     }
 }

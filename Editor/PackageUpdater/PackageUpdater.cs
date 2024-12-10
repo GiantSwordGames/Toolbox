@@ -15,6 +15,7 @@ namespace RichardPieterse
     [CreateAssetMenu(fileName = "PackageUpdater", menuName = MenuPaths.CREATE_MENU + "/PackageUpdater")]
     public class PackageUpdater : ScriptableObject
     {
+        
         [SerializeField] private string _packageName = "com.giantsword.toolbox";
         private Preference<string> _localFilePath = null;
         [SerializeField] private string _gitRepoUrl = "https://github.com/GiantSwordGames/Toolbox.git";
@@ -75,14 +76,14 @@ namespace RichardPieterse
              if (_localFilePath == null)
              {
                  string defaultPath =
-                     Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile),
-                         "Repositories");
-                 _localFilePath = new Preference<string>(this.name+"_localFilePath", defaultPath);
+                     Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), "Repositories");
+                 _localFilePath = new Preference<string>(Application.productName+"_"+ this.name+"_localFilePath", defaultPath);
              }
          }
 
          public void CheckPackageStatus()
          {
+            
              listRequest = Client.List(true);
              EditorApplication.update += CheckPackageStatusProgress;
          }
