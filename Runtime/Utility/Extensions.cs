@@ -741,18 +741,27 @@ namespace GiantSword
 
             return formatted;
         }
-        
+
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
             for (int i = list.Count - 1; i > 0; i--)
             {
                 int j = Random.Range(0, i + 1);
                 // Swap elements
-                T temp = list[i];
-                list[i] = list[j];
-                list[j] = temp;
+                (list[i], list[j]) = (list[j], list[i]);
             }
+
             return list;
+        }
+
+        public static void SortBySiblingIndex<T>(this List<T> list) where T : Component
+        {
+            list.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
+        }
+        
+        public static void SortBySiblingIndex<T>(this T[] list) where T : Component
+        {
+            System.Array.Sort(list, (a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
         }
         
         public static Vector3 Snap(this Vector3 vector, float snapValue)

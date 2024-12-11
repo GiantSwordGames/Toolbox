@@ -20,7 +20,9 @@ namespace GiantSword
             _value = (floatRange.min + floatRange.max)/2;
             _variance = (float)Math.Round( ((floatRange.max - floatRange.min)/2), 5);
         }
-        
+
+        public float baseValue => _value;
+
         public float GetRandom()
         {
             return Random.Range(_value - _variance, _value + _variance);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,6 +17,30 @@ namespace GiantSword
                 return true; // Return true to indicate the asset open has been handled
             }
             return false; // Return false to let Unity handle other assets as normal
+        }
+        
+        
+        private static List<Level> _levels;
+
+        [InitializeOnLoadMethod]
+        public static void Initialize()
+        {
+            UnityToolbarExtender.rightOfPlayButton.Add(OpenLevel);
+        }
+        
+        private static void OpenLevel()
+        {
+            if (EditorGUILayout.DropdownButton(new GUIContent("Open Level"), FocusType.Passive))
+            {
+                _levels = RuntimeEditorHelper.FindAssetsOfType<Level>();
+                // create dropdown menu
+                GenericMenu menu = new GenericMenu();
+                foreach (Level level in _levels)
+                {
+                    menu.AddItem(new GUIContent(level.name), false, () => level.OpenLevel());
+                }
+                menu.ShowAsContext();
+            }
         }
     }
 }
