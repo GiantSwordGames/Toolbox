@@ -9,20 +9,23 @@ namespace GiantSword
 {
     public class SoundAsset : ScriptableObject
     {
+        
+        public static readonly Preference<float> DefaultSpatialBlend = new Preference<float>("Spatial Blend",1f);
+        public static readonly Preference<AudioMixerGroup> DefaultMixerGroup = new Preference<AudioMixerGroup>("Default Mixer",null);
+
         public enum Playback
         {
             OneShot,
             Loop,
         }
 
-        [FormerlySerializedAs("playbackType")] public Playback _playback = Playback.OneShot;
+        public Playback _playback = Playback.OneShot;
 
         [Tooltip("2D -> 3D")] [Range(0, 1)]
-        [FormerlySerializedAs("spacialBlend")]  [SerializeField] public float _spacialBlend = 1f;
-        [FormerlySerializedAs("rolloffMode")]  [SerializeField] private AudioRolloffMode _rolloffMode = AudioRolloffMode.Logarithmic;
-        [FormerlySerializedAs("rolloffDistance")]  [SerializeField] private FloatRange _rolloffDistance = new FloatRange(1f, 25f);
-
-        [FormerlySerializedAs("clips")]  [SerializeField]  private AudioClip[] _clips;
+        [SerializeField] public float _spacialBlend = 1f;
+        [SerializeField] private AudioRolloffMode _rolloffMode = AudioRolloffMode.Logarithmic;
+        [SerializeField] private FloatRange _rolloffDistance = new FloatRange(1f, 25f);
+        [SerializeField]  private AudioClip[] _clips;
 
         [FormerlySerializedAs("volume")]   [SerializeField] private FloatVariance _volume = new FloatVariance(0.5f, 0.05f);
         [FormerlySerializedAs("pitch")]  [SerializeField] private FloatVariance _pitch = new FloatVariance(1f, 0.05f);
@@ -120,6 +123,11 @@ namespace GiantSword
         public void Trigger()
         {
             this.Play();
+        }
+
+        public void AssignDefaultValues()
+        {
+            _spacialBlend = DefaultSpatialBlend.value;
         }
     }
 }

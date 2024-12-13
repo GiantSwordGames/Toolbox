@@ -110,6 +110,7 @@ namespace GiantSword
         private static SoundAsset CreateSoundBankForClips(string name = null, params AudioClip[] clips)
         {
             SoundAsset soundAsset = ScriptableObject.CreateInstance<SoundAsset>();
+            soundAsset.AssignDefaultValues();
             string folderPath = RuntimeEditorHelper.GetPrimaryDirectoryForAssets<SoundAsset>();
             if (folderPath == "")
             {

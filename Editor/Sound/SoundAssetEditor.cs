@@ -10,11 +10,18 @@ namespace GiantSword
         private AudioSource _previewSource;
         private AudioClip _lastPlayedClip;
         private Texture2D _waveformTexture;
+        
+        private bool _displayDefaultSettings = false;
 
         public override void OnInspectorGUI()
         {
+            
+            DrawDefaultSettings();
+
             // Draw the default inspector
             DrawDefaultInspector();
+            
+            
 
             SoundAsset soundAsset = (SoundAsset)target;
 
@@ -47,6 +54,20 @@ namespace GiantSword
                     DisplayDetails(clipToDraw);
                     GUILayout.EndVertical();
                 }
+            }
+        }
+
+        private void DrawDefaultSettings()
+        {
+            _displayDefaultSettings =  EditorGUILayout.Foldout(_displayDefaultSettings, "Default Settings");
+           
+            if (_displayDefaultSettings)
+            {
+                EditorGUI.indentLevel++;
+                SoundAsset.DefaultSpatialBlend.DrawSlider(0, 1);
+                SoundAsset.DefaultMixerGroup.DrawDefaultGUI();
+                EditorGUI.indentLevel--;
+
             }
         }
 

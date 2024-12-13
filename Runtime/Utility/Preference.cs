@@ -122,40 +122,45 @@ namespace GiantSword
             set => _onChanged = value;
         }
 
-        private void Set(T value, bool force = false)
+        private void SetObject(Object newValue, bool force = false)
+        {
+            var assetPath = AssetDatabase.GetAssetPath(newValue );
+            EditorPrefs.SetString(_key, assetPath);
+            LoadFromEditorPrefs();
+        }
+        private void Set(T newValue, bool force = false)
         {
 
-            if (force == false && _value != null && _value.Equals(value))
+            if (force == false && _value != null && _value.Equals(newValue))
             {
                 return;
             }
 
-            _value = value;
+            _value = newValue;
 
 #if UNITY_EDITOR
             if (typeof(T) == typeof(string))
-                EditorPrefs.SetString(_key, Convert.ToString(value));
+                EditorPrefs.SetString(_key, Convert.ToString(newValue));
 
             else if (typeof(T) == typeof(float))
             {
-                EditorPrefs.SetFloat(_key, Convert.ToSingle(value));
+                EditorPrefs.SetFloat(_key, Convert.ToSingle(newValue));
 
             }
             else if (typeof(T) == typeof(int))
             {
-                EditorPrefs.SetInt(_key, Convert.ToInt32(value));
+                EditorPrefs.SetInt(_key, Convert.ToInt32(newValue));
             }
 
             else if (typeof(T) == typeof(bool))
-                EditorPrefs.SetBool(_key, Convert.ToBoolean(value));
+                EditorPrefs.SetBool(_key, Convert.ToBoolean(newValue));
 
-            else if (value == null)
+            else if (newValue == null)
                 EditorPrefs.SetString(_key, string.Empty);
 
-            else if (value is UnityEngine.Object)
+            else if (newValue is UnityEngine.Object)
             {
-                var assetPath = AssetDatabase.GetAssetPath(value as UnityEngine.Object);
-
+                var assetPath = AssetDatabase.GetAssetPath(newValue as UnityEngine.Object);
                 EditorPrefs.SetString(_key, assetPath);
             }
 #endif
@@ -194,7 +199,7 @@ namespace GiantSword
 #endif
         }
 
-        public void DrawGUI(string label = "")
+        public void DrawDefaultGUI(string label = "")
         {
 #if UNITY_EDITOR
             
@@ -248,21 +253,36 @@ namespace GiantSword
                 return;
             }
             
-            if (typeof(T) ==  typeof(Object))
+            if (typeof(T).IsSubclassOf(typeof(Object)))
             {
-                EditorGUI.BeginChangeCheck();
-                var objPref = this as Preference<Object>;
-             
-                var newValue = EditorGUILayout.ObjectField(label, objPref.value, typeof(T) , false);
                 
+                // draw object field
+                EditorGUI.BeginChangeCheck();
+                var newValue = EditorGUILayout.ObjectField(label, (Object) this, typeof(T), false);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    objPref.value = newValue;
+                    SetObject(newValue);
                 }
+                
                 return;
             }
             
             throw new NotImplementedException();
+#endif
+        }
+
+        public void DrawSlider(float min, float max)
+        {
+#if UNITY_EDITOR
+            using (var changeCheck = new EditorGUI.ChangeCheckScope())
+            {
+                EditorGUILayout.LabelField("Spatial Blend:");
+                float newValue = EditorGUILayout.Slider((float) this, min, max);
+                if (changeCheck.changed)
+                {
+                    Set((T) Convert.ChangeType(newValue, typeof(T)));
+                }
+            }
 #endif
         }
     }
