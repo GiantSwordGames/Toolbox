@@ -7,8 +7,26 @@ namespace GiantSword
 {
     public class ClipboardToScript
     {
+        [InitializeOnLoadMethod]
+        private static void Initialize()
+        {
+            EditorApplication.update += OnEditorUpdate;
+        }
+
+        private static void OnEditorUpdate()
+        {
+            Event e = Event.current;
+            if (e != null && e.type == EventType.KeyDown && e.command && e.keyCode == KeyCode.V)
+            {
+                if (ClipboardToScript.CreateScriptFromClipboard())
+                {
+                    e.Use();
+                }
+            }
+        }
+        
         [MenuItem("Assets/Create C# Script from Clipboard", priority = 0)]
-        public static void CreateScriptFromClipboard()
+        public static bool CreateScriptFromClipboard()
         {
             // Get the text from the clipboard
             string clipboardText = GUIUtility.systemCopyBuffer;
@@ -16,24 +34,24 @@ namespace GiantSword
             // Validate the clipboard text
             if (string.IsNullOrWhiteSpace(clipboardText) || !clipboardText.Contains("class "))
             {
-                Debug.LogWarning("Clipboard does not contain valid C# class text.");
-                return;
+                // Debug.LogWarning("Clipboard does not contain valid C# class text.");
+                return false;
             }
 
             // Extract the class name from the clipboard text
             string className = ExtractClassName(clipboardText);
             if (string.IsNullOrEmpty(className))
             {
-                Debug.LogWarning("Could not determine the class name from the clipboard content.");
-                return;
+                // Debug.LogWarning("Could not determine the class name from the clipboard content.");
+                return false;
             }
 
             // Get the selected folder path in the Project view
             string folderPath = GetSelectedFolderPath();
             if (string.IsNullOrEmpty(folderPath))
             {
-                Debug.LogWarning("Please right-click on a folder to use this action.");
-                return;
+                // Debug.LogWarning("Please right-click on a folder to use this action.");
+                return false;
             }
 
             // Construct the full path for the new script
@@ -46,6 +64,8 @@ namespace GiantSword
             AssetDatabase.Refresh();
 
             Debug.Log($"Created new script '{className}.cs' from clipboard in folder: {folderPath}");
+            return true;
+
         }
 
         // Extracts the class name from the clipboard content

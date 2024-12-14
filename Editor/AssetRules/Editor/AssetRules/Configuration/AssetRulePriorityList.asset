@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: AssetRulePriorityList
   m_EditorClassIdentifier: 
   _globalIgnoredPaths:
-  - path: Assets/Project/Art
-    disable: 1
+  - path: Assets/SoundCollections
+    disable: 0
+  - path: Assets/Plugins
+    disable: 0
   _rules:
   - {fileID: 11400000, guid: ab2ee25a74191bb4ab770bb7fd5a9bee, type: 2}
   - {fileID: 11400000, guid: 8f5a7d196fe9c1b45ac5bc1e58edffba, type: 2}

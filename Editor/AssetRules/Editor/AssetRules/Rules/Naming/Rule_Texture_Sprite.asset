@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-Editor:NightTools.Utility.Validation:NamingRuleForTypeForTexture
   _enabled: 1
   _example: {fileID: 2800000, guid: 09a4252e01b942a46a129f3467361243, type: 3}
-  _test: {fileID: 2800000, guid: 7c90b9029e412954985b10b3c6e15d84, type: 3}
+  _test: {fileID: 2800000, guid: 8073b1f0be7b94537bbda99fb2ca4073, type: 3}
   _pathTest: Assets/Game/Environment/Sprites/Buildings/Sprites/Sprite_House_Door
   _exceptions:
   - Environment|Icon_
   _pathRequirements: []
-  order: 15
+  order: 10
   _customPrefix: Sprite_
   _customPostfix: 
   _regexValidation: 
