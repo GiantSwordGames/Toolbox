@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using GiantSword;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using Object = UnityEngine.Object;
 
-namespace GiantSword
+namespace GiantSwordEditor
 {
     [CustomEditor(typeof(AudioClipExporter))]
     public class AudioClipExporterEditor : CustomEditorBase<AudioClipExporter>

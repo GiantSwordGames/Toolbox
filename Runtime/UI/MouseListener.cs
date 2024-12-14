@@ -1,23 +1,24 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
-namespace RichardPieterse
+namespace GiantSword
 {
     public class MouseListener : MonoBehaviour
     {
-        [SerializeField] private UnityEvent _mouseOver = new UnityEvent();
+        [SerializeField] private UnityEvent _mouseEnter = new UnityEvent();
         [SerializeField] private UnityEvent _mouseExit = new UnityEvent();
         [SerializeField] private UnityEvent _mouseDown = new UnityEvent();
 
-        public UnityEvent mouseOver => _mouseOver;
+        public UnityEvent mouseEnter => _mouseEnter;
 
         public UnityEvent mouseExit => _mouseExit;
 
         public UnityEvent mouseDown => _mouseDown;
 
-        private void OnMouseOver()
+        private void OnMouseEnter()
         {
-            _mouseOver?.Invoke();
+            _mouseEnter?.Invoke();
         }
         
         private void OnMouseExit()
@@ -38,7 +39,7 @@ namespace RichardPieterse
                 if (child.gameObject.GetComponent<Collider2D>() || child.gameObject.GetComponent<Collider>())
                 {
                     MouseListener mouseListener = child.gameObject.AddComponent<MouseListener>();
-                    mouseListener.mouseOver.AddListener( _mouseOver.Invoke);
+                    mouseListener.mouseEnter.AddListener( _mouseEnter.Invoke);
                     mouseListener.mouseExit.AddListener( _mouseExit.Invoke);
                     mouseListener.mouseDown.AddListener( _mouseDown.Invoke);
                 }

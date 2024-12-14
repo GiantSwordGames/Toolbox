@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     [Serializable]
     public struct RegexRule

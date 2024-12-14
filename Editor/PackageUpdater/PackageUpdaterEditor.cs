@@ -8,7 +8,7 @@ using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace RichardPieterse
+namespace GiantSword
 {
     
     

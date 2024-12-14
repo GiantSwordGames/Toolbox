@@ -7,9 +7,9 @@ using System;
 using System.Linq;
 using System.Text;
 using GiantSword;
-using RichardPieterse;
+using GiantSword;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     class AssetRuleWindow : EditorWindow
     {

@@ -10,7 +10,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 
-namespace RichardPieterse
+namespace GiantSword
 {
     [CreateAssetMenu(fileName = "PackageUpdater", menuName = MenuPaths.CREATE_MENU + "/PackageUpdater")]
     public class PackageUpdater : ScriptableObject

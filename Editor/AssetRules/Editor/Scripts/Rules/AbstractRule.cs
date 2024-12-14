@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     // [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH + "/Rule for Addressable")]
     public abstract class AbstractRule : ScriptableObject

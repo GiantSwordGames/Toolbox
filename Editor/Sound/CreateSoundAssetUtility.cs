@@ -60,7 +60,7 @@ namespace GiantSword
         }
     }
 
-    public static class CreateSoundBankUtility
+    public static class CreateSoundAssetUtility
     {
 
         [MenuItem(MenuPaths.CREATE_SOUND + "/Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
@@ -74,7 +74,7 @@ namespace GiantSword
                 return;
             }
 
-            var newAsset = CreateSoundBankForClips(null, clips.ToArray());
+            var newAsset = CreateSoundAssetForClips(null, clips.ToArray());
 
             RuntimeEditorHelper.SelectAndFocus(newAsset);
         }
@@ -93,7 +93,7 @@ namespace GiantSword
             List<SoundAsset> banks = new List<SoundAsset>();
             foreach (var clip in clips)
             {
-                var newAsset = CreateSoundBankForClips(null, clip);
+                var newAsset = CreateSoundAssetForClips(null, clip);
                 banks.Add(newAsset);
             }
 
@@ -102,16 +102,16 @@ namespace GiantSword
 
         public static SoundAsset CreateSoundBank(string name = null)
         {
-            var sound = CreateSoundBankForClips(name, null);
+            var sound = CreateSoundAssetForClips(name, null);
             RuntimeEditorHelper.SetDirty(sound);
             return sound;
         }
 
-        private static SoundAsset CreateSoundBankForClips(string name = null, params AudioClip[] clips)
+        private static SoundAsset CreateSoundAssetForClips(string name = null, params AudioClip[] clips)
         {
             SoundAsset soundAsset = ScriptableObject.CreateInstance<SoundAsset>();
             soundAsset.AssignDefaultValues();
-            string folderPath = RuntimeEditorHelper.GetPrimaryDirectoryForAssets<SoundAsset>();
+            string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<SoundAsset>();
             if (folderPath == "")
             {
 

@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH )]
     public class RuleForTexture: RuleBase

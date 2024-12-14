@@ -1,6 +1,7 @@
 using System;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GiantSword
 {
@@ -12,6 +13,12 @@ namespace GiantSword
             RunOnStart,
         }
         
+        enum ResetBehaviour
+        {
+            ResetOnEnable,
+            None,
+        }
+
         enum TimeMode
         {
             Scaled,
@@ -24,7 +31,8 @@ namespace GiantSword
             Absolute,
         }
         
-        [SerializeField] private TriggerBehavior _behavior = TriggerBehavior.RunOnStart;
+        [FormerlySerializedAs("_behavior")] [SerializeField] private TriggerBehavior _startBehavior = TriggerBehavior.RunOnStart;
+        [FormerlySerializedAs("_stopBehavior")] [SerializeField] private  ResetBehaviour _resetBehaviour = ResetBehaviour.ResetOnEnable;
         [SerializeField] private TimeMode _timeMode = TimeMode.Scaled;
         [SerializeField] private Mode _mode = Mode.Additive;
 
@@ -40,7 +48,10 @@ namespace GiantSword
 
         protected virtual void OnEnable()
         {
-            Reset();
+            if (_resetBehaviour == ResetBehaviour.ResetOnEnable)
+            {
+                Reset();
+            }
         }
 
         private void OnValidate()
@@ -53,7 +64,7 @@ namespace GiantSword
 
         protected void Start()
         {
-            if (_behavior == TriggerBehavior.RunOnStart)
+            if (_startBehavior == TriggerBehavior.RunOnStart)
             {
                 Trigger();
             }

@@ -180,7 +180,7 @@ namespace GiantSword
 
 
 #if UNITY_EDITOR
-                public static string GetPrimaryDirectoryForAssets<T>() where T : Object
+                public static string GetMostCommonDirectoryForAssetType<T>() where T : Object
                 {
                         List<T> findAssetsOfType = RuntimeEditorHelper.FindAssetsOfType<T>();
                         Dictionary<string, int> directoryPolpularity = new Dictionary<string, int>();

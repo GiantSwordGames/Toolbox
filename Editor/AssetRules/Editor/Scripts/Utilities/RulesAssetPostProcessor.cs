@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
-    class AssetPostProcessor : AssetPostprocessor
+     class RulesAssetPostProcessor : AssetPostprocessor
     {
         static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets,
             string[] movedFromAssetPaths)
         {
+            
             if (AssetRulePreferences.checkRulesOnAssetImport == false)
                 return;
 

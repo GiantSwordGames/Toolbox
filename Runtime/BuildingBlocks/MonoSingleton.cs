@@ -17,7 +17,7 @@ namespace GiantSword
 
             instance = this as T;
             instance.transform.SetParent(null);
-            DontDestroyOnLoad(instance.gameObject);
+            // DontDestroyOnLoad(instance.gameObject);
         }
     }
 }

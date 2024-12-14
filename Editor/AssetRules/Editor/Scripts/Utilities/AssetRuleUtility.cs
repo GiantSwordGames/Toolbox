@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     public static class AssetRuleUtility
     {

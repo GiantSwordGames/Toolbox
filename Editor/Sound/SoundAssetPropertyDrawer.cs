@@ -21,7 +21,7 @@ namespace GiantSword
         Rect buttonRect = new Rect(position.x + position.width - 55, position.y, 55, position.height);
         if (GUI.Button(buttonRect, "Create"))
         {
-            SoundAsset soundAsset = CreateSoundBankUtility.CreateSoundBank(property.name.ToUpperCamelCase());
+            SoundAsset soundAsset = CreateSoundAssetUtility.CreateSoundBank(property.name.ToUpperCamelCase());
             property.objectReferenceValue = soundAsset;
             property.serializedObject.ApplyModifiedProperties();
         }

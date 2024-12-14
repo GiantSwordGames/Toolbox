@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Rule For Unity Type" )]
     public class RuleForUnityType : RuleBase

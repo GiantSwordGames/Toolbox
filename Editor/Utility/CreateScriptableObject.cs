@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using GiantSword;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace GiantSwordEditor
 {
     public static class CreateScriptableObject
     {
-        [MenuItem("Assets/Create/ScriptableObject from Script", false, 1)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "/ScriptableObject from Script", priority = MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateAsset()
         {
             // Get the selected script file
@@ -40,9 +41,10 @@ namespace GiantSwordEditor
             var asset = ScriptableObject.CreateInstance(type);
 
             // Determine the path to save the asset
-            var path = Path.GetDirectoryName(scriptPath);
+            var path = "Assets/Project/Configurations";
             var assetPathAndName = AssetDatabase.GenerateUniqueAssetPath($"{path}/{className}.asset");
 
+            Debug.Log(assetPathAndName);
             // Save the asset
             AssetDatabase.CreateAsset(asset, assetPathAndName);
             AssetDatabase.SaveAssets();
@@ -51,7 +53,7 @@ namespace GiantSwordEditor
             Selection.activeObject = asset;
         }
 
-        [MenuItem("Assets/Create/ScriptableObject from Script", true)]
+        [MenuItem(MenuPaths.QUICK_CREATE +"/ScriptableObject from Script", true)]
         public static bool ValidateCreateAsset()
         {
             var selected = Selection.activeObject;

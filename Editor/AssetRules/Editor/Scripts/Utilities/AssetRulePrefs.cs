@@ -1,9 +1,9 @@
 using GiantSword;
-using RichardPieterse;
+using GiantSword;
 using UnityEditor;
 using UnityEngine;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     public static class AssetRulePreferences
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     /// <summary>
     /// Gets a list of asset in the project using AssetDatabase.FindAssets($"t:typeT") and caches the result 

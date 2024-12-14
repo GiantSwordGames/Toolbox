@@ -1,8 +1,8 @@
-﻿using RichardPieterse.AssetRules;
+﻿using GiantSword.AssetRules;
 using UnityEngine;
 using Object = System.Object;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     public abstract class AssetRulePostProcess: ScriptableObject
     {

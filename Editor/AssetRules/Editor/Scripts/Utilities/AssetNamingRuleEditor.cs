@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace RichardPieterse.AssetRules
+namespace GiantSword.AssetRules
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(RuleForUnityType))]
