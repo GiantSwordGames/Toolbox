@@ -8,40 +8,31 @@ namespace GiantSword
     public class SoundAssetEditor : CustomEditorBase<SoundAsset>
     {
         private AudioSource _previewSource;
-        private AudioClip _lastPlayedClip;
-        private Texture2D _waveformTexture;
-        
+        private AudioClip _lastClip;
+        private Texture2D _cachedWaveformTexture;
         private bool _displayDefaultSettings = false;
 
         public override void OnInspectorGUI()
         {
-            
             DrawDefaultSettings();
-
-            // Draw the default inspector
             DrawDefaultInspector();
-            
-            
 
             SoundAsset soundAsset = (SoundAsset)target;
 
-            // Add a space and a "Play" button
             GUILayout.Space(10);
             if (GUILayout.Button("Play"))
             {
                 PlayAudioClip(soundAsset);
             }
-            
+
             if (GUILayout.Button("Import"))
             {
                 foreach (SoundAsset asset in targetObjects)
                 {
                     asset.ImportAudioClips();
                 }
-                
             }
 
-            // Always draw the waveform of the first available clip, even if not playing
             if (soundAsset.clips != null && soundAsset.clips.Length > 0)
             {
                 AudioClip clipToDraw = soundAsset.clips[0]; // Draw the first clip by default
@@ -49,7 +40,7 @@ namespace GiantSword
                 {
                     GUILayout.Space(10);
                     DrawWaveform(clipToDraw);
-                    GUILayout.BeginVertical( CreateDarkerBoxStyle());
+                    GUILayout.BeginVertical(CreateDarkerBoxStyle());
                     DisplayHeader(clipToDraw);
                     DisplayDetails(clipToDraw);
                     GUILayout.EndVertical();
@@ -59,146 +50,14 @@ namespace GiantSword
 
         private void DrawDefaultSettings()
         {
-            _displayDefaultSettings =  EditorGUILayout.Foldout(_displayDefaultSettings, "Default Settings");
-           
+            _displayDefaultSettings = EditorGUILayout.Foldout(_displayDefaultSettings, "Default Settings");
+
             if (_displayDefaultSettings)
             {
                 EditorGUI.indentLevel++;
                 SoundAsset.DefaultSpatialBlend.DrawSlider(0, 1);
                 SoundAsset.DefaultMixerGroup.DrawDefaultGUI();
                 EditorGUI.indentLevel--;
-
-            }
-        }
-
-        private GUIStyle CreateDarkerBoxStyle()
-        {
-            GUIStyle darkBoxStyle = new GUIStyle(GUI.skin.box);
-            darkBoxStyle.normal.background = MakeTex(2, 2, new Color(0.15f, 0.29f, 0.33f)); // Dark color
-            return darkBoxStyle;
-        }
-
-        private Texture2D MakeTex(int width, int height, Color color)
-        {
-            Color[] pixels = new Color[width * height];
-            for (int i = 0; i < pixels.Length; i++)
-            {
-                pixels[i] = color;
-            }
-
-            Texture2D texture = new Texture2D(width, height);
-            texture.SetPixels(pixels);
-            texture.Apply();
-            return texture;
-        }
-        
-        private void DisplayHeader(AudioClip clip)
-        {
-            GUILayout.BeginHorizontal();
-            // Clip name
-            GUILayout.Label($"{clip.name}");
-            
-            GUILayout.FlexibleSpace();
-            
-            // Clip length in seconds
-            GUILayout.Label($"{clip.length:F2} s");
-            GUILayout.EndHorizontal();
-        }
-        
-        private void DisplayDetails(AudioClip clip)
-        {
-            GUILayout.BeginHorizontal();
-            // Number of channels (mono/stereo)
-            GUILayout.Label($"Ch: {clip.channels} {(clip.channels == 1 ? "(Mono)" : "(Stereo)")}");
-
-            GUILayout.FlexibleSpace();
-
-            // Bit rate calculation (approximation)
-            int bitRate = Mathf.RoundToInt((clip.frequency * clip.channels * 16) / 1000f);
-            GUILayout.Label($"{bitRate} kbps");
-            GUILayout.FlexibleSpace();
-
-            // Maximum dB level
-            float maxDB = GetMaxDB(clip);
-            GUILayout.Label($"Max dB: {maxDB:F2} dB");
-            GUILayout.EndHorizontal();
-
-        }
-
-        private float GetMaxDB(AudioClip clip)
-        {
-            if (clip == null) return 0f; // Return 0 if no clip is provided
-
-            float[] samples = new float[clip.samples * clip.channels];
-            clip.GetData(samples, 0);
-
-            float maxAmplitude = 0f;
-            foreach (float sample in samples)
-            {
-                maxAmplitude = Mathf.Max(maxAmplitude, Mathf.Abs(sample));
-            }
-
-            // Convert amplitude to dB and return as a positive value
-            float maxDB = 20 * Mathf.Log10(maxAmplitude);
-            return Mathf.Clamp(Mathf.Abs(maxDB), 0f, 80f); // Ensure the result is positive and clamped between 0 dB and 80 dB
-        }
-
-        private void PlayAudioClip(SoundAsset soundAsset)
-        {
-            if (soundAsset.clips == null || soundAsset.clips.Length == 0)
-            {
-                Debug.LogWarning("No audio clips found in this SoundAsset.");
-                return;
-            }
-
-            // Select a random clip from the sound asset
-            AudioClip clipToPlay = soundAsset.NextClip();
-            if (clipToPlay == null)
-            {
-                Debug.LogWarning("The selected clip is null.");
-                return;
-            }
-
-            AudioListener audioListener = FindObjectOfType<AudioListener>();
-            if (audioListener == null)
-            {
-                Debug.LogWarning("No AudioListener found in the scene.");
-                return;
-            }
-
-            // If we're in the editor and not in play mode, use a temporary AudioSource
-            if (!Application.isPlaying)
-            {
-                if (_previewSource == null)
-                {
-                    GameObject tempGO = new GameObject("AudioPreview");
-                    tempGO.hideFlags = HideFlags.HideAndDontSave | HideFlags.HideInHierarchy;
-
-                    _previewSource = tempGO.AddComponent<AudioSource>();
-                    _previewSource.hideFlags = HideFlags.HideAndDontSave;
-
-                    tempGO.transform.position = audioListener.transform.position;
-                }
-
-                _previewSource.clip = clipToPlay;
-                _previewSource.volume = soundAsset.volume.GetRandom();
-                _previewSource.pitch = soundAsset.pitch.GetRandom();
-                _previewSource.spatialBlend = soundAsset.spacialBlend;
-                _previewSource.outputAudioMixerGroup = soundAsset.mixerGroup;
-                _previewSource.Play();
-
-                // Store the last played clip for waveform display and schedule cleanup
-                _lastPlayedClip = clipToPlay;
-                EditorApplication.update += RemovePreviewSource;
-                Repaint(); // Force the inspector to repaint to show the playhead
-            }
-            else
-            {
-                // Use AudioSource.PlayClipAtPoint during play mode
-                AudioSource.PlayClipAtPoint(clipToPlay, audioListener.transform.position, soundAsset.volume.GetRandom());
-
-                // Store the last played clip for waveform display
-                _lastPlayedClip = clipToPlay;
             }
         }
 
@@ -206,38 +65,56 @@ namespace GiantSword
         {
             if (clip == null) return;
 
-            // Ensure we have a texture to draw the waveform
-            int width = 300;
-            int height = 100;
-            if (_waveformTexture == null || _waveformTexture.width != width)
+            // Regenerate the cached texture if the clip has changed
+            if (_lastClip != clip || _cachedWaveformTexture == null)
             {
-                _waveformTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-                _waveformTexture.hideFlags = HideFlags.HideAndDontSave;
+                _cachedWaveformTexture = GenerateWaveformTexture(clip, 300, 100);
+                _lastClip = clip;
             }
 
-            // Get the samples from the audio clip
+            Rect waveformRect = GUILayoutUtility.GetRect(_cachedWaveformTexture.width, _cachedWaveformTexture.height);
+            GUI.DrawTexture(waveformRect, _cachedWaveformTexture);
+
+            // Draw the playhead line if the audio is playing
+            if (_previewSource != null && _previewSource.isPlaying)
+            {
+                float playheadPosition = (_previewSource.time / clip.length) * waveformRect.width;
+                DrawPlayheadLine(waveformRect, playheadPosition);
+                Repaint(); // Force repaint to update playhead in real time
+            }
+        }
+
+        private void DrawPlayheadLine(Rect waveformRect, float playheadX)
+        {
+            Color playheadColor = Color.red;
+            float lineX = waveformRect.xMin + playheadX;
+
+            Handles.color = playheadColor;
+            Handles.DrawLine(
+                new Vector3(lineX, waveformRect.yMin),
+                new Vector3(lineX, waveformRect.yMax)
+            );
+        }
+
+        private Texture2D GenerateWaveformTexture(AudioClip clip, int width, int height)
+        {
             float[] samples = new float[clip.samples * clip.channels];
             clip.GetData(samples, 0);
 
-            // Clear the texture
+            Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+            texture.hideFlags = HideFlags.HideAndDontSave;
+
             Color backgroundColor = new Color(0.2f, 0.2f, 0.2f);
             Color waveformColor = Color.green;
-            Color zeroLineColor = Color.red;
-            Color playheadColor = Color.white;
+            int zeroLineY = height / 2;
 
+            // Clear the texture
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    _waveformTexture.SetPixel(x, y, backgroundColor);
+                    texture.SetPixel(x, y, backgroundColor);
                 }
-            }
-
-            // Draw the zero line
-            int zeroLineY = height / 2;
-            for (int x = 0; x < width; x++)
-            {
-                _waveformTexture.SetPixel(x, zeroLineY, zeroLineColor);
             }
 
             // Draw the waveform
@@ -255,66 +132,175 @@ namespace GiantSword
                     }
                 }
 
-                // Map the amplitude to the height of the texture
-                int positiveY = zeroLineY + Mathf.RoundToInt((maxAmplitude * (height / 2)));
-                int negativeY = zeroLineY - Mathf.RoundToInt((maxAmplitude * (height / 2)));
+                int positiveY = zeroLineY + Mathf.RoundToInt(maxAmplitude * (height / 2));
+                int negativeY = zeroLineY - Mathf.RoundToInt(maxAmplitude * (height / 2));
 
-                // Draw positive and negative amplitude lines
                 for (int y = zeroLineY; y <= positiveY; y++)
                 {
-                    _waveformTexture.SetPixel(x, y, waveformColor);
+                    texture.SetPixel(x, y, waveformColor);
                 }
                 for (int y = zeroLineY; y >= negativeY; y--)
                 {
-                    _waveformTexture.SetPixel(x, y, waveformColor);
+                    texture.SetPixel(x, y, waveformColor);
                 }
             }
 
-            // Draw the playhead marker if playing
-            if (_previewSource != null && _previewSource.isPlaying)
+            texture.Apply();
+            return texture;
+        }
+
+        private void DisplayHeader(AudioClip clip)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label($"{clip.name}");
+            GUILayout.FlexibleSpace();
+            GUILayout.Label($"{clip.length:F2} s");
+            GUILayout.EndHorizontal();
+        }
+
+        private void DisplayDetails(AudioClip clip)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label($"Ch: {clip.channels} {(clip.channels == 1 ? "(Mono)" : "(Stereo)")}");
+            GUILayout.FlexibleSpace();
+
+            int bitRate = Mathf.RoundToInt((clip.frequency * clip.channels * 16) / 1000f);
+            GUILayout.Label($"{bitRate} kbps");
+            GUILayout.FlexibleSpace();
+
+            float maxDB = GetMaxDB(clip);
+            GUILayout.Label($"Max dB: {maxDB:F2} dB");
+            GUILayout.EndHorizontal();
+        }
+
+        private float GetMaxDB(AudioClip clip)
+        {
+            if (clip == null) return 0f;
+
+            const int sampleCount = 128; // Number of samples to evaluate
+            float[] samples = new float[sampleCount];
+            int totalSamples = clip.samples * clip.channels;
+            int stepSize = Mathf.Max(1, totalSamples / sampleCount);
+
+            float maxAmplitude = 0f;
+
+            // Retrieve evenly spaced samples
+            for (int i = 0; i < sampleCount; i++)
             {
-                float playheadPosition = (_previewSource.time / clip.length) * width;
-                int playheadX = Mathf.Clamp(Mathf.RoundToInt(playheadPosition), 0, width - 1);
-
-                for (int y = 0; y < height; y++)
+                int sampleIndex = i * stepSize;
+                if (sampleIndex < totalSamples)
                 {
-                    _waveformTexture.SetPixel(playheadX, y, playheadColor);
+                    clip.GetData(samples, sampleIndex / clip.channels);
+                    for (int j = 0; j < clip.channels; j++)
+                    {
+                        maxAmplitude = Mathf.Max(maxAmplitude, Mathf.Abs(samples[j]));
+                    }
                 }
-
-                Repaint(); // Continuously repaint the inspector to update the playhead position
             }
 
-            _waveformTexture.Apply();
+            // Convert amplitude to decibels
+            float maxDB = 20 * Mathf.Log10(maxAmplitude);
+            return Mathf.Clamp(Mathf.Abs(maxDB), 0f, 80f);
+        }
 
-            // Draw the texture in the inspector
-            GUILayout.Label(_waveformTexture, GUILayout.Width(width), GUILayout.Height(height));
+        private void PlayAudioClip(SoundAsset soundAsset)
+        {
+            if (soundAsset.clips == null || soundAsset.clips.Length == 0)
+            {
+                Debug.LogWarning("No audio clips found in this SoundAsset.");
+                return;
+            }
+
+            AudioClip clipToPlay = soundAsset.NextClip();
+            if (clipToPlay == null)
+            {
+                Debug.LogWarning("The selected clip is null.");
+                return;
+            }
+
+            AudioListener audioListener = FindObjectOfType<AudioListener>();
+            if (audioListener == null)
+            {
+                Debug.LogWarning("No AudioListener found in the scene.");
+                return;
+            }
+
+            if (!Application.isPlaying)
+            {
+                if (_previewSource == null)
+                {
+                    GameObject tempGO = new GameObject("AudioPreview");
+                    tempGO.hideFlags = HideFlags.HideAndDontSave | HideFlags.HideInHierarchy;
+
+                    _previewSource = tempGO.AddComponent<AudioSource>();
+                    _previewSource.hideFlags = HideFlags.HideAndDontSave;
+                    tempGO.transform.position = audioListener.transform.position;
+                }
+
+                _previewSource.clip = clipToPlay;
+                _previewSource.volume = soundAsset.volume.GetRandom();
+                _previewSource.pitch = soundAsset.pitch.GetRandom();
+                _previewSource.spatialBlend = soundAsset.spacialBlend;
+                _previewSource.outputAudioMixerGroup = soundAsset.mixerGroup;
+                _previewSource.Play();
+
+                _lastClip = clipToPlay;
+                EditorApplication.update += RemovePreviewSource;
+                Repaint();
+            }
+            else
+            {
+                AudioSource.PlayClipAtPoint(clipToPlay, audioListener.transform.position, soundAsset.volume.GetRandom());
+                _lastClip = clipToPlay;
+            }
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            // Clean up the preview AudioSource when the inspector is closed
+
             if (_previewSource != null)
             {
                 DestroyImmediate(_previewSource.gameObject);
                 EditorApplication.update -= RemovePreviewSource;
             }
 
-            if (_waveformTexture != null)
+            if (_cachedWaveformTexture != null)
             {
-                DestroyImmediate(_waveformTexture);
+                DestroyImmediate(_cachedWaveformTexture);
+                _cachedWaveformTexture = null;
             }
         }
 
         private void RemovePreviewSource()
         {
-            // Remove the preview source if it is not playing
             if (_previewSource != null && !_previewSource.isPlaying)
             {
                 DestroyImmediate(_previewSource.gameObject);
                 _previewSource = null;
                 EditorApplication.update -= RemovePreviewSource;
             }
+        }
+
+        private GUIStyle CreateDarkerBoxStyle()
+        {
+            GUIStyle darkBoxStyle = new GUIStyle(GUI.skin.box);
+            darkBoxStyle.normal.background = MakeTex(2, 2, new Color(0.15f, 0.29f, 0.33f));
+            return darkBoxStyle;
+        }
+
+        private Texture2D MakeTex(int width, int height, Color color)
+        {
+            Color[] pixels = new Color[width * height];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                pixels[i] = color;
+            }
+
+            Texture2D texture = new Texture2D(width, height);
+            texture.SetPixels(pixels);
+            texture.Apply();
+            return texture;
         }
     }
 }

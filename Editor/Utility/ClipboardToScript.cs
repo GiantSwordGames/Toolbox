@@ -10,18 +10,28 @@ namespace GiantSword
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            EditorApplication.update += OnEditorUpdate;
+            EditorApplication.projectWindowItemOnGUI += OnEditorUpdate;
+
         }
 
-        private static void OnEditorUpdate()
+        private static void OnEditorUpdate(string guid, Rect selectionRect)
         {
             Event e = Event.current;
-            if (e != null && e.type == EventType.KeyDown && e.command && e.keyCode == KeyCode.V)
+
+            if (e != null)
             {
-                if (ClipboardToScript.CreateScriptFromClipboard())
-                {
-                    e.Use();
-                }
+                    if (e.type == EventType.KeyDown)
+                    {
+                        if (e.keyCode == KeyCode.V)
+                        {
+                            Debug.Log("v");
+
+                            if (ClipboardToScript.CreateScriptFromClipboard())
+                            {
+                                e.Use();
+                            }
+                        }
+                    }
             }
         }
         

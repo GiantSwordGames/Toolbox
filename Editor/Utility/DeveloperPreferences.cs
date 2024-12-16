@@ -14,7 +14,23 @@ namespace GiantSword
         }
         
         private static List<SettingDrawer> _settingsDrawers = new List<SettingDrawer>(); 
-        
+
+
+        public static void RegisterPreference<T>(Preference<T> preference)
+        {
+#if UNITY_EDITOR
+            
+            DeveloperPreferences.RegisterSettingDrawer(new DeveloperPreferences.SettingDrawer()
+            {
+                keywords = new[] { preference.key }, // todo: split up camel case
+                onGUI = ()=>
+                {
+                    preference.DrawDefaultGUI();
+                }
+            });
+#endif
+
+        }
         
         public static void RegisterSettingDrawer(SettingDrawer drawer)
         {

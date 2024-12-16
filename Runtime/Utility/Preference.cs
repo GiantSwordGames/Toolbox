@@ -11,16 +11,28 @@ namespace GiantSword
 {
     public class Preference<T>
     {
+        public enum Mode
+        {
+            Project,
+            Global
+        }
+        
         private static List<string> __keyRegistry = new List<string>();
         private string _key;
+        private string _rawKey;
         private bool _initialized = false;
         private T _value;
         private T _default;
         public Action<T> _onChanged;
 
-        public Preference(string key, T defaultValue)
+        public Preference(string key, T defaultValue, Mode mode = Mode.Project)
         {
-            _key = key;
+            _rawKey = key;
+            if(mode == Mode.Global)
+                _key = key;
+            else
+                _key =  Application.dataPath +"_"+ key;
+            
             _value = defaultValue;
             _default = defaultValue;
             _onChanged = null;
@@ -122,11 +134,15 @@ namespace GiantSword
             set => _onChanged = value;
         }
 
+        public string key => _key;
+
         private void SetObject(Object newValue, bool force = false)
         {
+#if UNITY_EDITOR
             var assetPath = AssetDatabase.GetAssetPath(newValue );
             EditorPrefs.SetString(_key, assetPath);
             LoadFromEditorPrefs();
+            #endif
         }
         private void Set(T newValue, bool force = false)
         {
@@ -204,13 +220,14 @@ namespace GiantSword
 #if UNITY_EDITOR
             
             if (label == "")
-                label = _key;
+                label = _rawKey.ToTitleCase();
             
             
             if (this is Preference<bool> boolPref)
             {
                 EditorGUI.BeginChangeCheck();
-                var newValue =  EditorGUILayout.Toggle(boolPref.value, label);
+                // var newValue =  EditorGUILayout.Toggle(boolPref.value, label);
+                var newValue =  GUILayout.Toggle(boolPref.value,  label.ToTitleCase());
                 if (EditorGUI.EndChangeCheck())
                 {
                     boolPref.value = newValue;
@@ -285,6 +302,7 @@ namespace GiantSword
             }
 #endif
         }
+
     }
 
     public static class PreferenceExtensions

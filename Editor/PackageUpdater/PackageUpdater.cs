@@ -129,8 +129,16 @@ namespace GiantSword
 
          public void SwitchToLocalPackage()
          {
-             targetPackagePath = localPackagePath;
-             SwitchToPackageToTargetPath();
+             if (File.Exists(localFilePath))
+             {
+                 targetPackagePath = localPackagePath;
+                 SwitchToPackageToTargetPath();
+             }
+             else
+             {
+                    Debug.LogError("Local package path does not exist: " + localFilePath);
+             }
+            
          }
         private void SwitchToPackageToTargetPath()
         {

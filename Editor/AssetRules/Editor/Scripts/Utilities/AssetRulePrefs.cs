@@ -7,6 +7,7 @@ namespace GiantSword.AssetRules
 {
     public static class AssetRulePreferences
     {
+     
         private static Preference<bool> _checkRulesOnAssetImport = new Preference<bool>("_CheckNamingRulesOnAssetImport", false);
         private static Preference<bool> _autoApplyNamingConventions = new Preference<bool>("_autoApplyNamingConventions", false);
 

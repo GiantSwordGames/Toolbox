@@ -100,6 +100,7 @@ namespace GiantSword
             soundInstance.Setup(soundAsset, parent, position);
             return soundInstance;
         }
+
         private void Setup(SoundAsset soundAsset, Transform parent, Vector3 position)
         {
             transform.parent = parent;
@@ -108,13 +109,14 @@ namespace GiantSword
             _audioSource = gameObject.AddComponent<AudioSource>();
             _audioSource.playOnAwake = false;
             _audioSource.loop = _soundAsset.isLooping;
+            _audioSource.outputAudioMixerGroup = _soundAsset.mixerGroup;
             _audioSource.spatialBlend = _soundAsset.spacialBlend;
             _audioSource.rolloffMode = _soundAsset.rolloffMode;
             _audioSource.minDistance = _soundAsset.rolloffDistance.min;
             _audioSource.maxDistance = _soundAsset.rolloffDistance.max;
             _audioSource.clip = _soundAsset.NextClip();
-             _volume =  _soundAsset.volume.GetRandom();
-             _audioSource.volume = _volume;
+            _volume = _soundAsset.volume.GetRandom();
+            _audioSource.volume = _volume;
             _pitch = _soundAsset.pitch.GetRandom();
             ApplyPitchScaling();
             _audioSource.Play();

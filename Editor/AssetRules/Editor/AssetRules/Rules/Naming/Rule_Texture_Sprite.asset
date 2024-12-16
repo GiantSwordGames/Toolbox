@@ -26,7 +26,7 @@ MonoBehaviour:
   _removeSpaces: 0
   _replaceSpacesWithUnderscores: 1
   _includeGrandparentInName: 0
-  _parentFolder: Sprites
+  _parentFolder: 
   _absolutePath: 
   _regexReplaceFromName: []
   _regexReplaceInDirectories:

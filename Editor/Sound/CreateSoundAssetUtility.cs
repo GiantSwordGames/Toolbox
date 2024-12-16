@@ -10,7 +10,7 @@ namespace GiantSword
         private List<SoundAsset> _soundBanks;
         private List<AudioClip> _audioClips;
 
-        [MenuItem("Assets/Assign To Sound Bank")]
+        [MenuItem(MenuPaths.QUICK_CREATE + "/Assign To Sound Bank")]
         public static void OpenWindow()
         {
             var window = GetWindow<DynamicContextMenuEditor>("Assign Audio Clip to Sound Bank", true);
@@ -20,7 +20,6 @@ namespace GiantSword
         private void Awake()
         {
             _soundBanks = RuntimeEditorHelper.FindAssetsOfType<SoundAsset>();
-            // get selected audio clips
             _audioClips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();
         }
 
@@ -40,30 +39,13 @@ namespace GiantSword
             }
             GUILayout.EndVertical();
         }
-
-        private void ShowContextMenu()
-        {
-            GenericMenu menu = new GenericMenu();
-            for (int i = 1; i <= 5; i++)
-            {
-                int index = i; // Capture the current value of i
-                menu.AddItem(new GUIContent("Option " + i), false, () => OnOptionSelected(index));
-            }
         
-            // Show the menu at the current mouse position
-            menu.DropDown(new Rect(Event.current.mousePosition, Vector2.zero));
-        }
-
-        private static void OnOptionSelected(int option)
-        {
-            Debug.Log("Option " + option + " selected");
-        }
     }
 
     public static class CreateSoundAssetUtility
     {
 
-        [MenuItem(MenuPaths.CREATE_SOUND + "/Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "/Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateSoundAsset()
         {
             var clips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();
@@ -79,7 +61,7 @@ namespace GiantSword
             RuntimeEditorHelper.SelectAndFocus(newAsset);
         }
 
-        [MenuItem(MenuPaths.CREATE_SOUND + "/Create Sound Banks From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "/Create Sound Banks From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateSoundAssets()
         {
             var clips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();

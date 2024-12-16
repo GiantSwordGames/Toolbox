@@ -418,6 +418,12 @@ namespace GiantSword
             }
         }
 
+        public static void SetDirection(this Transform transform, int direction)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = Mathf.Abs(scale.x) * direction;
+            transform.localScale = scale;
+        }
 
         public static void Toggle(this GameObject gameObject)
         {
