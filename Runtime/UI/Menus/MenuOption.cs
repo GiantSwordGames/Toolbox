@@ -19,6 +19,9 @@ namespace GiantSword
         [SerializeField] private UnityEvent _onDeselect;
         [SerializeField] private GameObject _selector;
         [SerializeField] private TextContentFitter _textContentFitter;
+        
+        
+        
         private bool _clicked;
         private bool _isSelected;
 
@@ -83,10 +86,8 @@ namespace GiantSword
         private void Start()
         {
             SetUp();
-            Debug.Log("Add Listener " + this +" " + _optionAsset, this);
             _optionAsset.onSelect += (Select);
             _optionAsset.onDeselect += (Deselect);
-            Debug.Log("Add Listener complete" + this, this);
 
         }
 
@@ -112,18 +113,20 @@ namespace GiantSword
 
         private void OnDestroy()
         {
-            if (Application.isPlaying )
-            {
-                if (_optionAsset)
-                {
-                    Debug.Log("RemoveListener Listener " + this, this);
-                    if (RuntimeEditorHelper.IsQuitting == false)
-                    {
-                        _optionAsset.onSelect -= Select;
-                        _optionAsset.onDeselect -= (Deselect);
-                    }
-                }
-            }
+            // if (Application.isPlaying )
+            // {
+            //     if (_optionAsset)
+            //     {
+            //         Debug.Log("RemoveListener Listener " + this, this);
+            //         if (RuntimeEditorHelper.IsQuitting == false)
+            //         {
+            //             Action action = _optionAsset.onSelect;
+            //             Debug.Log(action == null);
+            //             _optionAsset.onSelect -= Select;
+            //             _optionAsset.onDeselect -= (Deselect);
+            //         }
+            //     }
+            // }
         }
 
     }

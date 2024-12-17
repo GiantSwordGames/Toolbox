@@ -213,6 +213,13 @@ namespace GiantSword
             vector.z = value.z;
             return vector;
         }
+        
+        public static Vector3 WithXY(this Vector3 vector, Vector3 value)
+        {
+            vector.x = value.x;
+            vector.y = value.y;
+            return vector;
+        }
 
         public static Vector3 WithX(this Vector3 vector, float value)
         {

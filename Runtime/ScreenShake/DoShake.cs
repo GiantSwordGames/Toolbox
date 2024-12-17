@@ -3,10 +3,11 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    public class DoScreenShake : MonoBehaviour
+    public class DoShake : MonoBehaviour
     {
         [SerializeField] private TargetTransform _targetTransform;
         [SerializeField] private bool _targetCamera = true;
+        [SerializeField] private bool _triggerOnEnable = false;
         [SerializeField] private ScreenShakeAsset _screenShakeAsset;
         private float _time = 0f;
         private bool _running = false;
@@ -27,11 +28,17 @@ namespace GiantSword
             }
             ResetState();
             _screenShakeAsset.listenForButtonTest += Trigger;
+
+            if (_triggerOnEnable)
+            {
+                Trigger();
+            }
         }
 
         private void OnDisable()
         {
             _screenShakeAsset.listenForButtonTest -= Trigger;
+            ResetState();
         }
 
         private void ResetState()

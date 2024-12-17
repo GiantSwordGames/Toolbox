@@ -29,6 +29,16 @@ namespace GiantSword
             set
             {
                 ScopedEventManager.GetState(this, out ScopedEventManager.State<T> state);
+                if (state == null)
+                {
+                }
+                
+                if (value == null)
+                {
+                    Debug.Log("value is null");
+                    return;
+                }
+                
                 if (value.Equals( state.value) == false)
                 {
                     state.value = value;

@@ -129,7 +129,7 @@ namespace GiantSword
 
          public void SwitchToLocalPackage()
          {
-             if (File.Exists(localFilePath))
+             if (Directory.Exists(localFilePath))
              {
                  targetPackagePath = localPackagePath;
                  SwitchToPackageToTargetPath();
