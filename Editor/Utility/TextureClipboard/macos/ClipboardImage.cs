@@ -66,16 +66,22 @@ public class ClipboardTexturePaster2 : Editor
             Debug.Log("Image pasted and saved as Texture2D at: " + texturePath);
         }
 
-        private static string GetSelectedFolderPath()
+      private static string GetSelectedFolderPath()
+{
+    foreach (Object obj in Selection.GetFiltered<Object>(mode: SelectionMode.Assets))
+    {
+        string path = AssetDatabase.GetAssetPath(obj);
+        if (AssetDatabase.IsValidFolder(path))
         {
-            foreach (Object obj in Selection.GetFiltered(typeof(DefaultAsset), SelectionMode.Assets))
-            {
-                string path = AssetDatabase.GetAssetPath(obj);
-                if (AssetDatabase.IsValidFolder(path))
-                    return path;
-            }
-            return null;
+            return path;
         }
+        else if (File.Exists(path))
+        {
+            return Path.GetDirectoryName(path);
+        }
+    }
+    return null;
+}
 
         
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
