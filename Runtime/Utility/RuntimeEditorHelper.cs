@@ -62,6 +62,8 @@ namespace GiantSword
                         _playModeStateChange = mode;
                         if (_playModeStateChange == PlayModeStateChange.ExitingPlayMode)
                         {
+                                Debug.Log("OnApplicationQuitting");
+
                                 _isQuitting = true;
                         }
                 }
@@ -70,6 +72,7 @@ namespace GiantSword
 
                 private static void OnApplicationQuitting()
                 {
+                        Debug.Log("OnApplicationQuitting");
                         _isQuitting = true;
                 }
 
@@ -576,21 +579,39 @@ namespace GiantSword
                         return false;
                 }
 
-                // Instantiate prefab if possible otherwise do a regular gameobject instantiate
-                public static T SmartInstantiate<T>(T gameObject) where T : MonoBehaviour
+                public static void SmartDestroy(this GameObject gameObject)
                 {
-                        T instantiated = null;
-#if UNITY_EDITOR
-                        if (PrefabUtility.GetPrefabAssetType(gameObject) == PrefabAssetType.Regular)
+                        if (gameObject == null)
+                                return;
+
+                        if (Application.isPlaying)
                         {
-                                instantiated = (T)PrefabUtility.InstantiatePrefab(gameObject);
+                                GameObject.Destroy(gameObject);
                         }
                         else
                         {
-                                instantiated = Object.Instantiate(gameObject) as T;
+                                UndoDestroyObjectImmediate(gameObject);
+                        }
+                        
+                }
+
+
+                // Instantiate prefab if possible otherwise do a regular gameobject instantiate
+                public static T SmartInstantiate<T>(this T prefab, Transform transform = null) where T : MonoBehaviour
+                {
+                        T instantiated = null;
+#if UNITY_EDITOR
+                        PrefabAssetType assetType = PrefabUtility.GetPrefabAssetType(prefab);
+                        if (assetType == PrefabAssetType.Regular || assetType == PrefabAssetType.Variant)
+                        {
+                                instantiated = (T)PrefabUtility.InstantiatePrefab(prefab, transform);
+                        }
+                        else
+                        {
+                                instantiated = Object.Instantiate(prefab) as T;
                         }
 #else
-                                                instantiated = Object.Instantiate(gameObject) as T;
+                                                instantiated = Object.Instantiate(gameObject, transform) as T;
 
 #endif
                         return instantiated;

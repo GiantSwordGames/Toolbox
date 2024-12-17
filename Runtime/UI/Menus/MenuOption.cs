@@ -1,9 +1,10 @@
 using System;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace GiantSword
 {
@@ -12,18 +13,51 @@ namespace GiantSword
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private TextMeshProUGUI _textMeshPro;
         [SerializeField] private MenuOptionAsset _optionAsset;
+        [SerializeField] private MenuDefinition _menuDefinition;
         [SerializeField] private UnityEvent _onClick;
-        [SerializeField] private SoundAsset _sound;
+        [SerializeField] private UnityEvent _onSelect;
+        [SerializeField] private UnityEvent _onDeselect;
+        [SerializeField] private GameObject _selector;
+        [SerializeField] private TextContentFitter _textContentFitter;
         private bool _clicked;
+        private bool _isSelected;
 
-        private void OnValidate()
-        {
-            SetUp();
-        }
+        public bool isSelected => _isSelected;
+
 
         private void OnEnable()
         {
             _clicked = false;
+        }
+
+        
+        [Button]
+        public void Select()
+        {
+            if (_selector != null)
+            {
+                _selector.gameObject.SetActive(true);
+            }
+
+            _textMeshPro.color = _menuDefinition.selectedColor;
+
+            _isSelected = true;
+            
+            _onSelect?.Invoke();
+        }
+
+        public void Deselect()
+        {
+            if (_selector != null)
+            {
+                _selector.gameObject.SetActive(false);
+            }
+            
+            _textMeshPro.color = _menuDefinition.deselectedColor;
+
+            _isSelected = false;
+
+            _onDeselect?.Invoke();
         }
 
         private void SetUp()
@@ -31,26 +65,66 @@ namespace GiantSword
             if (_optionAsset)
             {
                 _textMeshPro.text = _optionAsset.text;
-                // _canvasGroup.alpha = _optionAsset.interactable ? 1 : 0.5f;
-                _canvasGroup.interactable = _optionAsset.interactable;
+                name = "Option_" + _optionAsset.text;
+
+                if (_canvasGroup)
+                {
+                    _canvasGroup.interactable = _optionAsset.interactable;
+                }
+
+                if (_textContentFitter)
+                {
+                    _textContentFitter.Apply();
+                    
+                }
             }
         }
 
         private void Start()
         {
             SetUp();
+            Debug.Log("Add Listener " + this +" " + _optionAsset, this);
+            _optionAsset.onSelect += (Select);
+            _optionAsset.onDeselect += (Deselect);
+            Debug.Log("Add Listener complete" + this, this);
+
         }
 
+        [Button]
         public void OnClicked()
         {
             if (_clicked)
             {
                 return;
             }
-            _sound?.Play();
+            _optionAsset.sound?.Play();
             _clicked = true;
             _optionAsset.Trigger();
             _onClick.Invoke();
         }
+
+        public void Setup(MenuOptionAsset option, MenuDefinition menuDefinition)
+        {
+            _menuDefinition = menuDefinition;
+            _optionAsset = option;
+            SetUp();
+        }
+
+        private void OnDestroy()
+        {
+            if (Application.isPlaying )
+            {
+                if (_optionAsset)
+                {
+                    Debug.Log("RemoveListener Listener " + this, this);
+                    if (RuntimeEditorHelper.IsQuitting == false)
+                    {
+                        _optionAsset.onSelect -= Select;
+                        _optionAsset.onDeselect -= (Deselect);
+                    }
+                }
+            }
+        }
+
     }
 }

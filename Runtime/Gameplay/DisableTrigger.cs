@@ -6,7 +6,7 @@ namespace GiantSword
     public class DisableTrigger : MonoBehaviour
     {
         [SerializeField] private UnityEvent onEnable;
-        void OnEnable()
+        void OnDisable()
         {
             if (Time.frameCount != 0)
             {

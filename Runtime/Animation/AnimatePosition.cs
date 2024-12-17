@@ -16,6 +16,7 @@ namespace GiantSword
              }
             
              base.Reset();
+             _positionOffset = Vector3.zero;
              
              if(additive == false)
              {

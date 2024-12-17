@@ -709,6 +709,33 @@ namespace GiantSword
 
             return Random.Range(0, list.Count);
         }
+        
+        public static int GetNextWrappedIndex<T>(this IList<T> list, int index)
+        {
+            if (list == null || list.Count == 0)
+            {
+                throw new System.ArgumentException("The list is empty or null.");
+            }
+
+            index++;
+            index += list.Count;
+            index %= list.Count;
+            return index;
+        }
+        
+        public static int GetPreviousWrappedIndex<T>(this IList<T> list, int index)
+        {
+            if (list == null || list.Count == 0)
+            {
+                throw new System.ArgumentException("The list is empty or null.");
+            }
+
+            index--;
+            index += list.Count;
+            index %= list.Count;
+            return index;
+        }
+        
         public static bool IsNullOrEmpty<T>(this IList<T> list, bool throwError = false)
         {
             return list == null || list.Count == 0;

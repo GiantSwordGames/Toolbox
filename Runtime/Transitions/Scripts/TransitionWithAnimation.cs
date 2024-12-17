@@ -12,6 +12,7 @@ using System.Collections;
         [SerializeField] private Animator _animator;
         [SerializeField] private AnimationClip _inDuration;
         [SerializeField] private AnimationClip _outDuration;
+        [SerializeField] private float _startDelay = 0f;
         private static readonly int InTrigger = Animator.StringToHash("TransitionIn");
         private static readonly int OutTrigger = Animator.StringToHash("TransitionOut");
 
@@ -31,9 +32,12 @@ using System.Collections;
         
         private IEnumerator IETransitionIn(Action onComplete)
         {
+            yield return new WaitForSecondsRealtime(_startDelay);
+            
             _animator.SetTrigger(InTrigger);
             _animator.ResetTrigger(OutTrigger);
 
+            
             float inDurationLength = _inDuration.length + 0.01f;
             float lerp = 0;
             while (lerp < 1)
@@ -83,12 +87,12 @@ using System.Collections;
 
         private Coroutine DoTransitionOut()
         {
-            return StartCoroutine(IETransitionOut(null));
+            return AsyncHelper.StartCoroutine(IETransitionOut(null));
         }
 
         private Coroutine DoTransitionIn()
         {
-            return StartCoroutine(IETransitionIn(null));
+            return AsyncHelper.StartCoroutine(IETransitionIn(null));
         }
 
         [ContextMenu("Do Transition")]
@@ -100,7 +104,7 @@ using System.Collections;
 
         public Coroutine DoFullTransition(Action onTransitionInComplete, Action onTransitionOutComplete)
         {
-            return StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
+            return AsyncHelper.StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
         }
 
         public TransitionWithAnimation Instantiate()

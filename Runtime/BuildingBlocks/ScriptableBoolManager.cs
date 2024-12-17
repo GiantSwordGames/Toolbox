@@ -15,7 +15,6 @@ namespace GiantSword
         Undefined,
     }
 
-
     public  class ScriptableBoolManager: MonoBehaviour
     {
         
