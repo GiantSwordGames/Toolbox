@@ -16,7 +16,8 @@ namespace GiantSword
         {
             // Check if Command (or Control on Windows) and V are pressed
             Event currentEvent = Event.current;
-            if (currentEvent == null || !currentEvent.isKey || !currentEvent.control || !currentEvent.command || currentEvent.keyCode != KeyCode.V)
+            if (currentEvent == null || !currentEvent.isKey || !currentEvent.control || !currentEvent.command ||
+                currentEvent.keyCode != KeyCode.V)
                 return;
 
             // Ensure we're in the Project view
@@ -24,29 +25,30 @@ namespace GiantSword
                 return;
 
             // Trigger paste functionality
-            PasteClipboardImage();
+            if (PasteClipboardImage())
+            {
 
-            // Consume the event
-            currentEvent.Use();
+                // Consume the event
+                currentEvent.Use();
+            }
         }
 
         [MenuItem("Assets/Paste Clipboard Image as Texture", false, 150)]
-        private static void PasteClipboardImage()
+        private static bool PasteClipboardImage()
         {
             // Check if a folder is selected
             string folderPath = GetSelectedFolderPath();
             if (string.IsNullOrEmpty(folderPath))
             {
                 Debug.LogError("Please select a folder in the Project view to paste the texture.");
-                return;
+                return false;
             }
 
             // Get image data from the clipboard
             Texture2D clipboardTexture = GetImageFromClipboard();
             if (clipboardTexture == null)
             {
-                Debug.LogError("No image data found in the clipboard.");
-                return;
+                return false;
             }
 
             // Save the texture as an asset
@@ -62,6 +64,7 @@ namespace GiantSword
             }
 
             Debug.Log("Image pasted and saved as Texture2D at: " + texturePath);
+            return true;
         }
 
         private static string GetSelectedFolderPath()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -9,6 +10,7 @@ namespace GiantSword
         [SerializeField] private UnityEvent _mouseEnter = new UnityEvent();
         [SerializeField] private UnityEvent _mouseExit = new UnityEvent();
         [SerializeField] private UnityEvent _mouseDown = new UnityEvent();
+        [SerializeField] private bool _isMouseOver = false;
 
         public UnityEvent mouseEnter => _mouseEnter;
 
@@ -16,13 +18,25 @@ namespace GiantSword
 
         public UnityEvent mouseDown => _mouseDown;
 
+        public bool isMouseOver => _isMouseOver;
+
+        private void OnDisable()
+        {
+            if (_isMouseOver)
+            {
+                OnMouseExit();
+            }
+        }
+
         private void OnMouseEnter()
         {
+            _isMouseOver = true;
             _mouseEnter?.Invoke();
         }
         
         private void OnMouseExit()
         {
+            _isMouseOver = false;
             _mouseExit?.Invoke();
         }
         

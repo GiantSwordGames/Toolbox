@@ -62,8 +62,6 @@ namespace GiantSword
                         _playModeStateChange = mode;
                         if (_playModeStateChange == PlayModeStateChange.ExitingPlayMode)
                         {
-                                Debug.Log("OnApplicationQuitting");
-
                                 _isQuitting = true;
                         }
                 }
@@ -72,7 +70,6 @@ namespace GiantSword
 
                 private static void OnApplicationQuitting()
                 {
-                        Debug.Log("OnApplicationQuitting");
                         _isQuitting = true;
                 }
 
