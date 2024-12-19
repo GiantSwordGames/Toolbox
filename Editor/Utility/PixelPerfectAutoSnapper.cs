@@ -5,13 +5,14 @@ using System.Collections.Generic;
 namespace GiantSword
 {
     [InitializeOnLoad]
-    public class PixelPerfectSnapper
+    public class PixelPerfectAutoSnapper
     {
-        private static Preference<bool> _enabled = new Preference<bool>("PixelPerfectSnapperEnabled", false);
-        static PixelPerfectSnapper()
+        private static Preference<bool> _enabled = new Preference<bool>("PixelPerfectSnapperEnabled", false, PreferenceMode.Project, true);
+        static PixelPerfectAutoSnapper()
         {
+            #if UNITY_EDITOR
             SceneView.duringSceneGui += OnSceneGUI;
-            DeveloperPreferences.RegisterPreference(_enabled);
+            #endif
         }
 
         private static void OnSceneGUI(SceneView sceneView)
@@ -34,36 +35,14 @@ namespace GiantSword
 
         private static void SnapSelectedSpriteRenderersToGrid()
         {
+            #if UNITY_EDITOR
             foreach (GameObject selectedObject in Selection.gameObjects)
             {
-                SpriteRenderer spriteRenderer = selectedObject.GetComponent<SpriteRenderer>();
-
-                if (spriteRenderer != null)
-                {
-                    SnapSpriteToGrid(spriteRenderer);
-                }
+                PixelPerfectUtility.SnapSpriteToGrid(selectedObject);
             }
+#endif
         }
 
-        private static void SnapSpriteToGrid(SpriteRenderer spriteRenderer)
-        {
-            Transform transform = spriteRenderer.transform;
-            float pixelsPerUnit = spriteRenderer.sprite.pixelsPerUnit;
-            float unitPerPixel = 1f / pixelsPerUnit;
-
-            Vector3 position = transform.position;
-            Vector2 spriteSize = spriteRenderer.sprite.bounds.size * pixelsPerUnit;
-
-            // Adjust position to account for odd/even dimensions
-            float xOffset = (Mathf.Floor(spriteSize.x) % 2 == 0) ? 0f : unitPerPixel / 2f;
-            float yOffset = (Mathf.Floor(spriteSize.y) % 2 == 0) ? 0f : unitPerPixel / 2f;
-
-            // Snap each axis
-            position.x = Mathf.Round((position.x - xOffset) / unitPerPixel) * unitPerPixel + xOffset;
-            position.y = Mathf.Round((position.y - yOffset) / unitPerPixel) * unitPerPixel + yOffset;
-
-            transform.position = position;
-        }
 
         private static void HandleArrowKeyNudge()
         {

@@ -9,14 +9,15 @@ using UnityEditor;
 
 namespace GiantSword
 {
+    public enum PreferenceMode
+    {
+        Project,
+        Global
+    }
+
     public class Preference<T>
     {
-        public enum Mode
-        {
-            Project,
-            Global
-        }
-        
+     
         private static List<string> __keyRegistry = new List<string>();
         private string _key;
         private string _rawKey;
@@ -25,10 +26,10 @@ namespace GiantSword
         private T _default;
         public Action<T> _onChanged;
 
-        public Preference(string key, T defaultValue, Mode mode = Mode.Project)
+        public Preference(string key, T defaultValue, PreferenceMode preferenceMode = PreferenceMode.Project, bool addToUserPrefs = false)
         {
             _rawKey = key;
-            if(mode == Mode.Global)
+            if(preferenceMode == PreferenceMode.Global)
                 _key = key;
             else
                 _key =  Application.dataPath +"_"+ key;
@@ -44,6 +45,14 @@ namespace GiantSword
             else
             {
                 Debug.LogError("Duplicate Preference Key " + key);
+            }
+
+            if (addToUserPrefs)
+            {
+#if UNITY_EDITOR
+                DeveloperPreferences.RegisterPreference(this);
+#endif
+
             }
         }
 

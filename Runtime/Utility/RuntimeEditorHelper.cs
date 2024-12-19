@@ -608,7 +608,7 @@ namespace GiantSword
                                 instantiated = Object.Instantiate(prefab) as T;
                         }
 #else
-                                                instantiated = Object.Instantiate(gameObject, transform) as T;
+                                                instantiated = Object.Instantiate(prefab, transform) as T;
 
 #endif
                         return instantiated;

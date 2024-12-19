@@ -76,8 +76,8 @@ namespace GiantSword
              if (_localFilePath == null)
              {
                  string defaultPath =
-                     Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), "Repositories");
-                 _localFilePath = new Preference<string>(Application.productName+"_"+ this.name+"_localFilePath", defaultPath);
+                     Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), "Repositories/Toolbox");
+                 _localFilePath = new Preference<string>( this.name+"_localFilePath", defaultPath);
              }
          }
 

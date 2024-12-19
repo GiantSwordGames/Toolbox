@@ -37,6 +37,8 @@ namespace GiantSword
             _settingsDrawers.Add(drawer);
         }
         
+#if UNITY_EDITOR
+
         [SettingsProvider]
         public static SettingsProvider CreateMyCustomSettingsProvider()
         {
@@ -68,5 +70,7 @@ namespace GiantSword
 
             return provider;
         }
+#endif
+
     }
 }
