@@ -1,11 +1,12 @@
 {
     "name": "Runtime",
-    "rootNamespace": "RichardPieterse",
+    "rootNamespace": "GiantSword",
     "references": [
         "NaughtyAttributes.Core",
         "Unity.Timeline",
         "Unity.TextMeshPro",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "EasySave3"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

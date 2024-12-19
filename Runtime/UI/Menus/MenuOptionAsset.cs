@@ -15,24 +15,24 @@ namespace GiantSword
         [SerializeField] private SoundAsset _sound;
 
         [SerializeField] private   UnityEvent _onClicked;
-        
-        private   ScopedState<Action> _onSelect = new ScopedState<Action>();
-        
-        private   ScopedState<Action> _onDeselect = new ScopedState<Action>();
+
+        private Action _onSelect = () => { };
+
+        private Action _onDeselect = () => { };
         public string text => _text;
 
         public bool interactable => _interactable;
 
         public  Action onSelect
         {
-            get => _onSelect.value;
-            set => _onSelect.value = value;
+            get => _onSelect;
+            set => _onSelect = value;
         }
 
         public  Action onDeselect
         {
-            get => _onDeselect.value;
-            set => _onDeselect.value = value;
+            get => _onDeselect;
+            set => _onDeselect = value;
         }
 
         public SoundAsset sound => _sound;
@@ -56,7 +56,7 @@ namespace GiantSword
 
         public void Select()
         {
-            _onSelect.value.Invoke();
+            _onSelect?.Invoke();
         }
     }
 }

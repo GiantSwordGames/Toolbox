@@ -4,8 +4,15 @@ using UnityEngine;
 
 namespace GiantSword
 {
+    public abstract class ScriptablePrimitive : ScriptableObject
+    {
+        [SerializeField] protected bool _savable;
+
+        public abstract void Save();
+        public abstract void Load();
+    }
     [CreateAssetMenu]
-    public class ScriptableBool : ScriptableObject
+    public class ScriptableBool : ScriptablePrimitive
     {
         public ScriptableVariableScope _scriptableVariableScope;
         public ScriptableVariableScope scriptableVariableScope => _scriptableVariableScope;
@@ -83,6 +90,23 @@ namespace GiantSword
         {
             ScriptableBoolManager.GetState(this, out ScriptableBoolManager.State state);
             state.onValueChanged -= onPlayerIsAliveChanged;
+        }
+        
+        [Button]
+        public override void Save()
+        {
+            SaveService.SaveBool(name, value);
+        }
+        
+        [Button]
+        public override void Load()
+        {
+
+            // PlayerPrefs.s
+            if (SaveService.HasKey(name))
+            {
+                value = SaveService.GetBool(name, value);
+            }
         }
     }
 }
