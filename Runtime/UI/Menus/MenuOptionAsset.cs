@@ -16,6 +16,7 @@ namespace GiantSword
 
         [SerializeField] private   UnityEvent _onClicked;
 
+        // private ScopedState<bool> b;
         private Action _onSelect = () => { };
 
         private Action _onDeselect = () => { };

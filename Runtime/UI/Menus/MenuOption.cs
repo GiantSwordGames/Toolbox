@@ -21,7 +21,6 @@ namespace GiantSword
         [SerializeField] private TextContentFitter _textContentFitter;
         
         
-        
         private bool _clicked;
         private bool _isSelected;
 
@@ -88,7 +87,15 @@ namespace GiantSword
             SetUp();
             _optionAsset.onSelect += (Select);
             _optionAsset.onDeselect += (Deselect);
-
+        }
+        
+        void OnDestroy()
+        {
+            if (_optionAsset)
+            {
+                _optionAsset.onSelect -= Select;
+                _optionAsset.onDeselect -= (Deselect);
+            }
         }
 
         [Button]
@@ -111,23 +118,23 @@ namespace GiantSword
             SetUp();
         }
 
-        private void OnDestroy()
-        {
-            // if (Application.isPlaying )
-            // {
-            //     if (_optionAsset)
-            //     {
-            //         Debug.Log("RemoveListener Listener " + this, this);
-            //         if (RuntimeEditorHelper.IsQuitting == false)
-            //         {
-            //             Action action = _optionAsset.onSelect;
-            //             Debug.Log(action == null);
-            //             _optionAsset.onSelect -= Select;
-            //             _optionAsset.onDeselect -= (Deselect);
-            //         }
-            //     }
-            // }
-        }
+        // private void OnDestroy()
+        // {
+        //     // if (Application.isPlaying )
+        //     // {
+        //     //     if (_optionAsset)
+        //     //     {
+        //     //         Debug.Log("RemoveListener Listener " + this, this);
+        //     //         if (RuntimeEditorHelper.IsQuitting == false)
+        //     //         {
+        //     //             Action action = _optionAsset.onSelect;
+        //     //             Debug.Log(action == null);
+        //     //             _optionAsset.onSelect -= Select;
+        //     //             _optionAsset.onDeselect -= (Deselect);
+        //     //         }
+        //     //     }
+        //     // }
+        // }
 
     }
 }
