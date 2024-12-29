@@ -70,7 +70,7 @@ namespace GiantSword
         [Button]
         public void Trigger()
         {
-            if (enabled == false)
+            if (enabled == false || gameObject.activeInHierarchy == false)
             {
                 return;
             }

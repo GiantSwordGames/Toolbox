@@ -107,8 +107,6 @@ namespace GiantSword
     
         public void OnBeforeSerialize()
         {
-    
-    
     #if UNITY_EDITOR
             _sceneName = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(_sceneAsset));
     #endif

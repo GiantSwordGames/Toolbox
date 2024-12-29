@@ -253,6 +253,10 @@ namespace GiantSword
             return drive;
         }
 
+        public static void SetAsActiveScene(this Scene scene)
+        {
+            SceneManager.SetActiveScene(scene);
+        }
 
         public static void SetProperty(this Renderer meshRenderer, string name, float value)
         {

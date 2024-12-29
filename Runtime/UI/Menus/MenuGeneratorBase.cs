@@ -183,7 +183,7 @@ namespace RichardPieterse
             if (_menuDefinition.openedBy != null && _generatedBackOption==null)
             {
                 _generatedBackOption = ScriptableObject.CreateInstance<MenuOptionAsset>();
-                _generatedBackOption.text = "Back " +Random.Range(0,22);
+                _generatedBackOption.text = "Back ";
                 _generatedBackOption.onClicked += CloseFromBackButton;
                 _generatedBackOption.name = _generatedBackOption.text;
                 
@@ -216,15 +216,12 @@ namespace RichardPieterse
 
         protected void OnOpen()
         {
-            Debug.Log("On Open " + this + " " + Time.frameCount, this);
-            Debug.Log("Is open " + _isOpen);
             Generate();
             _onOpened?.Invoke();
             SelectInitial();
             AsyncHelper.WaitForFrame(() =>
                 {
                     this._isOpen = true;
-                    Debug.Log("WaitForFrame Open " + this + " " + Time.frameCount, this);
                 }
             );
         }
