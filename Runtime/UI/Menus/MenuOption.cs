@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace GiantSword
@@ -14,9 +15,12 @@ namespace GiantSword
         [SerializeField] private TextMeshProUGUI _textMeshPro;
         [SerializeField] private MenuOptionAsset _optionAsset;
         [SerializeField] private MenuDefinition _menuDefinition;
-        [SerializeField] private UnityEvent _onClick;
-        [SerializeField] private UnityEvent _onSelect;
-        [SerializeField] private UnityEvent _onDeselect;
+        [FormerlySerializedAs("_onClicked")]
+        [FormerlySerializedAs("_onClick")] 
+        [SerializeField] private UnityEvent _onPlayClickedAnimation;
+        [SerializeField] private float _clickAnimationDuration = 0f;
+        [FormerlySerializedAs("_onSelect")] [SerializeField] private UnityEvent _onSelected;
+        [FormerlySerializedAs("_onDeselect")] [SerializeField] private UnityEvent _onDeselected;
         [SerializeField] private GameObject _selector;
         [SerializeField] private TextContentFitter _textContentFitter;
         
@@ -25,6 +29,7 @@ namespace GiantSword
         private bool _isSelected;
 
         public bool isSelected => _isSelected;
+        public bool isInteractable => _optionAsset.interactable;
 
 
         private void OnEnable()
@@ -45,7 +50,7 @@ namespace GiantSword
 
             _isSelected = true;
             
-            _onSelect?.Invoke();
+            _onSelected?.Invoke();
         }
 
         public void Deselect()
@@ -59,7 +64,7 @@ namespace GiantSword
 
             _isSelected = false;
 
-            _onDeselect?.Invoke();
+            _onDeselected?.Invoke();
         }
 
         private void SetUp()
@@ -99,16 +104,33 @@ namespace GiantSword
         }
 
         [Button]
-        public void OnClicked()
+        public void Click()
         {
             if (_clicked)
             {
                 return;
             }
-            _optionAsset.sound?.Play();
             _clicked = true;
-            _optionAsset.Trigger();
-            _onClick.Invoke();
+            _onPlayClickedAnimation.Invoke();
+
+            AsyncHelper.Delay(_clickAnimationDuration, () =>
+            {
+                _optionAsset.sound?.Play();
+                _optionAsset.Click();
+                if (_optionAsset.subMenu)
+                {
+                    Debug.Log("Sub Menu " + _optionAsset.subMenu);
+                    _menuDefinition.Close();
+                    _optionAsset.subMenu.Open(_menuDefinition);
+                }
+                
+            });
+            
+        }
+        
+        public MenuDefinition GetSubMenu()
+        {
+            return _optionAsset.subMenu;
         }
 
         public void Setup(MenuOptionAsset option, MenuDefinition menuDefinition)
@@ -117,24 +139,5 @@ namespace GiantSword
             _optionAsset = option;
             SetUp();
         }
-
-        // private void OnDestroy()
-        // {
-        //     // if (Application.isPlaying )
-        //     // {
-        //     //     if (_optionAsset)
-        //     //     {
-        //     //         Debug.Log("RemoveListener Listener " + this, this);
-        //     //         if (RuntimeEditorHelper.IsQuitting == false)
-        //     //         {
-        //     //             Action action = _optionAsset.onSelect;
-        //     //             Debug.Log(action == null);
-        //     //             _optionAsset.onSelect -= Select;
-        //     //             _optionAsset.onDeselect -= (Deselect);
-        //     //         }
-        //     //     }
-        //     // }
-        // }
-
     }
 }

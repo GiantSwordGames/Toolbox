@@ -1,5 +1,8 @@
 
 using System;
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -160,6 +163,13 @@ namespace GiantSword
             }
 
             return null;
+        }
+
+        public void OpenAdditive()
+        {
+#if UNITY_EDITOR
+            Open(OpenSceneMode.Additive);
+#endif
         }
     }
 }

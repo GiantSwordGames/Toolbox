@@ -188,7 +188,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 5859772076308616843}
         m_TargetAssemblyTypeName: GiantSword.MenuOption, Assembly-CSharp-firstpass
-        m_MethodName: OnClicked
+        m_MethodName: Click
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

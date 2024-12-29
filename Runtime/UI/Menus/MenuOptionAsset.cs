@@ -10,17 +10,23 @@ namespace GiantSword
     public class MenuOptionAsset : ScriptableObject
     {
         [SerializeField] private string _text;
-        private Action _action; // TO DO: move this state out of the scriptable object
         [SerializeField] private bool _interactable = true; // TO DO: move this state out of the scriptable object
         [SerializeField] private SoundAsset _sound;
+        [FormerlySerializedAs("_openSubMenu")] [SerializeField] private MenuDefinition _subMenu;
 
         [SerializeField] private   UnityEvent _onClicked;
+      
+        [ShowNonSerializedField]
+        private Action _onClickedAction; // TO DO: move this state out of the scriptable object
 
-        // private ScopedState<bool> b;
-        private Action _onSelect = () => { };
+        [ShowNonSerializedField] private Action _onSelect;
 
-        private Action _onDeselect = () => { };
-        public string text => _text;
+        private Action _onDeselect;
+        public string text
+        {
+            get => _text;
+            set { _text = value; }
+        }
 
         public bool interactable => _interactable;
 
@@ -38,20 +44,24 @@ namespace GiantSword
 
         public SoundAsset sound => _sound;
 
-        public void RegisterListener(Action action)
+        public Action onClicked
         {
-            _action += action;
+            get => _onClickedAction;
+            set => _onClickedAction = value;
         }
-        
+
+        public MenuDefinition subMenu => _subMenu;
+
+
         public void UnregisterListener(Action action)
         {
-            _action -= action;
+            _onClickedAction -= action;
         }
 
         [Button]
-        public void Trigger()
+        public void Click()
         {
-            _action?.Invoke();
+            _onClickedAction?.Invoke();
             _onClicked?.Invoke();
         }
 

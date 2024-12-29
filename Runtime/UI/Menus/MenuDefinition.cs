@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace GiantSword
@@ -13,8 +16,26 @@ namespace GiantSword
         [SerializeField] private Color _deactivatedColor = Color.grey;
         [Space]
         [SerializeField] private MenuOption _optionPrefab;
-        [SerializeField] private MenuOptionAsset[] _options;
-        [SerializeField] private MenuOptionAsset _initialSelection;
+        [SerializeField] private List<MenuOptionAsset> _options;
+        private MenuDefinition _openedBy;
+        
+        [ShowNonSerializedField]
+        private Action _onOpen;
+
+        [ShowNonSerializedField]
+        private Action _onClose;
+
+        public Action onOpen
+        {
+            get => _onOpen;
+            set => _onOpen = value;
+        }
+
+        public Action onClose
+        {
+            get => _onClose;
+            set => _onClose = value;
+        }
 
         public InputKeyAsset upKey => _upKey;
 
@@ -24,14 +45,30 @@ namespace GiantSword
 
         public MenuOption optionPrefab => _optionPrefab;
 
-        public MenuOptionAsset[] options => _options;
+        public virtual List<MenuOptionAsset> options => _options;
 
-        public MenuOptionAsset initialSelection => _initialSelection;
 
         public Color selectedColor => _selectedColor;
 
         public Color deselectedColor => _deselectedColor;
 
         public Color deactivatedColor => _deactivatedColor;
+
+        public MenuDefinition openedBy => _openedBy;
+
+        
+        [Button]
+        public void Open(MenuDefinition openedBy)
+        {
+            Debug.Log("Open");
+            _openedBy = openedBy;
+            onOpen?.Invoke();
+        }
+
+        [Button]
+        public void Close()
+        {
+            onClose?.Invoke();
+        }
     }
 }

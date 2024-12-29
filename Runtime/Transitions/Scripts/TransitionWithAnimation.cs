@@ -117,8 +117,6 @@ using System.Collections;
         public TransitionWithAnimation InstantiateAndDoSceneTransition( int buildIndex)
         {
             var instance = Instantiate();
-            
-            Debug.Log("Load scene " + buildIndex);
             instance.DoFullTransition(() => SceneManager.LoadScene(buildIndex), null);  
             return instance;
         }
@@ -148,6 +146,13 @@ using System.Collections;
         {
             var instance = Instantiate();
             instance.DoTransitionIn();
+        }
+
+        public TransitionWithAnimation InstantiateAndDoSceneTransition(SceneReference sceneReference)
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(() => sceneReference.Load(), null);  
+            return instance;
         }
     }
 }

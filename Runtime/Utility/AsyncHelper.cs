@@ -25,8 +25,15 @@ namespace GiantSword
 
         private static IEnumerator IEDelay(Action action, float delay)
         {
-            yield return new WaitForSeconds(delay);
-            action();
+            if (delay == 0)
+            {
+                action();
+            }
+            else
+            {
+                yield return new WaitForSeconds(delay);
+                action();
+            }
         }
 
         public static Coroutine StartCoroutine(IEnumerator routine)
