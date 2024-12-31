@@ -23,6 +23,7 @@ namespace RichardPieterse
         
 
         private MenuOptionAsset _generatedBackOption;
+        private MenuOption _backOption;
 
         private void Awake()
         {
@@ -62,22 +63,40 @@ namespace RichardPieterse
                 if (_menuDefinition.upKey.IsDown())
                 {
                     SelectPrevious();
+                    _menuDefinition.styleDefinition.selectionSound?.Play();
                 }
 
                 if (_menuDefinition.downKey.IsDown())
                 {
                     SelectNext();
+                    _menuDefinition.styleDefinition.selectionSound?.Play();
                 }
 
                 if (_menuDefinition.acceptKey.IsDown())
                 {
                     ClickOnSelected();
+                    _menuDefinition.styleDefinition.clickSound?.Play();
+                }
+                
+                if(_backOption != null &&  _menuDefinition.BackButton.IsDown())
+                {
+                    Select(_backOption);
+                    _backOption.Click();
+                    _menuDefinition.styleDefinition.clickSound?.Play();
                 }
             }
         }
 
         // [Button]
         protected void SelectInitial()
+        {
+            if (_instancedOptions.Count > 0)
+            {
+                Select(_instancedOptions[0]);
+            }
+        }
+        
+        protected void Select(MenuOption selectOption)
         {
             foreach (MenuOption option in _instancedOptions)
             {
@@ -86,7 +105,7 @@ namespace RichardPieterse
 
             if (_instancedOptions.Count > 1)
             {
-                _instancedOptions[0].Select();
+                selectOption.Select();
             }
         }
 
@@ -186,15 +205,14 @@ namespace RichardPieterse
                 _generatedBackOption.text = "Back ";
                 _generatedBackOption.onClicked += CloseFromBackButton;
                 _generatedBackOption.name = _generatedBackOption.text;
-                
             }
             
             if (_generatedBackOption != null)
             {
-                MenuOption menuOption = _menuDefinition.optionPrefab.SmartInstantiate();
-                menuOption.transform.SetParent(transform, false);
-                menuOption.Setup(_generatedBackOption, _menuDefinition);
-                _instancedOptions.Add(menuOption);
+                _backOption = _menuDefinition.optionPrefab.SmartInstantiate();
+                _backOption.transform.SetParent(transform, false);
+                _backOption.Setup(_generatedBackOption, _menuDefinition);
+                _instancedOptions.Add(_backOption);
             }
         }
 

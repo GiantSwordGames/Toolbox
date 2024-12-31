@@ -7,9 +7,12 @@ namespace GiantSword
 {
     public class MenuDefinition : ScriptableObject
     {
+        [SerializeField] private MenuStyleDefinition _styleDefinition;
+        [Space]
         [SerializeField] private InputKeyAsset _upKey;
         [SerializeField] private InputKeyAsset _downKey;
         [SerializeField] private InputKeyAsset _acceptKey;
+        [SerializeField] private InputKeyAsset _backButton;
         [Space]
         [SerializeField] private Color _selectedColor = Color.white;
         [SerializeField] private Color _deselectedColor = Color.Lerp(Color.white, Color.gray, .2f );
@@ -56,11 +59,14 @@ namespace GiantSword
 
         public MenuDefinition openedBy => _openedBy;
 
-        
+        public InputKeyAsset BackButton => _backButton;
+
+        public MenuStyleDefinition styleDefinition => _styleDefinition;
+
+
         [Button]
         public void Open(MenuDefinition openedBy)
         {
-            Debug.Log("Open");
             _openedBy = openedBy;
             onOpen?.Invoke();
         }

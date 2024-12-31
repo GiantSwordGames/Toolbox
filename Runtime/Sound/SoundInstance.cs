@@ -9,6 +9,8 @@ namespace GiantSword
     {
         [SerializeField] AudioSource _audioSource;
         [FormerlySerializedAs("_soundBank")] [SerializeField] SoundAsset _soundAsset;
+       [SerializeField] private bool _autoDestroy = true;
+        
         private float _pitch;
         private float _time;
         private float _fade = 1;
@@ -132,7 +134,7 @@ namespace GiantSword
                 audioLength = _audioSource.clip.length;
             }
 
-            if (_audioSource.loop == false &&  _time > audioLength + 20f)
+            if (_autoDestroy &&  _audioSource.loop == false &&  _time > audioLength + 20f)
             {
                 Destroy(gameObject);
             }
@@ -150,4 +152,5 @@ namespace GiantSword
             _audioSource.Stop();
         }
     }
+    
 }

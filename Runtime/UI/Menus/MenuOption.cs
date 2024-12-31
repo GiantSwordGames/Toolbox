@@ -119,7 +119,6 @@ namespace GiantSword
                 _optionAsset.Click();
                 if (_optionAsset.subMenu)
                 {
-                    Debug.Log("Sub Menu " + _optionAsset.subMenu);
                     _menuDefinition.Close();
                     _optionAsset.subMenu.Open(_menuDefinition);
                 }
