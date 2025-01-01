@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace RichardPieterse
 {
-    public class ScriptabeMenuGenerator : MenuGeneratorBase
+    public class ScriptabeMenuGenerator : MenuGenerator
     {
        
     }

@@ -76,5 +76,10 @@ namespace GiantSword
         {
             onClose?.Invoke();
         }
+        
+        public virtual void RegenerateDynamicOptions()
+        {
+            
+        }
     }
 }

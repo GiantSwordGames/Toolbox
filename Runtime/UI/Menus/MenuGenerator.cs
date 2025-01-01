@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace RichardPieterse
 {
-    public class MenuGeneratorBase : MonoBehaviour
+    public class MenuGenerator : MonoBehaviour
     {
         [SerializeField] protected List<MenuOption> _instancedOptions = new List<MenuOption>();
         [SerializeField] protected MenuDefinition _menuDefinition;
@@ -40,7 +40,6 @@ namespace RichardPieterse
         private void Start()
         {
             SelectInitial();
-         ;
 
             foreach (var menuOptionAsset in _menuDefinition.options)
             {
@@ -187,10 +186,10 @@ namespace RichardPieterse
         protected  void Generate()
         {
             Clear();
+            _menuDefinition.RegenerateDynamicOptions();
 
             List<MenuOptionAsset> options = _menuDefinition.options;
 
-            
             foreach (var option in options)
             {
                 MenuOption menuOption = _menuDefinition.optionPrefab.SmartInstantiate();
