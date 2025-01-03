@@ -669,5 +669,30 @@ namespace GiantSword
                 }
 
                 public static bool IsQuitting => _isQuitting;
+
+                public static void CreateDirectoryFromAssetPath(string folderPath)
+                {
+                        if (!AssetDatabase.IsValidFolder(folderPath))
+                        {
+                                string[] folders = folderPath.Split('/');
+                                string currentPath = "";
+                                for (int i = 0; i < folders.Length; i++)
+                                {
+                                        if (i == 0)
+                                        {
+                                                currentPath = folders[i];
+                                        }
+                                        else
+                                        {
+                                                string newPath = currentPath + "/" + folders[i];
+                                                if (!AssetDatabase.IsValidFolder(newPath))
+                                                {
+                                                        AssetDatabase.CreateFolder(currentPath, folders[i]);
+                                                }
+                                                currentPath = newPath;
+                                        }
+                                }
+                        }
+                }
         }
 }

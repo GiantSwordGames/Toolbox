@@ -45,6 +45,10 @@ namespace GiantSword
             _mouseDown?.Invoke();
         }
 
+        private void Start()
+        {
+        }
+
         public void AddListenersToChildren()
         {
             Transform[] children = GetComponentsInChildren<Transform>();
@@ -52,7 +56,7 @@ namespace GiantSword
             {
                 if (child.gameObject.GetComponent<Collider2D>() || child.gameObject.GetComponent<Collider>())
                 {
-                    MouseListener mouseListener = child.gameObject.AddComponent<MouseListener>();
+                    MouseListener mouseListener = child.gameObject.GetOrAddComponent<MouseListener>();
                     mouseListener.mouseEnter.AddListener( _mouseEnter.Invoke);
                     mouseListener.mouseExit.AddListener( _mouseExit.Invoke);
                     mouseListener.mouseDown.AddListener( _mouseDown.Invoke);
