@@ -998,7 +998,21 @@ namespace GiantSword
             transform.localScale = scale;
             return transform;
         }
-
+        
+        public static void SetX(this Transform transform, float value)
+        {
+            transform.position = transform.position.WithX(value);
+        }
+        
+        public static void SetY(this Transform transform, float value)
+        {
+            transform.position = transform.position.WithY(value);
+        }
+        
+        public static void SetZ(this Transform transform, float value)
+        {
+            transform.position = transform.position.WithZ(value);
+        }
         
         public static Transform FlipX(this Transform transform, bool flip)
         {

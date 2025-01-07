@@ -82,7 +82,6 @@ public class ClipboardTexturePaster2 : Editor
             Texture2D clipboardTexture = GetImageFromClipboard();
             if (clipboardTexture == null)
             {
-                Debug.LogError("No image data found in the clipboard.");
                 return null;
             }
 

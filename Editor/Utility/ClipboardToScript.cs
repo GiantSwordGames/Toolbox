@@ -24,7 +24,6 @@ namespace GiantSword
                     {
                         if (e.keyCode == KeyCode.V)
                         {
-                            Debug.Log("v");
 
                             if (ClipboardToScript.CreateScriptFromClipboard())
                             {
