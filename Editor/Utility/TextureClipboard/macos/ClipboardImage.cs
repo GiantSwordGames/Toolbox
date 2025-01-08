@@ -14,14 +14,22 @@ public class ClipboardTexturePaster2 : Editor
         {
             EditorApplication.projectWindowItemOnGUI += OnProjectViewUpdate;
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyUpdate;
+            SceneView.duringSceneGui += OnSceneViewUpdate;
+        }
+
+        private static void OnSceneViewUpdate(SceneView obj)
+        {
+            
         }
 
         private static void OnHierarchyUpdate(int instanceid, Rect selectionrect)
         {
-            // create a sprite renderer and paste the clipboard image into it
-            
-            Event e = Event.current;
+            TryPasteIntoScene();
+        }
 
+        private static void TryPasteIntoScene()
+        {
+            Event e = Event.current;
             if (e != null)
             {
                 if (e.type == EventType.KeyDown)
@@ -38,6 +46,11 @@ public class ClipboardTexturePaster2 : Editor
                             if (clipboardTexture != null)
                             {
                                 sr.sprite = clipboardTexture;
+                            }
+
+                            if (Selection.activeTransform)
+                            {
+                                sr.transform.SetParent(Selection.activeTransform);
                             }
                             RuntimeEditorHelper.Select(sr);
                         }

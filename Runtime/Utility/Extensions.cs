@@ -258,6 +258,48 @@ namespace GiantSword
             SceneManager.SetActiveScene(scene);
         }
 
+        public static Coroutine DoScale(this Transform transform, float start, float to, float duration)
+        {
+            return DoScale( transform, new Vector3(start, start, start), new Vector3(to, to, to), duration);
+            
+        }
+        public static Coroutine DoScale( this Transform transform, Vector3 start, Vector3 to, float duration)
+        {
+            return AsyncHelper.StartCoroutine(IEDoScale( transform, start, to, duration));
+        }
+
+        public static void OnComplete(this Coroutine coroutine, Action action)
+        {
+            AsyncHelper.InvokeOnCoroutineComplete(coroutine, action);
+        }
+
+        public static T Instantate<T>(this T prefab) where T : Component
+        {
+            return Object.Instantiate(prefab);
+        }
+        
+        public static T Instantate<T>(this T prefab, Vector3 position) where T : Component
+        {
+            return Object.Instantiate(prefab, position, Quaternion.identity);
+        }
+        
+        public static T Instantate<T>(this T prefab, Transform parent) where T : Component
+        {
+            return Object.Instantiate(prefab, parent);
+        }
+
+        private static IEnumerator IEDoScale(Transform transform, Vector3 start, Vector3 to, float duration)
+        {
+            float lerp = 0;
+            while (lerp < 1)
+            {
+                lerp += Time.deltaTime / duration;
+                lerp = Mathf.Clamp01(lerp);
+                transform.localScale = Vector3.Lerp(start, to, lerp);
+                yield return null;
+            }   
+            yield break;
+        }
         public static void SetProperty(this Renderer meshRenderer, string name, float value)
         {
             MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
@@ -997,6 +1039,26 @@ namespace GiantSword
             scale.z = z;
             transform.localScale = scale;
             return transform;
+        }
+        
+        public static void SetLocalX(this Transform transform, float value)
+        {
+            transform.localPosition = transform.localPosition.WithX(value);
+        }
+        
+        public static void SetLocalY(this Transform transform, float value)
+        {
+            transform.localPosition = transform.localPosition.WithY(value);
+        }
+        
+        public static void SetLocalZ(this Transform transform, float value)
+        {
+            transform.localPosition = transform.localPosition.WithZ(value);
+        }
+        
+        public static void SetXY(this Transform transform, Vector3 value)
+        {
+            transform.position = value.WithZ(transform.position.z);
         }
         
         public static void SetX(this Transform transform, float value)

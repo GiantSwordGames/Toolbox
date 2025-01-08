@@ -58,5 +58,18 @@ namespace GiantSword
                 yield return null;
             }
         }
+
+        public static void InvokeOnCoroutineComplete(Coroutine coroutine, Action action)
+        {
+            StartCoroutine(IEInvokeOnCoroutineComplete(coroutine, action));
+        }
+        
+        private static IEnumerator IEInvokeOnCoroutineComplete(Coroutine coroutine, Action action)
+        {
+            if (coroutine != null)
+                yield return coroutine;
+
+            action?.Invoke();
+        }
     }
 }

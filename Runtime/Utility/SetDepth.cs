@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace GiantSword
@@ -10,10 +11,20 @@ namespace GiantSword
             World
         }
         
-        [SerializeField] private float _depth = 0;
+        [SerializeField] private SmartFloat _depth = 0;
         [SerializeField] private Space _space = Space.Local;
         // Update is called once per frame
         void OnDrawGizmosSelected()
+        {
+            Apply();
+        }
+
+        public void Awake()
+        {
+            Apply();
+        }
+
+        private void Apply()
         {
             if (_space == Space.Local)
             {
