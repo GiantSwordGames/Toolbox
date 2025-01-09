@@ -258,14 +258,14 @@ namespace GiantSword
             SceneManager.SetActiveScene(scene);
         }
 
-        public static Coroutine DoScale(this Transform transform, float start, float to, float duration)
+        public static Coroutine DoScaleTween(this Transform transform, float start, float to, float duration)
         {
-            return DoScale( transform, new Vector3(start, start, start), new Vector3(to, to, to), duration);
+            return DoScaleTween( transform, new Vector3(start, start, start), new Vector3(to, to, to), duration);
             
         }
-        public static Coroutine DoScale( this Transform transform, Vector3 start, Vector3 to, float duration)
+        public static Coroutine DoScaleTween( this Transform transform, Vector3 start, Vector3 to, float duration)
         {
-            return AsyncHelper.StartCoroutine(IEDoScale( transform, start, to, duration));
+            return AsyncHelper.StartCoroutine(IEDoScaleTween( transform, start, to, duration));
         }
 
         public static void OnComplete(this Coroutine coroutine, Action action)
@@ -288,7 +288,7 @@ namespace GiantSword
             return Object.Instantiate(prefab, parent);
         }
 
-        private static IEnumerator IEDoScale(Transform transform, Vector3 start, Vector3 to, float duration)
+        private static IEnumerator IEDoScaleTween(Transform transform, Vector3 start, Vector3 to, float duration)
         {
             float lerp = 0;
             while (lerp < 1)
@@ -542,6 +542,29 @@ namespace GiantSword
         {
             gameObject.SetActive(false);
         }
+
+        public static List<T> GetDirectChildren<T>(this Component component) where T : Component
+        {
+            return component.gameObject.GetDirectChildren<T>();
+        }
+
+        public static List<T> GetDirectChildren<T>(this GameObject gameObject) where T : Component
+        {
+            List<Transform> directChildren = gameObject.transform.GetDirectChildren();
+            List<T> children = new List<T>();
+            foreach (Transform child in directChildren)
+            {
+                var component = child.GetComponent<T>();
+                if (component)
+                {
+                    children.Add(component);
+                }
+            }
+
+            return children;
+        }
+
+
 
         public static Coroutine TweenFloat(this TextMeshProUGUI text, float start, float end,float duration,
             Func<float, string> formattingFunction, Action onComplete = null)
@@ -1060,6 +1083,12 @@ namespace GiantSword
         {
             transform.position = value.WithZ(transform.position.z);
         }
+        
+        public static bool IsEqualXY(this Transform transform, Vector3 value)
+        {
+            return transform.position.x == value.x && transform.position.y == value.y;
+        }
+
         
         public static void SetX(this Transform transform, float value)
         {

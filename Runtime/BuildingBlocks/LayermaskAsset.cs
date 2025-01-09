@@ -31,5 +31,11 @@ namespace GiantSword
         {
             return Contains(component.gameObject);
         }
+
+        public Collider2D OverlapCircle2D(Vector3 position, float raduis)
+        {
+            Collider2D overlapCircle = Physics2D.OverlapCircle(position, raduis, layerMask.value);
+            return overlapCircle;
+        }
     }
 }

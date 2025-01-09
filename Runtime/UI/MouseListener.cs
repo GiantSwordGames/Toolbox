@@ -10,6 +10,8 @@ namespace GiantSword
         [SerializeField] private UnityEvent _mouseEnter = new UnityEvent();
         [SerializeField] private UnityEvent _mouseExit = new UnityEvent();
         [SerializeField] private UnityEvent _mouseDown = new UnityEvent();
+        [SerializeField] private UnityEvent _mouseUp = new UnityEvent();
+        [SerializeField] private UnityEvent _mouseUpAnyWhere = new UnityEvent();
         [SerializeField] private bool _isMouseOver = false;
 
         public UnityEvent mouseEnter => _mouseEnter;
@@ -17,6 +19,8 @@ namespace GiantSword
         public UnityEvent mouseExit => _mouseExit;
 
         public UnityEvent mouseDown => _mouseDown;
+        public UnityEvent mouseUp => _mouseUp;
+        public UnityEvent mouseUpAnyWhere => _mouseUpAnyWhere;
 
         public bool isMouseOver => _isMouseOver;
 
@@ -45,8 +49,22 @@ namespace GiantSword
             _mouseDown?.Invoke();
         }
 
+        private void OnMouseUp()
+        {
+            _mouseUp?.Invoke();
+        }
+
         private void Start()
         {
+        }
+
+
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
+                _mouseUpAnyWhere?.Invoke();
+            }
         }
 
         public void AddListenersToChildren()
@@ -60,6 +78,7 @@ namespace GiantSword
                     mouseListener.mouseEnter.AddListener( _mouseEnter.Invoke);
                     mouseListener.mouseExit.AddListener( _mouseExit.Invoke);
                     mouseListener.mouseDown.AddListener( _mouseDown.Invoke);
+                    mouseListener._mouseUp.AddListener( _mouseUp.Invoke);
                 }
             }
         }
