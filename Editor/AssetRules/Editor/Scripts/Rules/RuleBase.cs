@@ -23,7 +23,9 @@ namespace GiantSword.AssetRules
         [SerializeField] protected string _customPostfix;
         [SerializeField] protected string _regexValidation;
         [SerializeField] protected bool _removeSpaces = true;
+        [SerializeField] protected bool _capitalize = true;
         [SerializeField] protected bool _replaceSpacesWithUnderscores = true;
+        [SerializeField] protected bool _removeHyphens = true;
      
         [Tooltip("Specifically for environment folder assets that need to include there super category in there name")]
         [SerializeField] protected bool _includeGrandparentInName = false;
@@ -117,6 +119,18 @@ namespace GiantSword.AssetRules
             
             string formattedDirectory = Path.GetDirectoryName(assetPath).Replace("\\", "/") + "/";
 
+            
+            if (_capitalize)
+            {
+                 formattedDirectory = Regex.Replace(formattedDirectory, @"(^|[^a-zA-Z])([a-z])", match => 
+                    match.Groups[1].Value + match.Groups[2].Value.ToUpper()
+                );
+            }
+            
+            if (_removeHyphens)
+                formattedDirectory = formattedDirectory.Replace("-", "");
+
+            
             if (_removeSpaces)
                 formattedDirectory = formattedDirectory.Replace(" ", "");
 
@@ -168,6 +182,16 @@ namespace GiantSword.AssetRules
         {
             string formattedName = Path.GetFileNameWithoutExtension(assetPath);
 
+            if (_capitalize)
+            {
+                formattedName = Regex.Replace(formattedName, @"(^|[^a-zA-Z])([a-z])", match => 
+                    match.Groups[1].Value + match.Groups[2].Value.ToUpper()
+                );
+            }
+            
+            if (_removeHyphens)
+                formattedName = formattedName.Replace("-", "");
+
             if (_removeSpaces)
                 formattedName = formattedName.Replace(" ", "");
 
@@ -217,6 +241,8 @@ namespace GiantSword.AssetRules
             {
                 formattedName = formattedName.Substring(0, formattedName.Length - 1);
             }
+            
+            
             
             return formattedName;
         }

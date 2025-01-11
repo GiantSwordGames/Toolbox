@@ -24,11 +24,20 @@ MonoBehaviour:
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 0
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
   _includeGrandparentInName: 0
   _parentFolder: 
   _absolutePath: 
-  _regexReplaceFromName: []
+  _regexReplaceFromName:
+  - description: 
+    replace: Texture
+    with: 
+    disable: 0
+  - description: 
+    replace: '-'
+    with: 
+    disable: 0
   _regexReplaceInDirectories:
   - description: 
     replace: /Sprites
