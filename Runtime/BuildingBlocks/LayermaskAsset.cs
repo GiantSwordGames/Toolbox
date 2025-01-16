@@ -37,5 +37,23 @@ namespace GiantSword
             Collider2D overlapCircle = Physics2D.OverlapCircle(position, raduis, layerMask.value);
             return overlapCircle;
         }
+        
+        public Collider2D OverlapCircle2D(Vector3 position, float raduis, GameObject ignoreGameObject)
+        {
+            Collider2D[] results = Physics2D.OverlapCircleAll(position, raduis, layerMask.value);
+            foreach (Collider2D collider2D in results)
+            {
+                if (collider2D.gameObject != ignoreGameObject)
+                {
+                    return collider2D;
+                }
+            }
+            return null;
+        }
+        
+        public Collider2D[] OverlapCircleAll2D(Vector3 position, float raduis)
+        {
+            return Physics2D.OverlapCircleAll(position, raduis, layerMask.value);
+        }
     }
 }

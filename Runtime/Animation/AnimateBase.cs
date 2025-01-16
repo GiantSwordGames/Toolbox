@@ -43,6 +43,7 @@ namespace GiantSword
         [SerializeField] float _duration = Mathf.Infinity;
         [ShowNonSerializedField] bool _running = false;
         [ShowNonSerializedField] protected float _time = 0f;
+        [ShowNonSerializedField] private float _lastEvaluate;
 
         protected bool additive => _mode == Mode.Additive;
 
@@ -56,10 +57,7 @@ namespace GiantSword
 
         private void OnValidate()
         {
-            if (_additive)
-            {
-                _mode = Mode.Additive;
-            }
+          
         }
 
         protected void Start()
@@ -100,7 +98,9 @@ namespace GiantSword
                 }
                 inputTime = Mathf.Clamp(_time, 0, _duration);
             }
-            return _tweenSettings.Evaluate(inputTime)*lerp;
+
+            _lastEvaluate = _tweenSettings.Evaluate(inputTime)*lerp;
+            return _lastEvaluate;
         }
 
         void Update()

@@ -273,21 +273,26 @@ namespace GiantSword
             AsyncHelper.InvokeOnCoroutineComplete(coroutine, action);
         }
 
-        public static T Instantate<T>(this T prefab) where T : Component
+        public static T Instantate<T>(this T prefab) where T : Object
         {
             return Object.Instantiate(prefab);
         }
         
-        public static T Instantate<T>(this T prefab, Vector3 position) where T : Component
+        
+        public static T Instantate<T>(this T prefab, Vector3 position) where T : Object
         {
             return Object.Instantiate(prefab, position, Quaternion.identity);
         }
         
-        public static T Instantate<T>(this T prefab, Transform parent) where T : Component
+        public static T Instantate<T>(this T prefab, Transform parent) where T : Object
         {
             return Object.Instantiate(prefab, parent);
         }
 
+        public static T Instantate<T>(this T prefab, Transform parent, Vector3 position) where T : Object
+        {
+            return Object.Instantiate(prefab, position, Quaternion.identity, parent);
+        }
         private static IEnumerator IEDoScaleTween(Transform transform, Vector3 start, Vector3 to, float duration)
         {
             float lerp = 0;
@@ -543,10 +548,41 @@ namespace GiantSword
             gameObject.SetActive(false);
         }
 
+        public static Vector3 GetBottom(this Bounds bounds)
+        {
+            return bounds.center - Vector3.up * bounds.extents.y;
+        }
+        
+        public static Vector3 GetTop(this Bounds bounds)
+        {
+            return bounds.center + Vector3.up * bounds.extents.y;
+        }
+        
+
         public static List<T> GetDirectChildren<T>(this Component component) where T : Component
         {
             return component.gameObject.GetDirectChildren<T>();
         }
+
+        public static void SetLayer(this GameObject gameObject, string layer, bool applyToChildren = false)
+        {
+            SetLayer(gameObject, LayerMask.NameToLayer(layer), applyToChildren);
+        }
+        
+        public static void SetLayer(this GameObject gameObject, int layer, bool applyToChildren =false)
+        {
+            gameObject.layer = layer;
+            if (applyToChildren)
+            {
+                foreach (Transform child in gameObject.transform)
+                {
+                    child.gameObject.SetLayer(layer, true);
+                }
+            }
+        }
+
+
+        
 
         public static List<T> GetDirectChildren<T>(this GameObject gameObject) where T : Component
         {
@@ -910,7 +946,10 @@ namespace GiantSword
         
         public static string ToTitleCase(this string text)
         {
+            text=text.Replace("_", " ").Trim();
+
             string result = "";
+            
             for (int i = 0; i < text.Length; i++)
             {
                 if (i == 0)
@@ -928,6 +967,13 @@ namespace GiantSword
             }
 
             return result;
+        }
+
+        public static string ToTitleCase(this string text, string remove)
+        {
+
+            string result = text.Replace(remove,"");
+            return  result.ToTitleCase();
         }
 
         public static string ToUpperCamelCase(this string input)
@@ -1083,6 +1129,12 @@ namespace GiantSword
         {
             transform.position = value.WithZ(transform.position.z);
         }
+        
+        public static void SetLocalXY(this Transform transform, Vector3 value)
+        {
+            transform.localPosition = value.WithZ(transform.localPosition.z);
+        }
+
         
         public static bool IsEqualXY(this Transform transform, Vector3 value)
         {

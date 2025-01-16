@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace GiantSword
 {
-    public class DoPunchScale : MonoBehaviour
+    public class DoPunchPosition : MonoBehaviour
     {
         [SerializeField] private TargetTransform _target;
         [FormerlySerializedAs("_punchScaleAsset")] [SerializeField] private PunchAsset _punchAsset;

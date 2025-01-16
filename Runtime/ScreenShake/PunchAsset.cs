@@ -6,7 +6,7 @@ using UnityEngine.Serialization;
 namespace GiantSword
 {
     [CreateAssetMenu]
-    public class PunchScaleAsset : ScriptableObject
+    public class PunchAsset : ScriptableObject
     {
         [SerializeField] private float _duration = 1;
          [SerializeField] private float _amplitude =1;
@@ -21,9 +21,9 @@ namespace GiantSword
 
         public float duration => _duration;
 
-        public PunchInstance Apply(Transform target)
+        public PunchInstance ApplyToScale(Transform target)
         {
-            return new PunchInstance(target, this);
+            return new PunchInstance(target, this, PunchInstance.Type.Scale);
         }
 
         [Button]

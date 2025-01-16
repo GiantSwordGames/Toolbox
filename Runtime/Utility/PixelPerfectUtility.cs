@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace GiantSword
@@ -28,9 +29,8 @@ namespace GiantSword
             float pixelsPerUnit = 16;
             float unitPerPixel = 1f / pixelsPerUnit;
             Vector3 position = element.transform.position;
-            position.x = Mathf.Round((position.x) / unitPerPixel) * unitPerPixel;
-            position.y = Mathf.Round((position.y) / unitPerPixel) * unitPerPixel;
-
+            position.x = Mathf.Round(position.x);
+            position.y = Mathf.Round(position.y);
             element.transform.position = position;
         }
         
@@ -52,17 +52,35 @@ namespace GiantSword
             float unitPerPixel = 1f / pixelsPerUnit;
 
             Vector3 position = transform.position;
+            
             Vector2 spriteSize = spriteRenderer.sprite.bounds.size * pixelsPerUnit;
 
+            float xOffset = spriteRenderer.sprite.pivot.x;
+            float yOffset = spriteRenderer.sprite.pivot.y;
+            // Vector3 pivot = new Vector3(xOffset, y)
+
+            // Debug.Log( $"spriteRenderer.sprite.pivot: {spriteRenderer.sprite.pivot}, yOffset: {yOffset}");
+            // Debug.Log( $"xOffset: {xOffset}, yOffset: {yOffset}");
+
             // Adjust position to account for odd/even dimensions
-            float xOffset = (Mathf.Floor(spriteSize.x) % 2 == 0) ? 0f : unitPerPixel / 2f;
-            float yOffset = (Mathf.Floor(spriteSize.y) % 2 == 0) ? 0f : unitPerPixel / 2f;
+            // xOffset = (Mathf.Floor(xOffset) % 2 == 0) ? 0f : unitPerPixel / 2f;
+            // yOffset = (Mathf.Floor(yOffset) % 2 == 0) ? 0f : unitPerPixel / 2f;
 
+            // Debug.Log( $" Sprite Size {spriteSize} xOffset: {xOffset}, yOffset: {yOffset}");
+            
+            // Debug.Log($"Round {position.x- xOffset} {position.y - yOffset}");
+            // Debug.Log($"Add { xOffset} { yOffset}");
             // Snap each axis
-            position.x = Mathf.Round((position.x - xOffset) / unitPerPixel) * unitPerPixel + xOffset;
-            position.y = Mathf.Round((position.y - yOffset) / unitPerPixel) * unitPerPixel + yOffset;
+            Vector3 pixelPos = position / unitPerPixel;
+            // Debug.Log($"init position {pixelPos}");
 
-            transform.position = position;
+            pixelPos.x = Mathf.Round((pixelPos.x - xOffset) )  + xOffset;
+            pixelPos.y = Mathf.Round((pixelPos.y - yOffset)) + yOffset;
+            // Debug.Log($"position { position/unitPerPixel}");
+            Vector3 worldPos = pixelPos*unitPerPixel;
+
+            Undo.RecordObject(transform,"snap");
+            transform.SetXY(worldPos); ;
         }
     }
 }

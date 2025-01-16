@@ -19,8 +19,9 @@ namespace GiantSword
         [SerializeField] private TweenType _type = TweenType.Sin;
         [SerializeField] private float _frequency = 1.0f; // Frequency of the sine wave
         [SerializeField] private float _amplitude = 0.5f; // Amplitude of the sine wave
-        [FormerlySerializedAs("_offset")] [SerializeField] private float _frequencyOffset = 0f;
+        [SerializeField] private float _frequencyOffset = 0f;
         [SerializeField] private float _amplitudeOffset = 0f;
+        [SerializeField] private float _delay = 0f;
         [SerializeField] private bool _clamp = false;
         
         [ShowIf("_type", TweenType.AnimationCurve)]
@@ -29,6 +30,12 @@ namespace GiantSword
         
         public float Evaluate(float time)
         {
+            if (_delay > 0)
+            {
+                time -= _delay;
+                time = Mathf.Max(0, time);
+            }
+            
             if (_clamp)
             {
                 time = Mathf.Clamp01(time);
@@ -41,6 +48,7 @@ namespace GiantSword
             float value = 0;
             switch (_type)
             {
+                
                 case TweenType.Linear:
                     value = time;
                     break;
