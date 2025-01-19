@@ -5,6 +5,7 @@ namespace GiantSword
     public class DrawSphereGizmo : DrawGizmoBase
     {
         [SerializeField] private float _radius = 0.5f;
+        public float radius => _radius;
 
         protected override void CustomDrawWire()
         {

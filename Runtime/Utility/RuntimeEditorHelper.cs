@@ -672,6 +672,7 @@ namespace GiantSword
 
                 public static void CreateDirectoryFromAssetPath(string folderPath)
                 {
+                        #if UNITY_EDITOR
                         if (!AssetDatabase.IsValidFolder(folderPath))
                         {
                                 string[] folders = folderPath.Split('/');
@@ -693,6 +694,7 @@ namespace GiantSword
                                         }
                                 }
                         }
+#endif
                 }
         }
 }

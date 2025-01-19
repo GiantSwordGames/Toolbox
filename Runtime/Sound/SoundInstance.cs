@@ -11,20 +11,22 @@ namespace GiantSword
         [FormerlySerializedAs("_soundBank")] [SerializeField] SoundAsset _soundAsset;
        [SerializeField] private bool _autoDestroy = true;
         
-        private float _pitch;
+        private float _randomizedPitch;
         private float _time;
         private float _fade = 1;
-        private float _volume;
+        private float _randomizedVolume;
+        private float _pitchIncrement;
+        private float _velocityAttenuation =1f;
 
-        public float pitch {
+        public float randomizedPitch {
            get
            {
-               return _pitch;
+               return _randomizedPitch;
            }
            set
            {
-               _pitch = value;
-               ApplyPitchScaling();
+               _randomizedPitch = value;
+               ApplyPitch();
            }
        }
 
@@ -53,7 +55,7 @@ namespace GiantSword
                 timer += Time.unscaledDeltaTime;
                 float lerp = timer / duration;
                 lerp = Mathf.Clamp01(lerp);
-                _audioSource.volume = (1 - lerp)*_volume;
+                _audioSource.volume = (1 - lerp)*_randomizedVolume;
                 yield return null;
             }
             Destroy(gameObject);
@@ -72,24 +74,26 @@ namespace GiantSword
                 timer += Time.unscaledDeltaTime;
                 float lerp = timer / duration;
                 lerp = Mathf.Clamp01(lerp);
-                _audioSource.volume = lerp*_volume;
+                _audioSource.volume = lerp*_randomizedVolume;
                 yield return null;
             }
         }
-        
-                
-        
 
-        private void ApplyPitchScaling()
+        private void ApplyVolume()
         {
+            _audioSource.volume = _randomizedVolume*_velocityAttenuation;
+        }
+        private void ApplyPitch()
+        {
+            float basePitch = _randomizedPitch + _pitchIncrement*_soundAsset.pitchIncrementRange; 
             if (_soundAsset.useScaledTime)
             {
-                _audioSource.pitch = _pitch*Time.timeScale;
+                _audioSource.pitch = basePitch *Time.timeScale;
             }
             else
             {
                    
-                _audioSource.pitch = _pitch;
+                _audioSource.pitch = basePitch;
             }
         }
 
@@ -117,16 +121,17 @@ namespace GiantSword
             _audioSource.minDistance = _soundAsset.rolloffDistance.min;
             _audioSource.maxDistance = _soundAsset.rolloffDistance.max;
             _audioSource.clip = _soundAsset.NextClip();
-            _volume = _soundAsset.volume.GetRandom();
-            _audioSource.volume = _volume;
-            _pitch = _soundAsset.pitch.GetRandom();
-            ApplyPitchScaling();
+            _randomizedVolume = _soundAsset.volume.GetRandom();
+            _audioSource.volume = _randomizedVolume;
+            ApplyVolume();
+            _randomizedPitch = _soundAsset.pitch.GetRandom();
+            ApplyPitch();
             _audioSource.Play();
         }
 
         private void Update()
         {
-            ApplyPitchScaling();
+            ApplyPitch();
             _time += Time.deltaTime;
             float audioLength = 0;
             if (_audioSource.clip)
@@ -134,7 +139,7 @@ namespace GiantSword
                 audioLength = _audioSource.clip.length;
             }
 
-            if (_autoDestroy &&  _audioSource.loop == false &&  _time > audioLength + 20f)
+            if (_autoDestroy &&  _audioSource.loop == false &&  _time > audioLength + 2f)
             {
                 Destroy(gameObject);
             }
@@ -150,6 +155,18 @@ namespace GiantSword
         public void Stop()
         {
             _audioSource.Stop();
+        }
+
+        public void SetIncrementalPitch(float pitchIncrement)
+        {
+            _pitchIncrement = pitchIncrement;
+            ApplyPitch();
+        }
+
+        public void SetVelocityAttenuation(float velocity)
+        {
+            _velocityAttenuation = _soundAsset.velocityAttenuation.GetNormalized(velocity);
+            ApplyVolume();
         }
     }
     

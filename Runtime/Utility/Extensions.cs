@@ -1142,6 +1142,12 @@ namespace GiantSword
         }
 
         
+        public static string ApendNewLine(this string text, string newText)
+        {
+          
+            return   text + Environment.NewLine + newText;
+        }
+        
         public static void SetX(this Transform transform, float value)
         {
             transform.position = transform.position.WithX(value);

@@ -77,6 +77,11 @@ namespace GiantSword
             return new FloatRange(min, max);
         }
 
+        public float GetNormalized(float value)
+        {
+            return Mathf.InverseLerp(_min, _max, value);
+        }
+        
         public float EvaluateUnclamped(float progressBarValue)
         {
             return Mathf.Lerp(_min, _max, progressBarValue);

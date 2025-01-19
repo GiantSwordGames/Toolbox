@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace GiantSword
@@ -11,10 +12,9 @@ namespace GiantSword
 
         public static SoundInstance PlaySound(SoundAsset soundAsset, Transform parent, Vector3 position)
         {
-            SoundInstance soundInstance = SoundInstance.Create(soundAsset, parent, position);
-            return soundInstance;   
+           return  SoundInstanceManager.Instance.PlaySound(soundAsset, parent, position);
         }
-
+       
         public static SoundInstance PlaySound(SoundAsset soundAsset, Vector3 position)
         {
             return PlaySound(soundAsset, null, position);
@@ -26,8 +26,14 @@ namespace GiantSword
                 _audioListener = GameObject.FindObjectOfType<AudioListener>();
             
             Transform t = _audioListener.transform;
-            SoundInstance soundInstance = SoundInstance.Create(soundAsset, t, t.position);
-            return soundInstance;
+            // SoundInstance soundInstance = SoundInstance.Create(soundAsset, t, t.position);
+            return PlaySound(soundAsset,t, t.position);
+        }
+        
+        
+        public static bool CanPlay(this SoundAsset soundAsset)
+        {
+            return SoundInstanceManager.Instance.CanPlaySound(soundAsset);
         }
     }
 }

@@ -24,7 +24,8 @@ public class SmartFloat
     public FloatRange _floatRange;
     public FloatVariance _floatVariance;
 
-    public Action<float> onConstantValueChanged;
+    public event Action onPing;
+    public event Action<float> onConstantValueChanged;
     public Action<float> onValueChanged
     {
         get
@@ -214,5 +215,10 @@ public class SmartFloat
 
         // Ensure final increment in case of precision issues
         value += (1 - lerpPrev) * increment;
+    }
+
+    public void PingValue()
+    {
+        onPing?.Invoke();
     }
 }

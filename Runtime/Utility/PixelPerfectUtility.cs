@@ -79,7 +79,7 @@ namespace GiantSword
             // Debug.Log($"position { position/unitPerPixel}");
             Vector3 worldPos = pixelPos*unitPerPixel;
 
-            Undo.RecordObject(transform,"snap");
+            RuntimeEditorHelper.RecordObjectUndo(transform,"snap");
             transform.SetXY(worldPos); ;
         }
     }

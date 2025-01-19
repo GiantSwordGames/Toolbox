@@ -32,7 +32,10 @@ namespace GiantSword
 
         [FormerlySerializedAs("mixerGroup")]  [SerializeField] private AudioMixerGroup _mixerGroup;
         [SerializeField] private bool _useScaledTime = true;
+        [SerializeField] private float _cooldown = 0;
+        [FormerlySerializedAs("_pitchIncrement")] [FormerlySerializedAs("_frequecyIncrementRange")] [SerializeField] private float _pitchIncrementRange = 0;
 
+        [SerializeField] FloatRange _velocityAttenuation = new FloatRange(0, 0);
         public bool isOneShot => _playback == Playback.OneShot;
         public bool isLooping => _playback == Playback.Loop;
 
@@ -56,6 +59,11 @@ namespace GiantSword
         }
 
         public float spacialBlend => _spacialBlend;
+        public float cooldown => _cooldown;
+
+        public float pitchIncrementRange => _pitchIncrementRange;
+
+        public FloatRange velocityAttenuation => _velocityAttenuation;
 
         public AudioClip NextClip() => _clips?.Length > 0 ? _clips[Random.Range(0, _clips.Length)] : null;
 
@@ -129,5 +137,6 @@ namespace GiantSword
         {
             _spacialBlend = DefaultSpatialBlend.value;
         }
+
     }
 }

@@ -27,6 +27,7 @@ namespace GiantSword
         [SerializeField] private UnityEvent _onEmpty;
         [SerializeField] private UnityEvent _onFull;
         [SerializeField] private UnityEvent _onOverKill;
+        [SerializeField] private bool _fireEventsOnNoChange;
 
         private void OnValidate()
         {
@@ -55,7 +56,7 @@ namespace GiantSword
                     _value = Mathf.Clamp(_value, 0, _max.value);
                 }
 
-                if (previous != _value)
+                if (previous != _value || _fireEventsOnNoChange)
                 {
                     onValueChanged.Invoke();
                     onValueChangedAction?.Invoke(_value);
@@ -64,7 +65,7 @@ namespace GiantSword
                     {
                         onValueDecreased.Invoke();
                     }
-                    else
+                    else if (_value > previous)
                     {
                         onValueIncreased.Invoke();
                     }
