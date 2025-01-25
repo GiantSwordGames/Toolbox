@@ -8,6 +8,8 @@ public class InputEvent : MonoBehaviour
     [SerializeField] private UnityEvent _onPressed;
     [SerializeField]  [FormerlySerializedAs("inputAction")] private InputActionReference _inputAction;
     [SerializeField] KeyCode _keyCode = KeyCode.None;
+    [SerializeField] bool _skipFirstFrame = false;
+    bool _skippedFirstFrame = false;
 
     void OnEnable()
     {
@@ -27,6 +29,11 @@ public class InputEvent : MonoBehaviour
 
     void Update()
     {
+        if (_skipFirstFrame && _skippedFirstFrame ==false)
+        {
+            _skippedFirstFrame = true;
+                return;
+        }
         if (_inputAction != null && _inputAction.action.triggered)
         {
             Trigger();

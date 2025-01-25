@@ -1,13 +1,14 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using GiantSword;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-public class ClipboardTexturePaster2 : Editor
+namespace GiantSword.ClipboardImagePaste
+{
+    public class ClipboardImagePasteUtility : Editor
     {
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -19,7 +20,7 @@ public class ClipboardTexturePaster2 : Editor
 
         private static void OnSceneViewUpdate(SceneView obj)
         {
-            
+            TryPasteIntoScene();
         }
 
         private static void OnHierarchyUpdate(int instanceid, Rect selectionrect)
@@ -37,22 +38,23 @@ public class ClipboardTexturePaster2 : Editor
                     if (e.keyCode == KeyCode.V)
                     {
                         Sprite clipboardTexture = PasteClipboardImage();
-                        if ( clipboardTexture)
+                        if (clipboardTexture)
                         {
                             e.Use();
-                            
+
                             GameObject go = new GameObject(clipboardTexture.name);
-                            SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+                            SpriteRenderer spriteRenderer = go.AddComponent<SpriteRenderer>();
                             if (clipboardTexture != null)
                             {
-                                sr.sprite = clipboardTexture;
+                                spriteRenderer.sprite = clipboardTexture;
                             }
 
                             if (Selection.activeTransform)
                             {
-                                sr.transform.SetParent(Selection.activeTransform);
+                                spriteRenderer.transform.SetParent(Selection.activeTransform);
                             }
-                            RuntimeEditorHelper.Select(sr);
+
+                            Selection.activeObject = spriteRenderer;
                         }
                     }
                 }
@@ -89,7 +91,7 @@ public class ClipboardTexturePaster2 : Editor
             }
 
             // Ensure the folder exists
-            RuntimeEditorHelper.CreateDirectoryFromAssetPath(folderPath);
+            CreateDirectoryFromAssetPath(folderPath);
 
             // Get image data from the clipboard
             Texture2D clipboardTexture = GetImageFromClipboard();
@@ -103,38 +105,61 @@ public class ClipboardTexturePaster2 : Editor
             File.WriteAllBytes(texturePath, clipboardTexture.EncodeToPNG());
             AssetDatabase.Refresh();
 
-           TextureImporter importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
-           if (importer != null)
-           {
-               importer.textureType = TextureImporterType.Sprite;
-               AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
-               result = AssetDatabase.LoadAssetAtPath<Sprite>(texturePath);
-               Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
-               RuntimeEditorHelper.Select(texture2D);
-
-           }
-
-           Debug.Log("Image pasted and saved as Texture2D at: " + texturePath,result);
+            TextureImporter importer = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+            if (importer != null)
+            {
+                importer.textureType = TextureImporterType.Sprite;
+                AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
+                result = AssetDatabase.LoadAssetAtPath<Sprite>(texturePath);
+                Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
+                Selection.activeObject = texture2D;
+            }
+            Debug.Log("Image pasted and saved as Texture2D at: " + texturePath, result);
             return result;
         }
 
         private static string GetSelectedFolderPath()
-{
-    foreach (Object obj in Selection.GetFiltered<Object>(mode: SelectionMode.Assets))
-    {
-        string path = AssetDatabase.GetAssetPath(obj);
-        if (AssetDatabase.IsValidFolder(path))
         {
-            return path;
-        }
-        else if (File.Exists(path))
-        {
-            return Path.GetDirectoryName(path);
-        }
-    }
+            foreach (Object obj in Selection.GetFiltered<Object>(mode: SelectionMode.Assets))
+            {
+                string path = AssetDatabase.GetAssetPath(obj);
+                if (AssetDatabase.IsValidFolder(path))
+                {
+                    return path;
+                }
+                else if (File.Exists(path))
+                {
+                    return Path.GetDirectoryName(path);
+                }
+            }
 
-    return null;
-}
+            return null;
+        }
+        
+        public static void CreateDirectoryFromAssetPath(string folderPath)
+        {
+            if (!AssetDatabase.IsValidFolder(folderPath))
+            {
+                string[] folders = folderPath.Split('/');
+                string currentPath = "";
+                for (int i = 0; i < folders.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        currentPath = folders[i];
+                    }
+                    else
+                    {
+                        string newPath = currentPath + "/" + folders[i];
+                        if (!AssetDatabase.IsValidFolder(newPath))
+                        {
+                            AssetDatabase.CreateFolder(currentPath, folders[i]);
+                        }
+                        currentPath = newPath;
+                    }
+                }
+            }
+        }
 
 
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
@@ -169,3 +194,4 @@ public class ClipboardTexturePaster2 : Editor
         }
     }
 
+}

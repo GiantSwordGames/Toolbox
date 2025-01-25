@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rule_Physics
   m_EditorClassIdentifier: 
   _enabled: 1
-  _example: {fileID: 13400000, guid: 9eab62ed6289b469293d2637666e1303, type: 2}
+  _example: {fileID: 13400000, guid: 8b4af0e2b74dd4a5c86cb8455a9d23a4, type: 2}
   _test: {fileID: 13400000, guid: 7e8b2279e0e4e426a81fe127cad7873b, type: 2}
   _pathTest: 
   _exceptions: []
@@ -23,9 +23,11 @@ MonoBehaviour:
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 1
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
+  _removeHyphens: 1
   _includeGrandparentInName: 0
-  _parentFolder: 
+  _parentFolder: Physics
   _absolutePath: 
   _regexReplaceFromName: []
   _regexReplaceInDirectories: []

@@ -160,6 +160,19 @@ public class SmartFloat
         }
     }
 
+    public float normalizedValue
+    {
+        get
+        {
+            if (_mode == Mode.MonoFloat)
+            {
+                return _monoFloat.GetNormalizedValue();
+            }
+
+            return value;
+        }
+    }
+
     // implicit operator to convert float to SmartFloat
     public static implicit operator SmartFloat(float value)
     {

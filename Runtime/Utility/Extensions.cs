@@ -110,6 +110,10 @@ namespace GiantSword
             return to - from;
         }
         
+        public static float Dot(this Vector2 lhs, Vector2 rhs)
+        {
+            return Vector2.Dot(lhs, rhs);
+        }
         
         public static float Dot(this Vector3 lhs, Vector3 rhs)
         {
@@ -228,6 +232,18 @@ namespace GiantSword
         }
 
         public static Vector3 WithY(this Vector3 vector, float value)
+        {
+            vector.y = value;
+            return vector;
+        }
+        
+        public static Vector2 WithX(this Vector2 vector, float value)
+        {
+            vector.x = value;
+            return vector;
+        }
+
+        public static Vector2 WithY(this Vector2 vector, float value)
         {
             vector.y = value;
             return vector;
@@ -559,9 +575,9 @@ namespace GiantSword
         }
         
 
-        public static List<T> GetDirectChildren<T>(this Component component) where T : Component
+        public static List<T> GetDirectChildren<T>(this Component component, bool includeInactive = false) where T : Component
         {
-            return component.gameObject.GetDirectChildren<T>();
+            return component.gameObject.GetDirectChildren<T>(includeInactive);
         }
 
         public static void SetLayer(this GameObject gameObject, string layer, bool applyToChildren = false)
@@ -584,13 +600,13 @@ namespace GiantSword
 
         
 
-        public static List<T> GetDirectChildren<T>(this GameObject gameObject) where T : Component
+        public static List<T> GetDirectChildren<T>(this GameObject gameObject, bool includeInactive =false ) where T : Component
         {
             List<Transform> directChildren = gameObject.transform.GetDirectChildren();
             List<T> children = new List<T>();
             foreach (Transform child in directChildren)
             {
-                var component = child.GetComponent<T>();
+                var component = child.gameObject.GetComponent<T>();
                 if (component)
                 {
                     children.Add(component);
@@ -1142,10 +1158,17 @@ namespace GiantSword
         }
 
         
-        public static string ApendNewLine(this string text, string newText)
+        public static string AppendNewLine(this string text, string newText)
         {
-          
             return   text + Environment.NewLine + newText;
+        }
+
+        public static void SetEnabled<T>(this T[] components, bool state) where T : Behaviour
+        {
+            for (int i = 0; i < components.Length; i++)
+            {
+                components[i].enabled = state;
+            }
         }
         
         public static void SetX(this Transform transform, float value)

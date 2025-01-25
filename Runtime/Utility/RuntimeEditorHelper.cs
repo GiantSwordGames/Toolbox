@@ -594,7 +594,7 @@ namespace GiantSword
 
 
                 // Instantiate prefab if possible otherwise do a regular gameobject instantiate
-                public static T SmartInstantiate<T>(this T prefab, Transform transform = null) where T : MonoBehaviour
+                public static T SmartInstantiate<T>(this T prefab, Transform transform = null) where T : Object
                 {
                         T instantiated = null;
 #if UNITY_EDITOR

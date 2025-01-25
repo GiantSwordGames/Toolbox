@@ -78,5 +78,10 @@ namespace GiantSword
             _onFail?.Invoke();
             _onCoinTossComplete?.Invoke();
         }
+
+        public static bool Flip()
+        {
+            return Random.value > 0.5f;
+        }
     }
 }

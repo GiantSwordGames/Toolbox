@@ -1,8 +1,10 @@
 using System;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace GiantSword
 {
+    [ExecuteInEditMode]
     public class SetDepth : MonoBehaviour
     {
         enum Space
@@ -13,10 +15,14 @@ namespace GiantSword
         
         [SerializeField] private SmartFloat _depth = 0;
         [SerializeField] private Space _space = Space.Local;
+        [SerializeField] private bool _updateAtRuntime;
         // Update is called once per frame
-        void OnDrawGizmosSelected()
+        void Update()
         {
-            Apply();
+            if (Application.isPlaying == false || _updateAtRuntime)
+            {
+                Apply();
+            }
         }
 
         public void Awake()
@@ -24,7 +30,8 @@ namespace GiantSword
             Apply();
         }
 
-        private void Apply()
+        [Button]
+        public void Apply()
         {
             if (_space == Space.Local)
             {
