@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace GiantSword
 {
+
+
     [CustomPropertyDrawer(typeof(SoundAsset))]
     public class SoundAssetPropertyDrawer : PropertyDrawer
     {

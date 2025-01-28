@@ -515,6 +515,20 @@ namespace GiantSword
 
             return null;
         }
+
+        public static Transform GetLastActiveChild(this Transform transform)
+        {
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                Transform child = transform.GetChild(i);
+                if (child.gameObject.activeSelf)
+                {
+                    return child;
+                }
+            }
+
+            return null;
+        }
         
         public static Transform GetNextSibling(this Transform child, int direction, bool loop = true)
         {
@@ -616,6 +630,11 @@ namespace GiantSword
             return children;
         }
 
+        public static bool IsInViewport(this Camera camera, Vector3 position)
+        {
+            Vector3 viewportPoint = camera.WorldToViewportPoint(position);
+            return viewportPoint.x >= 0 && viewportPoint.x <= 1 && viewportPoint.y >= 0 && viewportPoint.y <= 1;
+        }
 
 
         public static Coroutine TweenFloat(this TextMeshProUGUI text, float start, float end,float duration,
@@ -913,6 +932,26 @@ namespace GiantSword
             }
 
             return list;
+        }
+
+        public static int CountRegisteredListeners(this Action list)
+        {
+            if (list == null)
+            {
+                return 0;
+            }
+
+            return list.GetInvocationList().Length;
+        }
+        
+        public static int CountRegisteredListeners<T>(this Action<T> list)
+        {
+            if (list == null)
+            {
+                return 0;
+            }
+
+            return list.GetInvocationList().Length;
         }
 
         public static void SortBySiblingIndex<T>(this List<T> list) where T : Component

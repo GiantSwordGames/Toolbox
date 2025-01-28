@@ -19,9 +19,13 @@ namespace GiantSword
 
         [SerializeField] private bool _initialValue;
         
-        public bool initialValue => _initialValue;
+        public bool initialValue
+        {
+            get => _initialValue;
+            set => _initialValue = value;
+        }
 
-       [ShowNativeProperty]  public bool value
+        [ShowNativeProperty]  public bool value
         {
             get
             {

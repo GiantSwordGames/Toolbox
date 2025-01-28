@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace GiantSword
@@ -48,12 +49,15 @@ namespace GiantSword
             }
             
         }
+
+       [ShowNativeProperty]  private int count => _scriptableBools.Count;
         
         private  Dictionary<ScriptableBool, State> _scriptableBools = new Dictionary<ScriptableBool, State>();
         
         
         public static void ResetAll(ScriptableVariableScope scriptableVariableScope)
         {
+            
             var keysToReset = new List<ScriptableBool>();
 
             foreach (var variable in instance._scriptableBools)
@@ -87,6 +91,18 @@ namespace GiantSword
             }
 
             instance._scriptableBools[scriptableBool].value = value;
+        }
+
+        [Button]
+        private bool LogRegisteredBools()
+        {
+            foreach (var variable in _scriptableBools)
+            {
+                Debug.Log($"Registered Bool {variable.Key} {variable.Value.value} {variable.Value.onValueChanged.CountRegisteredListeners()}", variable.Key);
+            }
+
+            return true;
+            
         }
     }
 }

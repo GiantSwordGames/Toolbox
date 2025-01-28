@@ -1,17 +1,14 @@
 using System;
 using UnityEditor;
-using UnityEngine;
 
-namespace GiantSword.Plugins.Framework.Generic.Editor.GiantSword
+namespace GiantSword
 {
-    
-    [CustomPropertyDrawer(typeof(ScriptableFloat))]
-    public class ConfigurationFloatDrawer : FloatAssetDrawerBase<ScriptableFloat>
+    [CustomPropertyDrawer(typeof(ConfigurationFloat))]
+    public class ConfigurationFloatDrawer : FloatAssetDrawerBase<ConfigurationFloat>
     {
-
         protected override float GetValue( SerializedProperty property)
         {
-            var targetObject = property.objectReferenceValue as ScriptableFloat;
+            var targetObject = property.objectReferenceValue as ConfigurationFloat;
             if (targetObject != null)
             {
                 return targetObject.value;

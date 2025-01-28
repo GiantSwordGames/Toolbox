@@ -8,12 +8,13 @@ namespace GiantSword
         [RuntimeInitializeOnLoadMethod]
         public static void Initialize()
         {
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
             ScriptableBoolManager boolManager = ScriptableBoolManager.instance;
             ScriptableFloatManager floatManager = ScriptableFloatManager.instance;
         }
 
-        private static void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        // reset on unload so that value are correct on Awake
+        private static void OnSceneUnloaded(Scene arg0)
         {
             ResetAll(ScriptableVariableScope.Scene);
         }
@@ -22,6 +23,7 @@ namespace GiantSword
         {
             ScriptableBoolManager.ResetAll(scriptableVariableScope);
             ScriptableFloatManager.ResetAll(scriptableVariableScope);
+            ScriptableEventManager.ResetAll(scriptableVariableScope);
         }   
     }
 }

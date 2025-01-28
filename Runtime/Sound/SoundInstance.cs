@@ -41,7 +41,9 @@ namespace GiantSword
                 _audioSource.volume = value;
             }
         }
-        
+
+        public SoundAsset soundAsset => _soundAsset;
+
         public void FadeOut(float duration)
         {
             StartCoroutine(IEFadeOut(duration));

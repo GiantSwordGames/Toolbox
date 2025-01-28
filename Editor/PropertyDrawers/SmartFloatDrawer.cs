@@ -59,7 +59,7 @@ namespace GiantSwordEditor
                     modeProp.enumValueIndex = (int)SmartFloat.Mode.Constant;
                     property.serializedObject.ApplyModifiedProperties();
                 });
-                menu.AddItem(new GUIContent("Use Variable"), modeProp.enumValueIndex == (int)SmartFloat.Mode.Variable, () =>
+                menu.AddItem(new GUIContent("Use ScriptableFloat"), modeProp.enumValueIndex == (int)SmartFloat.Mode.Variable, () =>
                 {
                     modeProp.enumValueIndex = (int)SmartFloat.Mode.Variable;
                     property.serializedObject.ApplyModifiedProperties();

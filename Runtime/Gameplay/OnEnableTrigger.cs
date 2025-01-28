@@ -11,7 +11,7 @@ namespace GiantSword
         [Button]
         void OnEnable()
         {
-            if (Time.frameCount != 0)
+            // if (Time.frameCount != 0)
             {
                 onEnable?.Invoke();
             }

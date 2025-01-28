@@ -11,6 +11,7 @@ namespace GiantSword
         {
             WaitForTrigger,
             RunOnStart,
+            RunOnEnable,
         }
         
         enum ResetBehaviour
@@ -41,6 +42,7 @@ namespace GiantSword
         [HideInInspector] [SerializeField] protected bool _additive = true;
         [SerializeField] protected SmartTween _tweenSettings;
         [SerializeField] float _duration = Mathf.Infinity;
+        [SerializeField] float _resultOffset =0;
         [ShowNonSerializedField] bool _running = false;
         [ShowNonSerializedField] protected float _time = 0f;
         [ShowNonSerializedField] private float _lastEvaluate;
@@ -52,6 +54,11 @@ namespace GiantSword
             if (_resetBehaviour == ResetBehaviour.ResetOnEnable)
             {
                 Reset();
+            }
+            
+            if (_startBehavior == TriggerBehavior.RunOnEnable)
+            {
+                Trigger();
             }
         }
 
@@ -99,7 +106,9 @@ namespace GiantSword
                 inputTime = Mathf.Clamp(_time, 0, _duration);
             }
 
-            _lastEvaluate = _tweenSettings.Evaluate(inputTime)*lerp;
+            // inputTime += _timeOffset;
+
+            _lastEvaluate = (_tweenSettings.Evaluate(inputTime) + _resultOffset) *lerp;
             return _lastEvaluate;
         }
 
