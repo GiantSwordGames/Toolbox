@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GiantSword;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class AnimateChildren : MonoBehaviour {
@@ -13,8 +14,9 @@ public class AnimateChildren : MonoBehaviour {
 
     public bool loop = true;
     public bool randomOffset = false;
+    private bool _isComplete = false;
 
-
+    [SerializeField] private UnityEvent _onLoopComplete;
     float timer = 0;
     int frame = 0;
 
@@ -25,17 +27,18 @@ public class AnimateChildren : MonoBehaviour {
     {
         frame = 0;
         timer = 0;
+        _isComplete = false;
         SetFrame();
     }
 
-    // Use this for initialization
-	void Start () {
+    private void OnEnable()
+    {
         children = transform.GetDirectChildren();
 
         if(randomOffset)
             timer = fps * Random.value;
 
-        SetFrame();
+        Reset();
     }
 
     // Update is called once per frame
@@ -51,11 +54,19 @@ public class AnimateChildren : MonoBehaviour {
             timer -= 1f / fps;
             frame++;
 
-            if(loop)
-                frame %= children.Count;
-            else
+            
+            if(frame > children.Count - 1)
             {
-                frame = Mathf.Clamp(frame, 0, children.Count);
+                if (loop)
+                {
+                    frame = 0;
+                }
+                else
+                {
+                    frame = children.Count - 1;
+                    _isComplete = true;
+                }
+                _onLoopComplete.Invoke();
             }
 
             SetFrame();

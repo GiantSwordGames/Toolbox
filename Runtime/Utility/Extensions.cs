@@ -1191,9 +1191,9 @@ namespace GiantSword
         }
 
         
-        public static bool IsEqualXY(this Transform transform, Vector3 value)
+        public static bool IsEqualXY(this Transform transform, Vector3 value, float tolerance = 0.000f)
         {
-            return transform.position.x == value.x && transform.position.y == value.y;
+            return Mathf.Abs(transform.position.x - value.x) < tolerance && Mathf.Abs(transform.position.y - value.y) < tolerance;
         }
 
         

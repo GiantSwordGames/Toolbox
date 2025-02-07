@@ -27,11 +27,33 @@ namespace GiantSword
         public static void SnapTransformToGrid(PixelSnappingElement element)
         {
             float pixelsPerUnit = 16;
-            float unitPerPixel = 1f / pixelsPerUnit;
-            Vector3 position = element.transform.position;
-            position.x = Mathf.Round(position.x);
-            position.y = Mathf.Round(position.y);
-            element.transform.position = position;
+
+            if (element.snapScale)
+            {
+                Vector3 scale = element.transform.localScale;
+                scale *= pixelsPerUnit;
+                scale.x = Mathf.Round(scale.x);
+                scale.y = Mathf.Round(scale.y);
+                scale /= pixelsPerUnit;
+                element.transform.localScale = scale;
+                element.pixelSize = element.transform.localScale*pixelsPerUnit;
+            }
+            
+            Vector3 pixelPosition = element.transform.position*pixelsPerUnit;
+            Vector2 offset = (element.pixelSize / 2f);
+            offset.x %= 1;
+            offset.y %= 1;
+            
+            pixelPosition.x += offset.x;
+            pixelPosition.x = Mathf.Round(pixelPosition.x);
+            pixelPosition.y = Mathf.Round(pixelPosition.y);
+            pixelPosition.x -= offset.x;
+            element.pixelPosition = pixelPosition;
+
+            element.transform.position = pixelPosition/16;
+
+           
+
         }
         
         public static void SnapSpriteToGrid(SpriteRenderer spriteRenderer)

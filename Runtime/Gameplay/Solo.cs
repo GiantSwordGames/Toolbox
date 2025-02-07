@@ -9,6 +9,7 @@ namespace GiantSword
     }
     public class Solo : MonoBehaviour
     {
+        
         [Button("Solo Chain")]
         public void Trigger()
         {

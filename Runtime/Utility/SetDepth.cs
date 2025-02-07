@@ -33,6 +33,11 @@ namespace GiantSword
         [Button]
         public void Apply()
         {
+            if (enabled == false)
+            {
+                
+                return;
+            }
             if (_space == Space.Local)
             {
                 if (transform.localPosition.z != _depth)

@@ -4,6 +4,7 @@ using GiantSword;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace Hardgore
 {
@@ -12,7 +13,7 @@ namespace Hardgore
          [SerializeField] private TagAsset[] _filterIncludeTags;
         [SerializeField] private Transform[] _ignoreNestedColliders;
         [SerializeField] private bool _dontClearUntilDisable =false;
-        [SerializeField] private LayermaskAsset _occludedByLayers;
+        [FormerlySerializedAs("_filterLayer")] [SerializeField] private LayermaskAsset _layerMask;
 
         [Space]
         private List<Collider2D> _overlappingColliders = new List<Collider2D>();
@@ -23,9 +24,11 @@ namespace Hardgore
         [ShowNativeProperty]  private int overlappingRigidBodies => _rigidbodies.Count;
         [ShowNativeProperty]  private int overlappingHealthCount => _healths.Count;
         
-        [Foldout("On Trigger Enter")]
-        public UnityEvent<Collider2D> onTriggerEnter;
-     
+        [FormerlySerializedAs("onTriggerEnter")] [Foldout("On Trigger Enter")]
+        public UnityEvent<Collider2D> onColliderEnter;
+
+        public UnityEvent<Collider2D> onColliderExit { get; set; } = new UnityEvent<Collider2D>();
+
         [Foldout("On Rigidbody Enter")]
         public UnityEvent<Rigidbody2D> onRigidbodyEnter;
        
@@ -34,6 +37,9 @@ namespace Hardgore
         
         [Foldout("On Player Enter")]
         public UnityEvent<Player> onPlayerEnter;
+        
+        [Foldout("On Player Enter")]
+        public UnityEvent<Player> onPlayerExit;
 
         private void OnDisable()
         {
@@ -48,7 +54,7 @@ namespace Hardgore
             
             _overlappingColliders.Add(other);
             
-            onTriggerEnter?.Invoke(other);
+            onColliderEnter?.Invoke(other);
 
             Rigidbody2D rigidbody = other.GetComponentInParent<Rigidbody2D>();
             if (rigidbody && rigidbody.isKinematic == false)
@@ -80,7 +86,11 @@ namespace Hardgore
 
         private bool FilterOut(Collider2D other)
         {
-            
+            if (_layerMask)
+            {
+                if (_layerMask.Contains(other) == false)
+                    return true;
+            }
             if(_filterIncludeTags.Length > 0)
             {
                 bool match = false;
@@ -112,17 +122,7 @@ namespace Hardgore
                     return true;
             }
 
-            if (_occludedByLayers)
-            {
-                // if(Physics.Linecast(transform.position, other.transform.position, out var hit,  _occludedByLayers))
-                // {
-                //     if (hit.collider != other)
-                //     {
-                //         return true;
-                //     }
-                // }
-            }
-
+           
             return false;
         }
 
@@ -135,6 +135,8 @@ namespace Hardgore
             if (FilterOut(other)) return;
 
             _overlappingColliders.Remove(other);
+            
+            onColliderExit?.Invoke(other);
             
             Rigidbody2D rigidbody = other.GetComponentInParent<Rigidbody2D>();
             if (rigidbody)
@@ -158,6 +160,11 @@ namespace Hardgore
         public List<Collider2D> GetColliders()
         {
             return _overlappingColliders;
+        }
+
+        public bool IsOverlapping()
+        {
+            return _overlappingColliders.Count > 0;
         }
 
         private void Update()

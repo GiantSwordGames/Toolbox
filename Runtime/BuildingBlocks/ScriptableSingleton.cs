@@ -6,7 +6,7 @@ namespace GiantSword
     {
         private static T _instance;
 
-        private static T instance
+        public static T instance
         {
             get
             {

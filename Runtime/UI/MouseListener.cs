@@ -35,6 +35,7 @@ namespace GiantSword
         private void OnMouseEnter()
         {
             _isMouseOver = true;
+            Debug.Log( "Mouse Enter " + this, this);
             _mouseEnter?.Invoke();
         }
         

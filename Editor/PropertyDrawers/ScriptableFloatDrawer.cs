@@ -21,7 +21,7 @@ namespace GiantSword.Plugins.Framework.Generic.Editor.GiantSword
 
         protected override void SetValue(SerializedProperty property, float newValue)
         {
-            var targetObject = property.objectReferenceValue as ConfigurationFloat;
+            var targetObject = property.objectReferenceValue as ScriptableFloat;
             if (targetObject != null)
             {
                 targetObject.value = newValue;
