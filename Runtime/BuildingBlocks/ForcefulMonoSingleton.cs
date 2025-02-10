@@ -2,7 +2,9 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+    using UnityEngine;
+
+    public class ForcefulMonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         public static T instance;
         private void OnEnable()

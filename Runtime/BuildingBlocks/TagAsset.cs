@@ -11,9 +11,10 @@ namespace GiantSword
     public static class TagUtility
     {
         
-        public static List<TagAsset> GetTags(this Component component)
+        public static List<TagAsset> GetTagsOnGameObject(this Component component)
         {
-            TagList[] taglists = component.GetComponentsInParent<TagList>();
+            TagList[] taglists = component.GetComponents<TagList>();
+            SingleTag[] singleTags = component.GetComponents<SingleTag>();
             List<TagAsset> _tagAssets = new List<TagAsset>();
             
             foreach (var taglist in taglists)
@@ -22,6 +23,55 @@ namespace GiantSword
                 {
                     _tagAssets.Add(tag);
                 }
+            }
+            
+            foreach (var singleTag in singleTags)
+            {
+                _tagAssets.Add(singleTag.tags);
+            }
+
+            return _tagAssets;
+        }
+        
+        public static List<TagAsset> GetTagsInChildren(this Component component)
+        {
+            TagList[] taglists = component.GetComponentsInChildren<TagList>();
+            SingleTag[] singleTags = component.GetComponentsInChildren<SingleTag>();
+            List<TagAsset> _tagAssets = new List<TagAsset>();
+            
+            foreach (var taglist in taglists)
+            {
+                foreach (var tag in taglist.tags)
+                {
+                    _tagAssets.Add(tag);
+                }
+            }
+            
+            foreach (var singleTag in singleTags)
+            {
+                _tagAssets.Add(singleTag.tags);
+            }
+
+            return _tagAssets;
+        }
+        
+        public static List<TagAsset> GetTagsInParents(this Component component)
+        {
+            TagList[] taglists = component.GetComponentsInParent<TagList>();
+            SingleTag[] singleTags = component.GetComponentsInParent<SingleTag>();
+            List<TagAsset> _tagAssets = new List<TagAsset>();
+            
+            foreach (var taglist in taglists)
+            {
+                foreach (var tag in taglist.tags)
+                {
+                    _tagAssets.Add(tag);
+                }
+            }
+            
+            foreach (var singleTag in singleTags)
+            {
+                _tagAssets.Add(singleTag.tags);
             }
 
             return _tagAssets;

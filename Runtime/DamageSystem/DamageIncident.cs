@@ -118,7 +118,7 @@ namespace GiantSword
 
         public bool IsReceiverIsOrganic()
         {
-            List<TagAsset> tags = receiver.GetTags();
+            List<TagAsset> tags = receiver.GetTagsInParents();
             foreach (var tag in tags)
             {
                 if (tag.name.Equals( "Tag_Organic"))

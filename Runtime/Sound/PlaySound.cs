@@ -77,7 +77,7 @@ namespace GiantSword
 
             if (Application.isPlaying)
             {
-                GiantSword.SafeCoroutineRunner.StartCoroutine(IEPlay());
+                SafeCoroutineRunner.StartCoroutine(IEPlay());
             }
         }
 

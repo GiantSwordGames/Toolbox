@@ -17,7 +17,7 @@ namespace GiantSword
             {
                 return;
             }
-            List<TagAsset> tagAssets = other.collider.GetTags();
+            List<TagAsset> tagAssets = other.collider.GetTagsInParents();
 
             if (tagAssets.ContainsAny(exclude))
             {

@@ -80,8 +80,18 @@ namespace GiantSword
             RuntimeEditorHelper.Ping(controller);
             (command.context as Animator).runtimeAnimatorController = controller;
         }
-        
-        
+
+
+        [MenuItem("CONTEXT/MonoBehaviour/Name GameObject To Match Script")]
+        public static void NameGameObjectToMatchScript(MenuCommand command)
+        {
+            MonoBehaviour monoBehaviour = (MonoBehaviour)command.context;
+            if (monoBehaviour != null)
+            {
+                string newName = monoBehaviour.GetType().Name;
+                monoBehaviour.gameObject.name = newName;
+            }
+        }
         [MenuItem("CONTEXT/SpriteRenderer/Rename Sprite To Match Game Object")]
         public static void RenameSpriteToMatchGameObject(MenuCommand command)
         {

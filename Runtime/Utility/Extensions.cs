@@ -819,15 +819,19 @@ namespace GiantSword
             return true;
         }
 
-    
-        public static bool ContainsAny<T>(this IList<T> list, IList<T> values )
+
+        public static bool ContainsAny<T>(this IList<T> list, IList<T> values)
         {
-            if(values.IsNullOrEmpty())
+            return AnyOverlap(list, values);
+        }
+        public static bool AnyOverlap<T>(this IList<T> listA, IList<T> listB )
+        {
+            if(listB.IsNullOrEmpty())
                 return false;
         
-            for (int i = 0; i < values.Count; i++)
+            for (int i = 0; i < listB.Count; i++)
             {
-                if (list.Contains(values[i]))
+                if (listA.Contains(listB[i]))
                 {
                     return true;
                 }

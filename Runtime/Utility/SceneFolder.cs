@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace GiantSword
@@ -35,6 +36,18 @@ namespace GiantSword
                 }
             }
             return null;
+        }
+
+        
+        [Button]
+        public void ZeroTransform()
+        {
+            Vector3 transformLocalPosition = transform.localPosition;
+            transform.localPosition = Vector3.zero;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).localPosition += transformLocalPosition;
+            }
         }
     }
 }
