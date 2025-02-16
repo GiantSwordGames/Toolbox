@@ -34,7 +34,7 @@ namespace GiantSword
             }
         }
         
-        [MenuItem("Assets/Create C# Script from Clipboard", priority = 0)]
+        // [MenuItem("Assets/Create C# Script from Clipboard", priority = 0)]
         public static bool CreateScriptFromClipboard()
         {
             // Get the text from the clipboard

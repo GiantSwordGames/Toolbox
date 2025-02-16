@@ -10,7 +10,6 @@ namespace GiantSword
     public static class ContextExtensions
     {
 
-        // Add the option to the context menu for the MeshRenderer component
         [MenuItem("CONTEXT/MeshRenderer/Assign Duplicate Material")]
         static void DuplicateAndAssignMaterial(MenuCommand command)
         {
@@ -92,6 +91,7 @@ namespace GiantSword
                 monoBehaviour.gameObject.name = newName;
             }
         }
+        
         [MenuItem("CONTEXT/SpriteRenderer/Rename Sprite To Match Game Object")]
         public static void RenameSpriteToMatchGameObject(MenuCommand command)
         {
@@ -106,7 +106,16 @@ namespace GiantSword
                 AssetDatabase.MoveAsset(path, newPath);
                 AssetDatabase.Refresh();
             }
+        } 
         
+        [MenuItem("CONTEXT/SpriteRenderer/Select Sprites")]
+        public static void SelectSprites(MenuCommand command)
+        {
+            SpriteRenderer spriteRenderer = (SpriteRenderer)command.context;
+            if (spriteRenderer != null)
+            {
+                RuntimeEditorHelper.AddToSelection( spriteRenderer.sprite.texture);
+            }
         } 
     }
     

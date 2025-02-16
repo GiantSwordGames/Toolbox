@@ -49,5 +49,15 @@ namespace GiantSword
                 transform.GetChild(i).localPosition += transformLocalPosition;
             }
         }
+
+
+        [Button]
+        public void CreateEmptyChild()
+        {
+            GameObject o = new GameObject("Child");
+            o.transform.SetParent(transform);
+            o.transform.localPosition = Vector3.zero;
+            o.transform.SetSiblingIndex(0);
+        }
     }
 }

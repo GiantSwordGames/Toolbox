@@ -134,6 +134,19 @@ namespace GiantSword
         {
             return array[Random.Range(0, array.Length)];
         }
+        
+        public static T GetElementLooping<T>(this T[] array, int i)
+        {
+            return array[(i+array.Length) % array.Length];
+        }
+        
+        
+        public static T GetElementLooping<T>(this List<T> array, int i)
+        {
+            return array[(i+array.Count) % array.Count];
+        }
+        
+        
 
         public static Vector2 GetContactPosition(this Collision2D collision2D)
         {

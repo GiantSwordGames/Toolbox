@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace GiantSword
 {
@@ -349,6 +350,15 @@ namespace GiantSword
 
 #if UNITY_EDITOR
                         Selection.objects = gos;
+#endif
+                }
+
+                public static void AddToSelection<T>( T obj) where T : Object
+                {
+#if UNITY_EDITOR
+                        List<Object> objects = Selection.objects.ToList();
+                        objects.Add(obj);
+                        Selection.objects = objects.ToArray();
 #endif
                 }
 

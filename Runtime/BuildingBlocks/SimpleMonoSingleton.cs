@@ -23,7 +23,7 @@ namespace GiantSword
             }
         }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             if (_instance == null)
             {

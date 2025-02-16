@@ -9,8 +9,8 @@ namespace GiantSword
     public class PunchAsset : ScriptableObject
     {
         [SerializeField] private float _duration = 1;
-         [SerializeField] private float _amplitude =1;
-        [FormerlySerializedAs("_amplitude")] [SerializeField] private Vector3 _amplitudeVector = Vector3.one;
+        [SerializeField] private float _amplitude =1;
+        [SerializeField] private Vector3 _amplitudeVector = Vector3.one;
         [SerializeField] private int _oscilations = 3;
 
         public event Action ListenForButtonTest;
@@ -20,6 +20,12 @@ namespace GiantSword
         public int oscilations => _oscilations;
 
         public float duration => _duration;
+
+        public float amplitude
+        {
+            get => _amplitude;
+            set => _amplitude = value;
+        }
 
         public PunchInstance ApplyToScale(Transform target)
         {

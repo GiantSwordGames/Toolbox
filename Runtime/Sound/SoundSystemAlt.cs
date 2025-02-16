@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GiantSword
@@ -6,6 +7,17 @@ namespace GiantSword
     public static class SoundSystemAlt
     {
         private static AudioListener _audioListener;
+        public static List<SoundInstance> Play(this SoundAsset[] soundAsset)
+        {
+            List<SoundInstance> soundInstances = new List<SoundInstance>();
+            foreach (SoundAsset asset in soundAsset)
+            {
+                soundInstances.Add(asset.Play());
+            }
+
+            return soundInstances;
+        }
+
         public static SoundInstance Play(this SoundAsset soundAsset) => PlaySound(soundAsset);
         public static SoundInstance Play(this SoundAsset soundAsset, Vector3 position) => PlaySound(soundAsset, position);
         public static SoundInstance Play(this SoundAsset soundAsset, Transform parent, Vector3 position) => PlaySound(soundAsset, parent, position);

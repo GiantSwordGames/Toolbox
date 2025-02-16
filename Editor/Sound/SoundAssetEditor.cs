@@ -32,6 +32,14 @@ namespace GiantSword
                     asset.ImportAudioClips();
                 }
             }
+            
+            if (GUILayout.Button("CreateTimeline"))
+            {
+                foreach (SoundAsset asset in targetObjects)
+                {
+                    asset.CreateNestedTimelineAsset();
+                }
+            }
 
             if (soundAsset.clips != null && soundAsset.clips.Length > 0)
             {

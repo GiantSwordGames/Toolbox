@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
+using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
+using UnityEngine.Timeline;
 
 namespace GiantSword
 {
@@ -18,6 +20,14 @@ namespace GiantSword
             OneShot,
             Loop,
         }
+        public enum Mode
+        {
+            RandomBag,
+            PureRandom,
+            Sequential,
+        }
+        
+        [SerializeField] private Mode _mode = Mode.RandomBag;
 
         public Playback _playback = Playback.OneShot;
 
@@ -36,6 +46,9 @@ namespace GiantSword
         [FormerlySerializedAs("_pitchIncrement")] [FormerlySerializedAs("_frequecyIncrementRange")] [SerializeField] private float _pitchIncrementRange = 0;
 
         [SerializeField] FloatRange _velocityAttenuation = new FloatRange(0, 0);
+
+        int _lastPlayedIndex = -1;
+        
         public bool isOneShot => _playback == Playback.OneShot;
         public bool isLooping => _playback == Playback.Loop;
 
@@ -65,7 +78,29 @@ namespace GiantSword
 
         public FloatRange velocityAttenuation => _velocityAttenuation;
 
-        public AudioClip NextClip() => _clips?.Length > 0 ? _clips[Random.Range(0, _clips.Length)] : null;
+        public Mode mode => _mode;
+
+        public AudioClip NextClip()
+        {
+            if (_clips == null || _clips.Length == 0)
+            {
+                Debug.LogWarning("No audio clips available in SoundAsset.");
+                return null;
+            }
+
+            switch (_mode)
+            {
+                case Mode.RandomBag:
+                    return _clips[Random.Range(0, _clips.Length)]; // not correctly implement
+                case Mode.PureRandom:
+                    return _clips[Random.Range(0, _clips.Length)];
+                case Mode.Sequential:
+                    return _clips[_lastPlayedIndex++%clips.Length];
+                default:
+                    return _clips[Random.Range(0, _clips.Length)];;
+            }
+            return null;
+        }
 
         public void AddClips(List<AudioClip> newClips)
         {
@@ -138,5 +173,28 @@ namespace GiantSword
             _spacialBlend = DefaultSpatialBlend.value;
         }
 
+        public void CreateNestedTimelineAsset()
+        {
+            TimelineAsset asset = ScriptableObject.CreateInstance<TimelineAsset>();
+            asset.name = "AudioTimeline";
+           
+            AudioTrack audioTrack = asset.CreateTrack<AudioTrack>(null, "Audio Track");
+
+            // Add all audio clips to the AudioTrack
+            foreach (var clip in _clips)
+            {
+                if (clip != null)
+                {
+                    var timelineClip = audioTrack.CreateClip<AudioPlayableAsset>();
+                    var audioPlayableAsset = timelineClip.asset as AudioPlayableAsset;
+                    audioPlayableAsset.clip = clip;
+                    timelineClip.displayName = clip.name;
+                }
+            }
+            AssetDatabase.AddObjectToAsset(asset, this);
+           
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
     }
 }

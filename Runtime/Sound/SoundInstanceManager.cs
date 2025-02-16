@@ -29,7 +29,7 @@ namespace GiantSword
             {
                 return null;
             }
-            
+
             SoundInstance soundInstance = SoundInstance.Create(soundAsset, parent, position);
             _lastPlayTime[soundAsset] = Time.time;
             // _soundsPlayedThisFrame.Add(soundAsset);
