@@ -12,6 +12,7 @@ namespace GiantSword
         [SerializeField] private KeyCode _secondaryKeyCode;
         [SerializeField] private KeyCode[] _otherKeyCodes = { };
         [SerializeField] private InputActionReference _actionAsset;
+        [SerializeField] private InputKeyAsset[] _compositeKeys = { };
 
         private void Awake()
         {
@@ -48,6 +49,14 @@ namespace GiantSword
                 }
                 
                 if (_actionAsset.action.WasPressedThisFrame())
+                {
+                    return true;
+                }
+            }
+
+            foreach (InputKeyAsset keyAsset in _compositeKeys)
+            {
+                if (keyAsset != this && keyAsset.IsDown())
                 {
                     return true;
                 }
@@ -91,6 +100,14 @@ namespace GiantSword
                 }
             }
             
+            foreach (InputKeyAsset keyAsset in _compositeKeys)
+            {
+                if (keyAsset != this && keyAsset.IsUp())
+                {
+                    return true;
+                }
+            }
+            
             return false;
         }
 
@@ -124,6 +141,14 @@ namespace GiantSword
                 }
                
                 if (_actionAsset.action.IsPressed())
+                {
+                    return true;
+                }
+            }
+                        
+            foreach (InputKeyAsset keyAsset in _compositeKeys)
+            {
+                if (keyAsset != this && keyAsset.IsHeld())
                 {
                     return true;
                 }

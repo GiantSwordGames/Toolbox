@@ -20,7 +20,6 @@ public class AnimateChildren : MonoBehaviour {
     float timer = 0;
     int frame = 0;
 
-    List<Transform> children = new List<Transform>();
 
     [Button]
     public void Reset()
@@ -33,8 +32,6 @@ public class AnimateChildren : MonoBehaviour {
 
     private void OnEnable()
     {
-        children = transform.GetDirectChildren();
-
         if(randomOffset)
             timer = fps * Random.value;
 
@@ -44,7 +41,7 @@ public class AnimateChildren : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        if (children.Count == 0)
+        if (transform.childCount == 0)
             return;
 
         timer += Time.deltaTime;
@@ -55,7 +52,7 @@ public class AnimateChildren : MonoBehaviour {
             frame++;
 
             
-            if(frame > children.Count - 1)
+            if(frame > transform.childCount - 1)
             {
                 if (loop)
                 {
@@ -63,7 +60,7 @@ public class AnimateChildren : MonoBehaviour {
                 }
                 else
                 {
-                    frame = children.Count - 1;
+                    frame = transform.childCount - 1;
                     _isComplete = true;
                 }
                 _onLoopComplete.Invoke();
@@ -76,9 +73,9 @@ public class AnimateChildren : MonoBehaviour {
 
     void SetFrame()
     {
-        for (int i = 0; i < children.Count; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            children[i].gameObject.SetActive(i == frame);
+            gameObject.transform.GetChild(i).gameObject.SetActive(i == frame);
         }
     }
 }

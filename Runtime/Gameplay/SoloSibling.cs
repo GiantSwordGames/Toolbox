@@ -1,25 +1,49 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GiantSword
 {
     public class SoloSibling : MonoBehaviour
     {
-        [SerializeField] private Transform _sibling;
+        [FormerlySerializedAs("_sibling")] [SerializeField] private Transform _target;
 
+        [SerializeField] private bool _chooseRandom = false;    
+        
         [Button]
         public void Trigger()
         {
-            if (_sibling)
+            if (enabled == false)
             {
-                Solo solo = _sibling.GetComponent<Solo>();
-                if (solo)
+                return;
+            }
+            if (_target)
+            {
+                if (_chooseRandom)
                 {
-                    solo.Trigger();
+                    int index = Random.Range(0, _target.childCount);
+                    Transform child = _target.GetChild(index);
+                    Solo solo = child.GetComponent<Solo>();
+                    if (solo)
+                    {
+                        solo.Trigger();
+                    }
+                    else
+                    {
+                        child.Solo();
+                    }
                 }
                 else
                 {
-                    _sibling.Solo();
+                    Solo solo = _target.GetComponent<Solo>();
+                    if (solo)
+                    {
+                        solo.Trigger();
+                    }
+                    else
+                    {
+                        _target.Solo();
+                    }  
                 }
             }
         }

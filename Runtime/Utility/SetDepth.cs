@@ -54,6 +54,12 @@ namespace GiantSword
                     RuntimeEditorHelper.SetDirty(transform);
                 }
             }
+            
+        }
+
+        public void ApplyTemporaryValue(float value)
+        {
+            transform.SetZ(value);
         }
     }
 }
