@@ -49,6 +49,8 @@ namespace GiantSword
 
         protected bool additive => _mode == Mode.Additive;
 
+        public bool running => _running;
+
         protected virtual void OnEnable()
         {
             if (_resetBehaviour == ResetBehaviour.ResetOnEnable)

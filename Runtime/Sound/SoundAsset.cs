@@ -175,6 +175,7 @@ namespace GiantSword
 
         public void CreateNestedTimelineAsset()
         {
+#if UNITY_EDITOR
             TimelineAsset asset = ScriptableObject.CreateInstance<TimelineAsset>();
             asset.name = "AudioTimeline";
            
@@ -195,6 +196,7 @@ namespace GiantSword
            
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+#endif
         }
     }
 }

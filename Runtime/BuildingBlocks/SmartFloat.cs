@@ -107,8 +107,10 @@ public class SmartFloat
             {
                 case Mode.Constant:
                     _constantValue = value;
-                    if(!Mathf.Approximately(previous, value))
-                        onConstantValueChanged?.Invoke(value);
+                    if (!Mathf.Approximately(previous, value))
+                    {
+                        onValueChanged?.Invoke(value);
+                    }
                     break;
                 case Mode.Variable:
                     if (_variable != null)
