@@ -8,10 +8,11 @@ namespace GiantSword
     [CreateAssetMenu]
     public class PunchAsset : ScriptableObject
     {
-        [SerializeField] private float _duration = 1;
-        [SerializeField] private float _amplitude =1;
-        [SerializeField] private Vector3 _amplitudeVector = Vector3.one;
-        [SerializeField] private int _oscilations = 3;
+        [SerializeField] private float _delay = 0;
+        [SerializeField] private float _duration = 0.5f;
+        [SerializeField] private float _amplitude =.2f;
+        [SerializeField] private Vector3 _amplitudeVector = new Vector3(1,-1,1); 
+        [SerializeField] private int _oscilations = 5;
 
         public event Action ListenForButtonTest;
 
@@ -20,6 +21,7 @@ namespace GiantSword
         public int oscilations => _oscilations;
 
         public float duration => _duration;
+        public float delay => _delay;
 
         public float amplitude
         {

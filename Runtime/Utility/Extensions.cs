@@ -129,7 +129,19 @@ namespace GiantSword
         {
             return (to + from) / 2;
         }
+        public static Vector2 Rotate(this Vector2 from, float min, float max)
+        {
+            float degrees = Random.Range(min, max);
+            return from.Rotate(degrees);
+        }
 
+        public static Vector2 Rotate(this Vector2 from, float degrees)
+        {
+            float radians = degrees * Mathf.Deg2Rad;
+            float sin = Mathf.Sin(radians);
+            float cos = Mathf.Cos(radians);
+            return new Vector2(cos * from.x - sin * from.y, sin * from.x + cos * from.y);
+        }
         public static T GetRandomElement<T>(this T[] array)
         {
             return array[Random.Range(0, array.Length)];

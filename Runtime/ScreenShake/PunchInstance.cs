@@ -43,7 +43,7 @@ namespace GiantSword
             {
                 function = ApplyToPosition;
             }
-            _routine = AsyncHelper.StartCoroutine(Apply( asset.amplitudeVector, asset.oscilations, asset.duration, function));
+            _routine = AsyncHelper.StartCoroutine(Apply(asset.delay, asset.amplitudeVector, asset.oscilations, asset.duration, function));
         }
 
         public State state => _state;
@@ -79,9 +79,15 @@ namespace GiantSword
             _transform.localPosition += value;
         }
        
-        private  IEnumerator Apply(  Vector3 amplitude, int oscillations, float duration, Action<Vector3> function)
+        private  IEnumerator Apply( float delay,  Vector3 amplitude, int oscillations, float duration, Action<Vector3> function)
         {
+            
             _state = State.Running;
+
+            if (delay > 0)
+            {
+                yield return new WaitForSeconds(delay);
+            }
 
             float time = 0;
             while (time < duration)

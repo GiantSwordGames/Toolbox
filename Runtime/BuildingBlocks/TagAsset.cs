@@ -95,8 +95,22 @@ namespace GiantSword
 
         public static bool HasTags(this GameObject gameObject,  List<TagAsset> mustIncludeTags)
         {
+            if(gameObject == null)
+            {
+                return false;
+            }
+            
             List<TagAsset> tagAssets = gameObject.GetTagsOnGameObject();
             return (tagAssets.Contains(mustIncludeTags));
+        }
+          public static bool HasTags(this Component component,  List<TagAsset> mustIncludeTags)
+        {
+            if(component == null)
+            {
+                return false;
+            }
+            
+            return component.gameObject.HasTags(mustIncludeTags);
         }
         
         public static bool ContainsPlayerTag( this List<TagAsset>  tagAssets)
