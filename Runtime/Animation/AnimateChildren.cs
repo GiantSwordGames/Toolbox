@@ -12,6 +12,7 @@ public class AnimateChildren : MonoBehaviour {
     [Min(1)]
     public int fps = 12;
 
+    private bool _isPlaying = true;
     public bool loop = true;
     public bool randomOffset = false;
     private bool _isComplete = false;
@@ -19,6 +20,8 @@ public class AnimateChildren : MonoBehaviour {
     [SerializeField] private UnityEvent _onLoopComplete;
     float timer = 0;
     int frame = 0;
+
+    public bool isPlaying => _isPlaying;
 
 
     [Button]
@@ -28,6 +31,7 @@ public class AnimateChildren : MonoBehaviour {
         timer = 0;
         _isComplete = false;
         SetFrame();
+        _isPlaying = true;
     }
 
     private void OnEnable()
@@ -62,6 +66,7 @@ public class AnimateChildren : MonoBehaviour {
                 {
                     frame = transform.childCount - 1;
                     _isComplete = true;
+                    _isPlaying = false;
                 }
                 _onLoopComplete.Invoke();
             }

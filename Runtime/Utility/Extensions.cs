@@ -568,11 +568,23 @@ namespace GiantSword
             return child.parent.GetChild(index);
         }
 
-        public static void Solo(this Transform transform)
+     
+
+        public static void Solo(this Transform transform, bool enableParentChain = false)
         {
             foreach (Transform sibling in transform.parent)
             {
                 sibling.gameObject.SetActive(sibling == transform);
+            }
+            
+            if (enableParentChain)
+            {
+                Transform parent = transform.parent;
+                while (parent != null)
+                {
+                    parent.gameObject.SetActive(true);
+                    parent = parent.parent;
+                }
             }
         }
 
@@ -873,7 +885,40 @@ namespace GiantSword
 
             return Random.Range(0, list.Count);
         }
+
+        public static T GetElement<T>(this IList<T> list, float lerp)
+        {
+            
+            if (list == null || list.Count == 0)
+            {
+                throw new System.ArgumentException("The list is empty or null.");
+            }
+
+            if (list.Count == 1)
+            {
+                return list[0];
+            }
+            
+            int index = Mathf.RoundToInt(lerp * (list.Count - 1));
+            return list[index];
+        }        
         
+        public static T GetElement<T>(this T[] list, float lerp)
+        {
+            if (list == null || list.Length == 0)
+            {
+                throw new System.ArgumentException("The list is empty or null.");
+            }
+
+            if (list.Length == 1)
+            {
+                return list[0];
+            }
+            
+            int index = Mathf.CeilToInt(lerp * (list.Length - 1));
+            return list[index];
+        }        
+
         public static int GetNextWrappedIndex<T>(this IList<T> list, int index)
         {
             if (list == null || list.Count == 0)
@@ -1222,9 +1267,17 @@ namespace GiantSword
             return   text + Environment.NewLine + newText;
         }
 
-        public static void SetEnabled<T>(this T[] components, bool state) where T : Behaviour
+        public static void SetElementsEnabled<T>(this T[] components, bool state) where T : Behaviour
         {
             for (int i = 0; i < components.Length; i++)
+            {
+                components[i].enabled = state;
+            }
+        }
+        
+        public static void SetElementsEnabled<T>(this List<T> components, bool state) where T : Behaviour
+        {
+            for (int i = 0; i < components.Count; i++)
             {
                 components[i].enabled = state;
             }

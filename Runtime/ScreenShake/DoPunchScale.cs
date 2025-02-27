@@ -27,6 +27,15 @@ namespace GiantSword
             Stop();
             _instance = _punchAsset.ApplyToScale(_target.target);
         }
+        public Coroutine GetCoroutine()
+        {
+            if (_instance != null)
+            {
+                return _instance.routine;
+            }
+            
+            return null;
+        }
 
         private void Stop()
         {

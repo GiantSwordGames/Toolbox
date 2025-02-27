@@ -10,9 +10,25 @@ namespace GiantSword
 
     public static class TagUtility
     {
-        
-        public static List<TagAsset> GetTagsOnGameObject(this Component component)
+
+        public static List<TagAsset> GetTagsOnGameObject(this Component gameObject)
         {
+            if (gameObject == null)
+            {
+                return new List<TagAsset>();
+            }
+            return GetTagsOnGameObject(gameObject.gameObject);
+
+        }
+        
+        public static List<TagAsset> GetTagsOnGameObject(this GameObject component)
+        {
+            
+            if (component == null)
+            {
+                return new List<TagAsset>();
+            }
+            
             TagList[] taglists = component.GetComponents<TagList>();
             SingleTag[] singleTags = component.GetComponents<SingleTag>();
             List<TagAsset> _tagAssets = new List<TagAsset>();
@@ -27,7 +43,7 @@ namespace GiantSword
             
             foreach (var singleTag in singleTags)
             {
-                _tagAssets.Add(singleTag.tags);
+                _tagAssets.Add(singleTag.tag);
             }
 
             return _tagAssets;
@@ -49,7 +65,7 @@ namespace GiantSword
             
             foreach (var singleTag in singleTags)
             {
-                _tagAssets.Add(singleTag.tags);
+                _tagAssets.Add(singleTag.tag);
             }
 
             return _tagAssets;
@@ -71,12 +87,18 @@ namespace GiantSword
             
             foreach (var singleTag in singleTags)
             {
-                _tagAssets.Add(singleTag.tags);
+                _tagAssets.Add(singleTag.tag);
             }
 
             return _tagAssets;
         }
 
+        public static bool HasTags(this GameObject gameObject,  List<TagAsset> mustIncludeTags)
+        {
+            List<TagAsset> tagAssets = gameObject.GetTagsOnGameObject();
+            return (tagAssets.Contains(mustIncludeTags));
+        }
+        
         public static bool ContainsPlayerTag( this List<TagAsset>  tagAssets)
         {
             foreach (TagAsset asset in tagAssets)

@@ -48,6 +48,8 @@ namespace GiantSword
 
         public State state => _state;
 
+        public Coroutine routine => _routine;
+
         public void Kill()
         {
             if (_state != State.Running)

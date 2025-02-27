@@ -21,6 +21,11 @@ namespace GiantSword
         {
             timeScale = 1;
         }
+        
+        public static void SetDebugTimeScale(float _timeScale)
+        {
+            timeScale = _timeScale;
+        }
        
     }
 }

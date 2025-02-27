@@ -4,7 +4,7 @@ namespace GiantSword
 {
     public class SimpleMonoSingleton<T> : MonoBehaviour where T : SimpleMonoSingleton<T>
     {
-        public static T _instance;
+        private static T _instance;
 
         public static T instance
         {
