@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    public class SimpleMonoSingleton<T> : MonoBehaviour where T : SimpleMonoSingleton<T>
+    public class FindMyMonoSingleton<T> : MonoBehaviour where T : FindMyMonoSingleton<T>
     {
         private static T _instance;
 

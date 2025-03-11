@@ -5,7 +5,7 @@ namespace RichardPieterse
 {
     public static class CanvasUtility 
     {
-        public static void FitRectTransformToContainedText(this GameObject gameObject)
+        public static void FitRectTransformToContainedText(this GameObject gameObject, Vector2 margin = default)
         {
             
             TextMeshProUGUI   textMesh = gameObject.GetComponent<TextMeshProUGUI>();
@@ -37,7 +37,7 @@ namespace RichardPieterse
                 newSizeDelta = textSize;
             }
 
-            rectTransform.sizeDelta = newSizeDelta;
+            rectTransform.sizeDelta = newSizeDelta + margin;
         }
 
     }

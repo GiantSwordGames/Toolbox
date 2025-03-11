@@ -10,6 +10,13 @@ namespace GiantSword
     [ExecuteInEditMode]
     public class TextContentFitter : MonoBehaviour
     {
+        [SerializeField] private Vector2 _margin;
+
+        private void OnValidate()
+        {
+            Apply();
+        }
+
         void Start()
         {
             Apply();
@@ -23,7 +30,7 @@ namespace GiantSword
                 return;
             }
             
-            CanvasUtility.FitRectTransformToContainedText(gameObject);
+            CanvasUtility.FitRectTransformToContainedText(gameObject, _margin);
         }
 
     }

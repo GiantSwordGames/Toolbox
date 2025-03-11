@@ -523,6 +523,11 @@ namespace GiantSword
             scale.x = Mathf.Abs(scale.x) * direction;
             transform.localScale = scale;
         }
+        
+        public static void SetDirection(this Transform transform, float direction)
+        {
+            SetDirection(transform, direction>=0?1:-1);
+        }
 
         public static void Toggle(this GameObject gameObject)
         {
@@ -886,6 +891,17 @@ namespace GiantSword
 
             int randomIndex = Random.Range(0, list.Count);
             return list[randomIndex];
+        }
+        
+        
+        public static T Last<T>(this IList<T> list)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return default;
+            }
+
+            return list[^1];
         }
 
         public static int GetRandomIndex<T>(this IList<T> list)
