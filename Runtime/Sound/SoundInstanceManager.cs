@@ -60,5 +60,14 @@ namespace GiantSword
         {
             _soundsPlayedThisFrame.Clear();
         }
+
+        public static float GetLastPlayTime(SoundAsset soundAsset)
+        {
+            if (Instance._lastPlayTime.ContainsKey(soundAsset))
+            {
+                return Instance._lastPlayTime[soundAsset];
+            }
+            return float.NegativeInfinity;
+        }
     }
 }

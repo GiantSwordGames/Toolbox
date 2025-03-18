@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace Hardgore
+namespace GiantSword
 {
     public class DetectCollision2D: MonoBehaviour
     {

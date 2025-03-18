@@ -4,7 +4,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Hardgore
+namespace GiantSword
 {
     public class TriggerOverlap: MonoBehaviour
     {

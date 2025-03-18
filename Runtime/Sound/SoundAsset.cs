@@ -39,7 +39,8 @@ namespace GiantSword
 
         [FormerlySerializedAs("volume")]   [SerializeField] private FloatVariance _volume = new FloatVariance(0.5f, 0.05f);
         [FormerlySerializedAs("pitch")]  [SerializeField] private FloatVariance _pitch = new FloatVariance(1f, 0.05f);
-
+        [SerializeField] private float _incrementalPitch = 0;
+        [SerializeField] private float _incrementalPitchTimeout = 2;
         [FormerlySerializedAs("mixerGroup")]  [SerializeField] private AudioMixerGroup _mixerGroup;
         [SerializeField] private bool _useScaledTime = true;
         [SerializeField] private float _cooldown = 0;
@@ -48,7 +49,8 @@ namespace GiantSword
         [SerializeField] FloatRange _velocityAttenuation = new FloatRange(0, 0);
 
         int _lastPlayedIndex = -1;
-        
+        [SerializeField] private float _accumulatedPitch = 0;
+
         public bool isOneShot => _playback == Playback.OneShot;
         public bool isLooping => _playback == Playback.Loop;
 
@@ -79,6 +81,10 @@ namespace GiantSword
         public FloatRange velocityAttenuation => _velocityAttenuation;
 
         public Mode mode => _mode;
+
+        public float incrementalPitchTimeout => _incrementalPitchTimeout;
+
+        public float incrementalPitch => _incrementalPitch;
 
         public AudioClip NextClip()
         {
@@ -198,5 +204,36 @@ namespace GiantSword
             AssetDatabase.Refresh();
 #endif
         }
+
+        public float GetIncrementedPitch()
+        {
+            if (_incrementalPitchTimeout > 0)
+            {
+
+                if (TimeSinceLastPlay() > _incrementalPitchTimeout)
+                {
+                    _accumulatedPitch = 0;
+                }
+
+            }
+
+            return _accumulatedPitch;
+        }
+
+        public void IncrementPitch()
+        {
+            _accumulatedPitch += _incrementalPitch;
+        }
+        
+
+        
+        [Button]
+        public float TimeSinceLastPlay()
+        {
+            Debug.Log(TimeSinceLastPlay());
+            return Time.time - SoundInstanceManager.GetLastPlayTime(this);
+        }
+        
+        
     }
 }

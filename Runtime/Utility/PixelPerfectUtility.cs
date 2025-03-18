@@ -50,10 +50,26 @@ namespace GiantSword
             pixelPosition.x -= offset.x;
             element.pixelPosition = pixelPosition;
 
-            element.transform.position = pixelPosition/16;
+            element.transform.position = pixelPosition/pixelsPerUnit;
+        }
+        
+        public static Vector2 Snap(Vector2 worldSpace)
+        {
+            float pixelsPerUnit = 16;
+            Vector3 pixelPosition = worldSpace*pixelsPerUnit;
+            pixelPosition.x = Mathf.Round(pixelPosition.x);
+            pixelPosition.y = Mathf.Round(pixelPosition.y);
+            return pixelPosition/pixelsPerUnit;
+        }
 
-           
-
+        
+        public static Vector3 Snap(Vector3 worldSpace)
+        {
+            float pixelsPerUnit = 16;
+            Vector3 pixelPosition = worldSpace*pixelsPerUnit;
+            pixelPosition.x = Mathf.Round(pixelPosition.x);
+            pixelPosition.y = Mathf.Round(pixelPosition.y);
+            return pixelPosition/pixelsPerUnit;
         }
         
         public static void SnapSpriteToGrid(SpriteRenderer spriteRenderer)

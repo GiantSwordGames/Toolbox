@@ -134,7 +134,14 @@ namespace GiantSword
             float degrees = Random.Range(min, max);
             return from.Rotate(degrees);
         }
-
+        public static Vector2 Round(this Vector2 from)
+        {
+            return new Vector2(Mathf.Round(from.x), Mathf.Round(from.y));
+        }
+        public static Vector3 Round(this Vector3 from)
+        {
+            return new Vector3(Mathf.Round(from.x), Mathf.Round(from.y));
+        }
         public static Vector2 Rotate(this Vector2 from, float degrees)
         {
             float radians = degrees * Mathf.Deg2Rad;
@@ -234,6 +241,11 @@ namespace GiantSword
         {
             color.a = alpha;
             return color;
+        }
+        
+        public static Color LerpTo(this Color from, Color to, float lerp)
+        {
+            return Color.Lerp(from, to, lerp);
         }
 
         public static Vector3 WithXZ(this Vector3 vector, Vector3 value)
@@ -698,7 +710,25 @@ namespace GiantSword
             }
             onComplete?.Invoke();
         }
+        
+        public static Coroutine TweenCurrentText(this TextMeshProUGUI text, float durationPerLetter =0.02f, Action onShowLetter = null)
+        {
+            return AsyncHelper.StartCoroutine(text.IETweenCurrentText(durationPerLetter,onShowLetter));
+        }
 
+        private static IEnumerator IETweenCurrentText(this TextMeshProUGUI text, float durationPerLetter, Action onShowLetter)
+        {
+            string str = text.text;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < str.Length; i++)
+            {
+                builder.Append(str[i]);
+                text.text = builder.ToString();
+                onShowLetter?.Invoke();
+                yield return new WaitForSeconds(durationPerLetter);
+            }
+        }
+        
         public static Coroutine AnimateTextAmount(this TextMeshProUGUI text, string prefix, float value,
             string postfix, float duration, int digits = 0)
         {
@@ -930,6 +960,11 @@ namespace GiantSword
             int index = Mathf.RoundToInt(lerp * (list.Count - 1));
             return list[index];
         }        
+        
+        public static T GetElementClamped<T>(this IList<T> list, int index)
+        {
+            return list[Mathf.Clamp(index, 0, list.Count - 1)];
+        }       
         
         public static T GetElement<T>(this T[] list, float lerp)
         {

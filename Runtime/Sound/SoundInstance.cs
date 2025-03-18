@@ -126,9 +126,10 @@ namespace GiantSword
             _randomizedVolume = _soundAsset.volume.GetRandom();
             _audioSource.volume = _randomizedVolume;
             ApplyVolume();
-            _randomizedPitch = _soundAsset.pitch.GetRandom();
+            _randomizedPitch = _soundAsset.pitch.GetRandom() + _soundAsset.GetIncrementedPitch();
             ApplyPitch();
             _audioSource.Play();
+            _soundAsset.IncrementPitch();
         }
 
         private void Update()
