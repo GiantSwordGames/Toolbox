@@ -45,7 +45,8 @@ namespace GiantSword
             {
                 if(Time.time - _lastPlayTime[soundAsset] >= soundAsset.cooldown) // cooldown 0 will limit to 1 play per frame
                 {
-                    _lastPlayTime[soundAsset] = Time.time;
+                    return true;
+                    // _lastPlayTime[soundAsset] = Time.time;
                 }
                 else
                 {

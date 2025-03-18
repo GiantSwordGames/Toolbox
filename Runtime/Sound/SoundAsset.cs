@@ -226,12 +226,10 @@ namespace GiantSword
         }
         
 
-        
-        [Button]
         public float TimeSinceLastPlay()
         {
-            Debug.Log(TimeSinceLastPlay());
-            return Time.time - SoundInstanceManager.GetLastPlayTime(this);
+            float timeSinceLastPlay = Time.time - SoundInstanceManager.GetLastPlayTime(this);
+            return timeSinceLastPlay;
         }
         
         
