@@ -122,6 +122,7 @@ namespace GiantSword
             _audioSource.rolloffMode = _soundAsset.rolloffMode;
             _audioSource.minDistance = _soundAsset.rolloffDistance.min;
             _audioSource.maxDistance = _soundAsset.rolloffDistance.max;
+            _audioSource.dopplerLevel = _soundAsset.dopplerLevel;
             _audioSource.clip = _soundAsset.NextClip();
             _randomizedVolume = _soundAsset.volume.GetRandom();
             _audioSource.volume = _randomizedVolume;

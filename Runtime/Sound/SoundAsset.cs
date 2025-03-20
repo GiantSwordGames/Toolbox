@@ -85,6 +85,7 @@ namespace GiantSword
         public float incrementalPitchTimeout => _incrementalPitchTimeout;
 
         public float incrementalPitch => _incrementalPitch;
+        public float dopplerLevel => 0;
 
         public AudioClip NextClip()
         {

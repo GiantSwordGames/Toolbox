@@ -215,6 +215,7 @@ namespace GiantSword
                     Undo.SetTransformParent(transforms[i], group.transform, "Group");
 
                 group.name = Selection.gameObjects[0].name;
+                group.transform.SetSiblingIndex(index);
                 Selection.activeGameObject = group;
             }
         }

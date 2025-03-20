@@ -1,3 +1,4 @@
+using System.Collections;
 using GiantSword;
 using NaughtyAttributes;
 using UnityEngine;
@@ -12,10 +13,20 @@ namespace GiantSword
         [SerializeField] bool _goToNextLevelInBuildSettings;
         [SerializeField] private Level _level;
         [SerializeField] private TransitionWithAnimation _transition;
+        [SerializeField] private float _delay = 0;
 
         [Button]
         public void Trigger()
         {
+            AsyncHelper.StartCoroutine(IETrigger());
+        }
+        public IEnumerator IETrigger()
+        {
+            if (_delay > 0)
+            {
+                yield return new WaitForSeconds(_delay);
+            }
+            
             ScriptableVariableManager.ResetAll(_resetVariableScope);
             if (_restartLevel)
             {

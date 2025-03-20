@@ -58,6 +58,5 @@ namespace GiantSword
 
             return $"{hoursInt}:{minutes:D2} {(isPm ? "PM" : "AM")}";
         }
-       
     }
 }
