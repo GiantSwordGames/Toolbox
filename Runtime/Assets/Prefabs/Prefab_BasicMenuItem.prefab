@@ -76,7 +76,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -4.2949673e+9, y: -4.2949673e+9}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5859772076308616843
 MonoBehaviour:
@@ -93,13 +93,15 @@ MonoBehaviour:
   _canvasGroup: {fileID: 8852771906713900001}
   _textMeshPro: {fileID: 3450409208934211729}
   _optionAsset: {fileID: 0}
-  _onClick:
+  _menuDefinition: {fileID: 0}
+  _onPlayClickedAnimation:
     m_PersistentCalls:
       m_Calls: []
-  _onSelect:
+  _clickAnimationDuration: 0
+  _onSelected:
     m_PersistentCalls:
       m_Calls: []
-  _onDeselect:
+  _onDeselected:
     m_PersistentCalls:
       m_Calls: []
   _selector: {fileID: 0}
@@ -210,6 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e70a7cd554b82453ca10810a689159cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _margin: {x: 0, y: 0}
 --- !u!225 &8852771906713900001
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -290,8 +293,7 @@ MonoBehaviour:
   m_text: QUIT
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f19f755fb7ea4f3ea7a856f775a910c, type: 2}
-  m_sharedMaterial: {fileID: -997010445025848579, guid: 2f19f755fb7ea4f3ea7a856f775a910c,
-    type: 2}
+  m_sharedMaterial: {fileID: -997010445025848579, guid: 2f19f755fb7ea4f3ea7a856f775a910c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

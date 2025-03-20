@@ -15,7 +15,7 @@ namespace GiantSword
         {
             public SmartFloat _delayBefore;
             public UnityEvent _actions;
-            public SmartFloat _delayAfter;
+        [HideInInspector]    public SmartFloat _delayAfter; // deprecate
         }
         
         [SerializeField] private List<Entry> _entries = new List<Entry>();

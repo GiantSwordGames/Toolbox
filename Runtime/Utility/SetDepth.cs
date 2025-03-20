@@ -48,7 +48,7 @@ namespace GiantSword
             {
                 if (transform.localPosition.z != depth)
                 {
-                    transform.SetLocalScaleZ(depth);
+                    transform.SetLocalZ(depth);
                     RuntimeEditorHelper.SetDirty(transform);
                 }
             }

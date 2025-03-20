@@ -24,7 +24,7 @@ namespace GiantSword
         {
             if (_delay > 0)
             {
-                yield return new WaitForSeconds(_delay);
+                yield return new WaitForSecondsRealtime(_delay);
             }
             
             ScriptableVariableManager.ResetAll(_resetVariableScope);
