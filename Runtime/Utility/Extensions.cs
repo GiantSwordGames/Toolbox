@@ -134,6 +134,11 @@ namespace GiantSword
             float degrees = Random.Range(min, max);
             return from.Rotate(degrees);
         }
+        
+        public static Vector3 Rotate(this Vector3 from, float min, float max)
+        {
+            return Quaternion.Euler( Random.Range(min, max), Random.Range(min, max), Random.Range(min, max))*from;
+        }
         public static Vector2 Round(this Vector2 from)
         {
             return new Vector2(Mathf.Round(from.x), Mathf.Round(from.y));
@@ -378,7 +383,7 @@ namespace GiantSword
         {
             for (int i = transform.childCount - 1; i >= 0; i--)
             {
-                GameObject.Destroy(transform.GetChild(i).gameObject);
+                RuntimeEditorHelper.SmartDestroy(transform.GetChild(i).gameObject);
             }
         }
 
@@ -1288,6 +1293,11 @@ namespace GiantSword
             scale.z = z;
             transform.localScale = scale;
             return transform;
+        }
+        
+        public static void Scale(this Transform transform, Vector3 scale)
+        {
+            transform.localScale = Vector3.Scale(transform.localScale, scale);
         }
         
         public static void SetLocalX(this Transform transform, float value)

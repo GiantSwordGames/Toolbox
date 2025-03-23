@@ -27,7 +27,7 @@ namespace GiantSword
                     {
                         folderPath = "Assets/Project/Configurations";
                     }
-                    string assetName = typeof(T).Name + "_" + label.text;
+                    string assetName = typeof(T).Name + "_" + label.text.ToUpperCamelCase();
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);

@@ -7,7 +7,8 @@ namespace GiantSword
         [SerializeField] private LayerMask _layerMasks;
 
         public LayerMask layerMask => _layerMasks;
-        
+        public int value => layerMask;
+
         // implicit operator
         public static implicit operator int(LayermaskAsset layermaskAsset)
         {

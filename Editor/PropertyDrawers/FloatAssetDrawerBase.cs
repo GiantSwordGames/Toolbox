@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -60,9 +61,20 @@ namespace GiantSword
                     {
                         folderPath = fallbackPath;
                     }
+                    
+                    //create folder if it doesn't exist
+                    if (!AssetDatabase.IsValidFolder(folderPath))
+                    {
+                        Debug.Log(folderPath);
+                        // get parent directory
+                        string parentDirectory = Path.GetDirectoryName(folderPath);
+                        // get the last directory name
+                        string newFolderName = Path.GetFileName(folderPath);
+                        // create the directory
+                        AssetDatabase.CreateFolder(parentDirectory, newFolderName);
+                    }
 
-                    Debug.Log(label.text);
-                    string assetName = typeof(T).Name + "_" + label.text;
+                    string assetName = typeof(T).Name + "_" + label.text.ToTitleCase();
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);

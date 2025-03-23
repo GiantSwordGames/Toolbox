@@ -17,7 +17,8 @@ namespace GiantSword
         [SerializeField] private UnityEvent<Collider> _onEnter;
         [SerializeField] private UnityEvent<Collider> _onExit;
         [SerializeField] private UnityEvent _onMovementDetected;
-        
+        [SerializeField] private TagAsset[] _filterIncludeTags;
+
         private List<Collider> _colliders = new List<Collider>();
         private  List<Collider> _previousColliders = new List<Collider>( );
 
@@ -43,6 +44,37 @@ namespace GiantSword
             Raycast(true);
         }
 
+        
+        private bool FilterOut(GameObject other)
+        {
+            
+            if(_filterIncludeTags.Length > 0)
+            {
+                bool match = false;
+                List<TagAsset> tagsInParents = other.transform.GetTagsInParents();
+                {
+                    foreach (TagAsset otherTag in tagsInParents)
+                    {
+                        foreach (TagAsset filterTag in _filterIncludeTags)
+                        {
+                            if (otherTag == filterTag)
+                            {
+                                match = true;
+                                break;
+                            }
+                        }
+                    } 
+                }
+
+                if (match == false)
+                {
+                    return true;
+                }
+            }
+            
+            
+            return false;
+        }
         public RaycastHit Raycast(bool suppressEvents = false)
         {
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.Ignore;
@@ -51,14 +83,22 @@ namespace GiantSword
             {
                 queryTriggerInteraction = QueryTriggerInteraction.Collide;
             }
+            
+            
 
+            int layerMask = 1;
+            if (_layermask != null)
+            {
+                layerMask = _layermask.value;
+            }
+            
             if (_thickness == 0)
             {
-                _raycastHits = Physics.RaycastAll(transform.position, transform.forward, _distance, _layermask, queryTriggerInteraction);
+                _raycastHits = Physics.RaycastAll(transform.position, transform.forward, _distance, layerMask, queryTriggerInteraction);
             }
             else
             {
-                _raycastHits = Physics.SphereCastAll(transform.position, _thickness, transform.forward, _distance, _layermask, queryTriggerInteraction);
+                _raycastHits = Physics.SphereCastAll(transform.position, _thickness, transform.forward, _distance, layerMask, queryTriggerInteraction);
             }
                
             // _raycastHits = Physics.RaycastAll(transform.position, transform.forward, _distance, _layermask, QueryTriggerInteraction.Ignore);
@@ -73,6 +113,11 @@ namespace GiantSword
             {
                 if (raycastHit.collider != null)
                 {
+                    if (FilterOut(raycastHit.collider.gameObject))
+                    {
+                        continue;
+                    }
+
                     _currentDistance = Mathf.Min(_currentDistance, raycastHit.distance);
                     _colliders.Add(raycastHit.collider);
                     

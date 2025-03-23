@@ -1,4 +1,5 @@
 using GiantSword;
+using NaughtyAttributes;
 using UnityEngine;
 
 
@@ -25,27 +26,28 @@ public class GenerateRope : MonoBehaviour
     }
 
 
-    [ContextMenu("Generate")]
+    [Button]
     private void Generate()
     {
         transform.DestroyChildren();
         for (int i = 0; i < length; i++)
         {
-            GameObject instantiate = Instantiate(_configuration.segment.gameObject,  transform );
-            instantiate.transform.localPosition = Vector3.forward * i * 0.5f;
+            GameObject instantiate = _configuration.segment.gameObject.SmartInstantiate(  transform );
+            instantiate.transform.localPosition = _configuration.offset*i;
             instantiate.transform.localRotation = Quaternion.identity;
             instantiate.transform.localScale = Vector3.one;
-            instantiate.AddComponent<Rigidbody>();
+            instantiate.GetOrAddComponent<Rigidbody>();
             instantiate.name = "Segment" + i;
         }
 
         for (int i = 1; i < length; i++)
         {
-            ConfigurableJoint configurableJoint = transform.GetChild(i).gameObject.AddComponent<ConfigurableJoint>();
-            configurableJoint.autoConfigureConnectedAnchor = false;
+            ConfigurableJoint configurableJoint = transform.GetChild(i).gameObject.GetOrAddComponent<ConfigurableJoint>();
+            // configurableJoint.autoConfigureConnectedAnchor = false;
             configurableJoint.connectedBody =   transform.GetChild(i-1).GetComponent<Rigidbody>();
-            configurableJoint.connectedAnchor = new Vector3(0, 0, 0.5f);
-            configurableJoint.anchor = new Vector3(0, 0, 0);
+            Debug.Log("Connected body: " + configurableJoint.connectedBody);
+            // configurableJoint.connectedAnchor = new Vector3(0, 0, 0.5f);
+            // configurableJoint.anchor anchor= new Vector3(0, 0, 0);
         }
 
         if (_addJointToStart)
@@ -73,24 +75,24 @@ public class GenerateRope : MonoBehaviour
 
         if (configurableJoint)
         {
-            configurableJoint.xMotion = ConfigurableJointMotion.Locked;
-            configurableJoint.yMotion = ConfigurableJointMotion.Locked;
-            configurableJoint.zMotion = ConfigurableJointMotion.Locked;
-            
-            configurableJoint.angularXMotion = ConfigurableJointMotion.Free;
-            configurableJoint.angularYMotion = ConfigurableJointMotion.Free;
-            configurableJoint.angularZMotion = ConfigurableJointMotion.Locked;
-
-
-            JointDrive angularXDrive = configurableJoint.angularXDrive;
-            angularXDrive.positionSpring = _configuration.springStrength;
-            angularXDrive.positionDamper = _configuration.springDamper;
-            configurableJoint.angularXDrive = angularXDrive;
-            
-            JointDrive angularYZDrive = configurableJoint.angularYZDrive;
-            angularYZDrive.positionSpring = _configuration.springStrength;
-            angularYZDrive.positionDamper = _configuration.springDamper;
-            configurableJoint.angularYZDrive = angularYZDrive;
+            // configurableJoint.xMotion = ConfigurableJointMotion.Locked;
+            // configurableJoint.yMotion = ConfigurableJointMotion.Locked;
+            // configurableJoint.zMotion = ConfigurableJointMotion.Locked;
+            //
+            // configurableJoint.angularXMotion = ConfigurableJointMotion.Free;
+            // configurableJoint.angularYMotion = ConfigurableJointMotion.Free;
+            // configurableJoint.angularZMotion = ConfigurableJointMotion.Locked;
+            //
+            //
+            // JointDrive angularXDrive = configurableJoint.angularXDrive;
+            // angularXDrive.positionSpring = _configuration.springStrength;
+            // angularXDrive.positionDamper = _configuration.springDamper;
+            // configurableJoint.angularXDrive = angularXDrive;
+            //
+            // JointDrive angularYZDrive = configurableJoint.angularYZDrive;
+            // angularYZDrive.positionSpring = _configuration.springStrength;
+            // angularYZDrive.positionDamper = _configuration.springDamper;
+            // configurableJoint.angularYZDrive = angularYZDrive;
         }
     }
 }

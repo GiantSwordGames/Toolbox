@@ -192,6 +192,8 @@ MonoBehaviour:
     type: 2}
   _outDuration: {fileID: 141086824163783131, guid: 868baabd668c74a42aa0e3408997e87b,
     type: 2}
+  _startDelay: 0
+  _holdAtApex: 1
 --- !u!1 &6347871938962877052
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ namespace GiantSword
         private float _springDamper;
 
         [SerializeField] private Material[] _materials;
+        [SerializeField] private Vector3 _offset = Vector3.up;
 
         public GameObject segment => _segment;
 
@@ -25,5 +26,11 @@ namespace GiantSword
         public float springDamper => _springDamper;
 
         public Material[] materials => _materials;
+
+        public Vector3 offset
+        {
+            get => _offset;
+            set => _offset = value;
+        }
     }
 }

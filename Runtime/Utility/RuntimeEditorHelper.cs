@@ -706,5 +706,10 @@ namespace GiantSword
                         }
 #endif
                 }
+
+                public static void ReloadCurrentScene()
+                {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
         }
 }

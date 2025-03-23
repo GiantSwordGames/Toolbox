@@ -13,6 +13,7 @@ using System.Collections;
         [SerializeField] private AnimationClip _inDuration;
         [SerializeField] private AnimationClip _outDuration;
         [SerializeField] private float _startDelay = 0f;
+        [SerializeField] private float _holdAtApex = 0f;
         private static readonly int InTrigger = Animator.StringToHash("TransitionIn");
         private static readonly int OutTrigger = Animator.StringToHash("TransitionOut");
 
@@ -74,12 +75,22 @@ using System.Collections;
             
             yield return DoTransitionIn();
             yield return null;
+            Debug.Log("Transition In Complete");
+            Debug.Log(Time.frameCount + " Transition In Complete " + Time.time);
+
             onTransitionInComplete?.Invoke();
             yield return null;
+
+            if (_holdAtApex > 0)
+            {
+                yield return new WaitForSeconds(_holdAtApex);
+            }
+            Debug.Log(Time.frameCount + " Transition  Out begin " + Time.time);
             yield return DoTransitionOut();
             yield return null;
             onTransitionOutComplete?.Invoke();
             yield return null;
+            Debug.Log(Time.frameCount + " Transition  Out Complete " + Time.time);
             
             if(_doNotAutoDestroy == false)
                 Destroy(this.gameObject);
@@ -95,7 +106,7 @@ using System.Collections;
             return AsyncHelper.StartCoroutine(IETransitionIn(null));
         }
 
-        [ContextMenu("Do Transition")]
+        [Button]
         public void TestTransition()
         {
             _doNotAutoDestroy = true;
