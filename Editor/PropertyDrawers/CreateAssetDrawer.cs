@@ -6,6 +6,8 @@ namespace GiantSword
 {
     public abstract class CreateAssetDrawer<T> : PropertyDrawer where T : ScriptableObject
     {
+         protected virtual string customPrefix => "";
+        
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
@@ -27,7 +29,14 @@ namespace GiantSword
                     {
                         folderPath = "Assets/Project/Configurations";
                     }
-                    string assetName = typeof(T).Name + "_" + label.text.ToUpperCamelCase();
+
+                    string prefix = typeof(T).Name;
+                    if(customPrefix != "")
+                    {
+                        prefix = customPrefix;
+                    }
+                    
+                    string assetName = prefix + "_" + label.text.ToUpperCamelCase();
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);

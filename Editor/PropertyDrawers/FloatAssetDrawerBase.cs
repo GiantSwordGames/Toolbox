@@ -6,6 +6,8 @@ namespace GiantSword
 {
     public abstract class FloatAssetDrawerBase<T> : PropertyDrawer where T: ScriptableObject
     {
+        protected virtual string customPrefix => "";
+
         private string fallbackPath => "Assets/Project/Configurations";
 
         protected abstract float GetValue(SerializedProperty property);
@@ -74,7 +76,12 @@ namespace GiantSword
                         AssetDatabase.CreateFolder(parentDirectory, newFolderName);
                     }
 
-                    string assetName = typeof(T).Name + "_" + label.text.ToTitleCase();
+                    string prefix = typeof(T).Name;
+                    if(customPrefix != "")
+                    {
+                        prefix = customPrefix;
+                    }
+                    string assetName = prefix + "_" + label.text.ToUpperCamelCase();
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);

@@ -6,8 +6,9 @@ namespace GiantSword.Plugins.Framework.Generic.Editor.GiantSword
 {
     
     [CustomPropertyDrawer(typeof(ScriptableFloat))]
-    public class ConfigurationFloatDrawer : FloatAssetDrawerBase<ScriptableFloat>
+    public class ScriptableFloatDrawer : FloatAssetDrawerBase<ScriptableFloat>
     {
+        protected override string customPrefix => "Float";
 
         protected override float GetValue( SerializedProperty property)
         {

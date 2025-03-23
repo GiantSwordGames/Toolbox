@@ -1,0 +1,104 @@
+using System;
+using System.Collections;
+using NaughtyAttributes;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+
+namespace GiantSword
+{
+    public abstract class TransitionBase : MonoBehaviour
+    {
+        [SerializeField] protected float _startDelay = 0f;
+        [FormerlySerializedAs("_holdAtApex")] [SerializeField] protected float _hold = 0f;
+        private bool _doNotAutoDestroy;
+
+        protected virtual void OnValidate()
+        {
+        }
+
+        [Button]
+        public void Trigger()
+        {
+            DoFullTransition(null, null);
+        }
+
+        protected abstract IEnumerator IETransitionIn(Action onComplete);
+
+        protected abstract IEnumerator IETransitionOut(Action onComplete);
+
+        protected abstract IEnumerator IEDoFullTransition(Action onTransitionInComplete,
+            Action onTransitionOutComplete);
+
+        protected Coroutine DoTransitionOut()
+        {
+            return AsyncHelper.StartCoroutine(IETransitionOut(null));
+        }
+
+        protected Coroutine DoTransitionIn()
+        {
+            return AsyncHelper.StartCoroutine(IETransitionIn(null));
+        }
+
+        [Button]
+        public void TestAsset()
+        {
+            InstantiateAndDoFullTransition();
+        }
+
+        public Coroutine DoFullTransition(Action onTransitionInComplete, Action onTransitionOutComplete)
+        {
+            if(_doNotAutoDestroy ==false)
+                DontDestroyOnLoad(gameObject);
+            return AsyncHelper.StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
+        }
+
+        public TransitionBase Instantiate()
+        {
+            GameObject newInstance = Instantiate(gameObject);
+            TransitionBase transitionFadeToBlack = newInstance.GetComponent<TransitionBase>();
+            return transitionFadeToBlack;
+        }
+        
+        public TransitionBase InstantiateAndDoSceneTransition( int buildIndex)
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(() => SceneManager.LoadScene(buildIndex), null);  
+            return instance;
+        }
+        public TransitionBase InstantiateAndDoFullTransition(Action onTransitionInComplete,
+            Action onTransitionOutComplete)
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(onTransitionInComplete, onTransitionOutComplete);
+            return instance;
+        }
+        
+        public TransitionBase InstantiateAndDoLevelTransition(Level loadScene)
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(() => loadScene.LoadLevel(), null);
+            return instance;
+        }
+        
+        public TransitionBase InstantiateAndDoFullTransition()
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(null, null);
+            return instance;
+        }
+        
+        public void InstantiateAndDoTransitionIn()
+        {
+            var instance = Instantiate();
+            instance.DoTransitionIn();
+        }
+
+        public TransitionBase InstantiateAndDoSceneTransition(SceneReference sceneReference)
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(() => sceneReference.Load(), null);  
+            return instance;
+        }
+    }
+}

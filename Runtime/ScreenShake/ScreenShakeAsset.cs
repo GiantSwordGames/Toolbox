@@ -42,6 +42,7 @@ namespace GiantSword
         [SerializeField] private AnimationCurve _decay = AnimationCurve.Linear(0, 1, 1, 0);
         [SerializeField] private float _duration = 1;
         [SerializeField] private float _amplitude = 1;
+        [SerializeField] private float _frequency = 1;
 
         [SerializeField] private Oscillator _positionOscillator = new Oscillator(16, 1, new Vector3(1, 2, 0), new Vector3(1, 1, 0));
         [SerializeField] private Oscillator _rotationOscillator = new Oscillator(1, 0, new Vector3(0, 0, 1), new Vector3(0, 0, 1));
@@ -57,7 +58,7 @@ namespace GiantSword
         private Vector3 EvaluateOscillator(Oscillator oscillator, float time)
         {
             Vector3 result = Vector3.zero;
-            result += oscillator.Evaluate(time);
+            result += oscillator.Evaluate(time*_frequency);
             result *= _amplitude;
             result *= _decay.Evaluate(Mathf.Clamp01(time / _duration));
             return result;

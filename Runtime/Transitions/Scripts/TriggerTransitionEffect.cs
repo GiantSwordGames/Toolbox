@@ -5,11 +5,11 @@ namespace GiantSword
 {
     public class TriggerTransitionEffect : MonoBehaviour
     {
-        [SerializeField] private TransitionWithAnimation _transitionPrefab;
+        [SerializeField] private TransitionBase _transitionPrefab;
 
         public void Trigger()
         {
-            TransitionWithAnimation transitionWithAnimation = _transitionPrefab.Instantiate();
+            TransitionBase transitionWithAnimation = _transitionPrefab.Instantiate();
             transitionWithAnimation.DoFullTransition(null, null);
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace GiantSword
 {
-    [CreateAssetMenu]
+    // [CreateAssetMenu]
     public class PunchAsset : ScriptableObject
     {
         [SerializeField] private float _delay = 0;

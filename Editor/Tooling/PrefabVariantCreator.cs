@@ -6,7 +6,7 @@ namespace GiantSword
 {
     public static class PrefabVariantGenerator
     {
-        [MenuItem("Assets/Convert Prefab to Variant", false, 10)]
+        // [MenuItem("Assets/Convert Prefab to Variant", false, 10)]
         public static void ConvertPrefabToVariant()
         {
             GameObject selectedObject = Selection.activeGameObject;

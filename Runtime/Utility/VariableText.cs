@@ -13,7 +13,9 @@
             [SerializeField] private TMPro.TMP_Text _text;
             [SerializeField] private string _prefix;
             [SerializeField] private string _postFix;
+            [SerializeField] private string _format = "F1";
             [SerializeField] private SmartFloat[] _additionalValues = {};
+
 
             public SmartFloat value => _value;
 
@@ -58,7 +60,7 @@
                     return;
                 }
 
-                _text.text = _prefix + Math.Round(_value.value, 1).ToString() + _postFix;
+                _text.text = _prefix +_value.value.ToString(_format) + _postFix;
                 for (int i = 0; i < _additionalValues.Length; i++)
                 {
                     string oldValue = $"{{{i}}}";

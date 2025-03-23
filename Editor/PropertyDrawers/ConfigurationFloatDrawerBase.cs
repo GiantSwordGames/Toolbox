@@ -6,6 +6,8 @@ namespace GiantSword
     [CustomPropertyDrawer(typeof(ConfigurationFloat))]
     public class ConfigurationFloatDrawer : FloatAssetDrawerBase<ConfigurationFloat>
     {
+        protected override string customPrefix => "Config";
+        
         protected override float GetValue( SerializedProperty property)
         {
             var targetObject = property.objectReferenceValue as ConfigurationFloat;
