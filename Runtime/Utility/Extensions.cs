@@ -1294,7 +1294,11 @@ namespace GiantSword
             transform.localScale = scale;
             return transform;
         }
-        
+
+        public static void Scale(this Transform transform, float scale)
+        {
+            transform.localScale *= scale;
+    }
         public static void Scale(this Transform transform, Vector3 scale)
         {
             transform.localScale = Vector3.Scale(transform.localScale, scale);
