@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using UnityEngine;
 
 namespace GiantSword
 {
@@ -19,6 +20,16 @@ namespace GiantSword
         public  void SlowTime(float timeScale)
         {
             TimeHelper.timeScale = timeScale;
+        }
+        
+        
+        public  void Quit()
+        {
+            Application.Quit();
+        }
+        public void ToggleFullScreen()
+        {
+            Screen.fullScreen = !Screen.fullScreen;
         }
     }
 }

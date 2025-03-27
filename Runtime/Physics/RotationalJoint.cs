@@ -38,6 +38,34 @@ namespace GiantSword
             joint.slerpDrive = drive;
         }
         
+        
+        public static void SetMotionSpring(this ConfigurableJoint joint, float spring)
+        {
+            JointDrive drive = joint.xDrive;
+            drive.positionSpring = spring;
+            joint.xDrive = drive;
+            drive = joint.yDrive;
+            drive.positionSpring = spring;
+            joint.yDrive = drive;
+            drive = joint.zDrive;
+            drive.positionSpring = spring;
+            joint.zDrive = drive;
+        }
+
+        public static void SetMotionDamper(this ConfigurableJoint joint, float damper)
+        {
+            JointDrive drive = joint.xDrive;
+            drive.positionDamper = damper;
+            joint.xDrive = drive;
+            drive = joint.yDrive;
+            drive.positionDamper = damper;
+            joint.yDrive = drive;
+            drive = joint.zDrive;
+            drive.positionDamper = damper;
+            joint.zDrive = drive;
+            
+        }
+        
         public static void SetAngularXSpring(this ConfigurableJoint joint, float spring)
         {
             JointDrive drive = joint.angularXDrive;

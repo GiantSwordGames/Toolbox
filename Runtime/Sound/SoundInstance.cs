@@ -7,8 +7,10 @@ namespace GiantSword
 {
     public class SoundInstance : MonoBehaviour
     {
+        public static Preference<bool> dontDestroySounds = new Preference<bool>("DontDestroySounds", false);
         [SerializeField] AudioSource _audioSource;
-        [FormerlySerializedAs("_soundBank")] [SerializeField] SoundAsset _soundAsset;
+        [FormerlySerializedAs("_soundBank")] 
+        [SerializeField] SoundAsset _soundAsset;
        [SerializeField] private bool _autoDestroy = true;
         
         private float _randomizedPitch;
@@ -145,7 +147,10 @@ namespace GiantSword
 
             if (_autoDestroy &&  _audioSource.loop == false &&  _time > audioLength + 2f)
             {
-                Destroy(gameObject);
+                if (dontDestroySounds == false)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 

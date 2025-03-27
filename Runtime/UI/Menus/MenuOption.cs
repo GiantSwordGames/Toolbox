@@ -82,8 +82,23 @@ namespace GiantSword
                 if (_textContentFitter)
                 {
                     _textContentFitter.Apply();
-                    
                 }
+
+                if (Application.isPlaying)
+                {
+                    _optionAsset.onTextRefreshed += () =>
+                    {
+                        _textMeshPro.text = _optionAsset.text;
+                        if (_textContentFitter)
+                        {
+                            _textContentFitter.Apply();
+                        }
+                    };
+                }
+            }
+            else
+            {
+                Debug.LogError("Option asset is null", this);
             }
         }
 
@@ -106,7 +121,7 @@ namespace GiantSword
         [Button]
         public void Click()
         {
-            if (_clicked)
+            if (_clicked && _optionAsset.allowReClick == false)
             {
                 return;
             }
@@ -122,9 +137,7 @@ namespace GiantSword
                     _menuDefinition.Close();
                     _optionAsset.subMenu.Open(_menuDefinition);
                 }
-                
             });
-            
         }
         
         public MenuDefinition GetSubMenu()

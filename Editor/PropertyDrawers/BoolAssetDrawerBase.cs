@@ -81,7 +81,6 @@ namespace GiantSword
                         folderPath = fallbackPath;
                     }
 
-                    Debug.Log(label.text);
                     string assetName = typeof(ScriptableBool).Name + "_" + label.text;
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);

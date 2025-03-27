@@ -57,12 +57,10 @@ using System.Collections;
         protected override IEnumerator IEDoFullTransition(Action onTransitionInComplete,
             Action onTransitionOutComplete)
         {
-                DontDestroyOnLoad(gameObject);
-            
+            DontDestroyOnLoad(gameObject);
+
             yield return DoTransitionIn();
             yield return null;
-            Debug.Log("Transition In Complete");
-            Debug.Log(Time.frameCount + " Transition In Complete " + Time.time);
 
             onTransitionInComplete?.Invoke();
             yield return null;
@@ -71,15 +69,13 @@ using System.Collections;
             {
                 yield return new WaitForSeconds(_hold);
             }
-            Debug.Log(Time.frameCount + " Transition  Out begin " + Time.time);
+
             yield return DoTransitionOut();
             yield return null;
             onTransitionOutComplete?.Invoke();
             yield return null;
-            Debug.Log(Time.frameCount + " Transition  Out Complete " + Time.time);
-            
-                Destroy(this.gameObject);
+            Destroy(this.gameObject);
         }
-       
+
     }
 }

@@ -8,99 +8,150 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    // Needed for LINQ methods
-
     public class BuildAndZip
     {
-    
-        public static class BuildWindowsAndMacToolBarButton
-        {
-            private static GUIContent _guiContent;
+        public static Preference<bool> buildForMac = new Preference<bool>("BuildForMac", true);
+        public static Preference<bool> buildForWindows = new Preference<bool>("BuildForWindows", true);
+        public static Preference<bool> buildForLinux = new Preference<bool>("BuildForLinux", false);
+        public static Preference<bool> buildForWebGL = new Preference<bool>("BuildForWeb", false);
 
-            [InitializeOnLoadMethod]
-            private static void Initialize()
-            {  
-                UnityToolbarExtender.farRight.Add(OnToolbarGUI);
-            }
-
-            private static void OnToolbarGUI()
-            {
-                GUILayoutOption layoutWidth = GUILayout.Width( 26);
-                GUILayoutOption layoutHeight = GUILayout.Height( 19);
-                Texture texture = RuntimeEditorHelper.FindAssetByName<Texture>("Icon_BuildWinMac");
-                _guiContent = new GUIContent(texture, "Build Windows And Mac");
-                if(GUILayout.Button( _guiContent,layoutWidth, layoutHeight))
-                {
-                    BuildAllPlatforms();
-                }
-            }
-        }
-    
-        [MenuItem("Build/Build Windows & Mac")]
+        [MenuItem("Build/Build All Platforms")]
         public static void BuildAllPlatforms()
         {
-            // Get the desktop path
             string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
-            // Use your application name as defined in Player Settings
             string applicationName = Application.productName;
-
-            // Define output paths
-            string winBuildFolder = System.IO.Path.Combine(desktopPath, applicationName.ToUpperCamelCase() + "_Win");
-            string macBuildFolder = System.IO.Path.Combine(desktopPath, applicationName.ToUpperCamelCase() + "_Mac");
-
-            // Create directories if they don't exist
-            if (!Directory.Exists(winBuildFolder))
-                Directory.CreateDirectory(winBuildFolder);
-            if (!Directory.Exists(macBuildFolder))
-                Directory.CreateDirectory(macBuildFolder);
-
-            // Convert EditorBuildSettings.scenes to a string array of scene paths
+            string formattedAppName = applicationName.ToUpperCamelCase();
             string[] scenePaths = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray();
 
-            // Build Windows version
-            string winBuildPath = System.IO.Path.Combine(winBuildFolder, applicationName + ".exe");
-            BuildPlayerOptions winOptions = new BuildPlayerOptions
+            if (buildForWindows.value)
             {
-                scenes = scenePaths,
-                locationPathName = winBuildPath,
-                target = BuildTarget.StandaloneWindows64,
-                options = BuildOptions.None
-            };
-            BuildReport winReport = BuildPipeline.BuildPlayer(winOptions);
-            Debug.Log("Windows build completed: " + winReport.summary.result);
+                string winBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Win");
+                Directory.CreateDirectory(winBuildFolder);
+                string winBuildPath = Path.Combine(winBuildFolder, applicationName + ".exe");
 
-            // Zip the Windows build folder
-            string winZipPath = winBuildFolder + ".zip";
-            if (File.Exists(winZipPath))
-                File.Delete(winZipPath);
-            ZipFile.CreateFromDirectory(winBuildFolder, winZipPath);
-            Debug.Log("Windows build zipped to: " + winZipPath);
+                var winOptions = new BuildPlayerOptions
+                {
+                    scenes = scenePaths,
+                    locationPathName = winBuildPath,
+                    target = BuildTarget.StandaloneWindows64,
+                    options = BuildOptions.None
+                };
 
-            // Build Mac version
-            // Note: For Mac builds, the output is a folder ending with .app.
-            string macBuildPath = System.IO.Path.Combine(macBuildFolder, applicationName + ".app");
-            BuildPlayerOptions macOptions = new BuildPlayerOptions
+                var report = BuildPipeline.BuildPlayer(winOptions);
+                Debug.Log("Windows build completed: " + report.summary.result);
+
+                DeleteDoNotShipArtifacts(winBuildFolder);
+
+                string zipPath = winBuildFolder + ".zip";
+                if (File.Exists(zipPath)) File.Delete(zipPath);
+                ZipFile.CreateFromDirectory(winBuildFolder, zipPath);
+                Debug.Log("Windows build zipped to: " + zipPath);
+            }
+
+            if (buildForMac.value)
             {
-                scenes = scenePaths,
-                locationPathName = macBuildPath,
-                target = BuildTarget.StandaloneOSX,
-                options = BuildOptions.None
-            };
-            BuildReport macReport = BuildPipeline.BuildPlayer(macOptions);
-            Debug.Log("Mac build completed: " + macReport.summary.result);
+                string macBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Mac");
+                Directory.CreateDirectory(macBuildFolder);
+                string macBuildPath = Path.Combine(macBuildFolder, applicationName + ".app");
 
-            // Zip the Mac build folder
-            string macZipPath = macBuildFolder + ".zip";
-            if (File.Exists(macZipPath))
-                File.Delete(macZipPath);
-            ZipFile.CreateFromDirectory(macBuildFolder, macZipPath);
-            Debug.Log("Mac build zipped to: " + macZipPath);
+                var macOptions = new BuildPlayerOptions
+                {
+                    scenes = scenePaths,
+                    locationPathName = macBuildPath,
+                    target = BuildTarget.StandaloneOSX,
+                    options = BuildOptions.None
+                };
 
-            // Optional: Cleanup unzipped build directories after zipping
-            // Directory.Delete(winBuildFolder, true);
-            // Directory.Delete(macBuildFolder, true);
+                var report = BuildPipeline.BuildPlayer(macOptions);
+                Debug.Log("Mac build completed: " + report.summary.result);
 
-            Debug.Log("Build and zip process complete.");
+                DeleteDoNotShipArtifacts(macBuildFolder);
+
+                string zipPath = macBuildFolder + ".zip";
+                if (File.Exists(zipPath)) File.Delete(zipPath);
+                ZipFile.CreateFromDirectory(macBuildFolder, zipPath);
+                Debug.Log("Mac build zipped to: " + zipPath);
+            }
+
+            if (buildForLinux.value)
+            {
+                string linuxBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Linux");
+                Directory.CreateDirectory(linuxBuildFolder);
+                string linuxBuildPath = Path.Combine(linuxBuildFolder, applicationName); // No extension
+
+                var linuxOptions = new BuildPlayerOptions
+                {
+                    scenes = scenePaths,
+                    locationPathName = linuxBuildPath,
+                    target = BuildTarget.StandaloneLinux64,
+                    options = BuildOptions.None
+                };
+
+                var report = BuildPipeline.BuildPlayer(linuxOptions);
+                Debug.Log("Linux build completed: " + report.summary.result);
+
+                DeleteDoNotShipArtifacts(linuxBuildFolder);
+
+                string zipPath = linuxBuildFolder + ".zip";
+                if (File.Exists(zipPath)) File.Delete(zipPath);
+                ZipFile.CreateFromDirectory(linuxBuildFolder, zipPath);
+                Debug.Log("Linux build zipped to: " + zipPath);
+            }
+
+            if (buildForWebGL.value)
+            {
+                string webglBuildFolder = Path.Combine(desktopPath, formattedAppName + "_WebGL");
+                Directory.CreateDirectory(webglBuildFolder);
+
+                var webglOptions = new BuildPlayerOptions
+                {
+                    scenes = scenePaths,
+                    locationPathName = webglBuildFolder,
+                    target = BuildTarget.WebGL,
+                    options = BuildOptions.None
+                };
+
+                var report = BuildPipeline.BuildPlayer(webglOptions);
+                Debug.Log("WebGL build completed: " + report.summary.result);
+
+                DeleteDoNotShipArtifacts(webglBuildFolder);
+
+                string zipPath = webglBuildFolder + ".zip";
+                if (File.Exists(zipPath)) File.Delete(zipPath);
+                ZipFile.CreateFromDirectory(webglBuildFolder, zipPath);
+                Debug.Log("WebGL build zipped to: " + zipPath);
+            }
+
+            Debug.Log("All selected builds complete.");
+        }
+
+        private static void DeleteDoNotShipArtifacts(string buildRoot)
+        {
+            if (!Directory.Exists(buildRoot)) return;
+
+            var directory = new DirectoryInfo(buildRoot);
+            var matches = directory.GetFileSystemInfos("*DoNotShip*", SearchOption.AllDirectories);
+
+            foreach (var file in matches)
+            {
+                try
+                {
+                    if (file is DirectoryInfo dir)
+                    {
+                        dir.Delete(true);
+                        Debug.Log($"Deleted directory: {dir.FullName}");
+                    }
+                    else
+                    {
+                        file.Delete();
+                        Debug.Log($"Deleted file: {file.FullName}");
+                    }
+                }
+                catch (IOException e)
+                {
+                    Debug.LogWarning($"Failed to delete {file.FullName}: {e.Message}");
+                }
+            }
         }
     }
 }

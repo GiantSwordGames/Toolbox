@@ -9,10 +9,12 @@ namespace GiantSword
 {
     public class MenuOptionAsset : ScriptableObject
     {
-        [SerializeField] private string _text;
+        [SerializeField] protected string _text;
         [SerializeField] private bool _interactable = true; // TO DO: move this state out of the scriptable object
         [SerializeField] private SoundAsset _sound;
-        [FormerlySerializedAs("_openSubMenu")] [SerializeField] private MenuDefinition _subMenu;
+        [FormerlySerializedAs("_openSubMenu")] 
+        [SerializeField] private MenuDefinition _subMenu;
+        [SerializeField] private bool _allowReClick = false; 
 
         [SerializeField] private   UnityEvent _onClicked;
       
@@ -22,7 +24,8 @@ namespace GiantSword
         [ShowNonSerializedField] private Action _onSelect;
 
         private Action _onDeselect;
-        public string text
+        public Action onTextRefreshed;
+        public virtual string text
         {
             get => _text;
             set { _text = value; }
@@ -52,6 +55,8 @@ namespace GiantSword
 
         public MenuDefinition subMenu => _subMenu;
 
+        public bool allowReClick => _allowReClick;
+
 
         public void UnregisterListener(Action action)
         {
@@ -59,7 +64,7 @@ namespace GiantSword
         }
 
         [Button]
-        public void Click()
+        public virtual void Click()
         {
             _onClickedAction?.Invoke();
             _onClicked?.Invoke();

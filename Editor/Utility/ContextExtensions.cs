@@ -30,6 +30,10 @@ namespace GiantSword
                 {
                     directory = "Assets/Project/Materials";
                 }
+                
+                // create each directory if it does not exist 
+                RuntimeEditorHelper.CreateFoldersIfNeeded(directory);
+
 
                 string duplicatedPath = Path.Combine(directory, name);
 
@@ -45,6 +49,7 @@ namespace GiantSword
                 Selection.activeObject = duplicatedMaterial;
             }
         }
+
 
         [MenuItem("CONTEXT/Animator/Create Controller With Empty Idle")]
         public static void CreateTwoStateAnimator(MenuCommand command)

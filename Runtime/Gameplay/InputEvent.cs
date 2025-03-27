@@ -1,3 +1,4 @@
+using GiantSword;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -7,6 +8,7 @@ public class InputEvent : MonoBehaviour
 {
     [SerializeField] private UnityEvent _onPressed;
     [SerializeField]  [FormerlySerializedAs("inputAction")] private InputActionReference _inputAction;
+    [SerializeField] private InputKeyAsset _asset;
     [SerializeField] KeyCode _keyCode = KeyCode.None;
     [SerializeField] bool _skipFirstFrame = false;
     bool _skippedFirstFrame = false;
@@ -37,11 +39,20 @@ public class InputEvent : MonoBehaviour
         if (_inputAction != null && _inputAction.action.triggered)
         {
             Trigger();
+            return;
         }
 
         if (Input.GetKeyDown(_keyCode))
         {
             Trigger();
+            return;
+
+        }
+
+        if (_asset.IsDown())
+        {
+            Trigger();
+            return;
         }
     }
 

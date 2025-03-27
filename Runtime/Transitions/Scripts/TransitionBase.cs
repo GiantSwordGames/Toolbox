@@ -20,7 +20,7 @@ namespace GiantSword
         [Button]
         public void Trigger()
         {
-            DoFullTransition(null, null);
+            InstantiateAndDoFullTransition();
         }
 
         protected abstract IEnumerator IETransitionIn(Action onComplete);
@@ -40,11 +40,10 @@ namespace GiantSword
             return AsyncHelper.StartCoroutine(IETransitionIn(null));
         }
 
-        [Button]
-        public void TestAsset()
-        {
-            InstantiateAndDoFullTransition();
-        }
+        // public void TestAsset()
+        // {
+        //     InstantiateAndDoFullTransition();
+        // }
 
         public Coroutine DoFullTransition(Action onTransitionInComplete, Action onTransitionOutComplete)
         {
@@ -88,7 +87,7 @@ namespace GiantSword
             return instance;
         }
         
-        public void InstantiateAndDoTransitionIn()
+        private void InstantiateAndDoTransitionIn()
         {
             var instance = Instantiate();
             instance.DoTransitionIn();

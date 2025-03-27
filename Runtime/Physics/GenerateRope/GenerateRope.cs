@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class GenerateRope : MonoBehaviour
 {
+    [InlineScriptableObject]
     [SerializeField] private GenerateRopeConfiguration _configuration;
     [SerializeField] private int length = 5;
-    [SerializeField] private bool _addJointToStart;
-    
 
     void Start()
     {
@@ -19,8 +18,8 @@ public class GenerateRope : MonoBehaviour
     {      
         for (int i = 2; i < length; i++)
         {
-            Collider colliderA = transform.GetChild(i-2).GetComponent<Collider>();
-            Collider colliderB = transform.GetChild(i).GetComponent<Collider>();
+            Collider colliderA = transform.GetChild(i-2).GetComponentInChildren<Collider>();
+            Collider colliderB = transform.GetChild(i).GetComponentInChildren<Collider>();
             Physics.IgnoreCollision(colliderA, colliderB);
         }
     }
@@ -30,11 +29,13 @@ public class GenerateRope : MonoBehaviour
     private void Generate()
     {
         transform.DestroyChildren();
+        Vector3 offset = Vector3.zero;
         for (int i = 0; i < length; i++)
         {
             GameObject instantiate = _configuration.segment.gameObject.SmartInstantiate(  transform );
-            instantiate.transform.localPosition = _configuration.offset*i;
-            instantiate.transform.localRotation = Quaternion.identity;
+            instantiate.transform.localPosition = offset;
+                offset +=Quaternion.Euler( _configuration.rotationOffset*i)*_configuration.offset;
+            instantiate.transform.localRotation = Quaternion.Euler( _configuration.rotationOffset*i);
             instantiate.transform.localScale = Vector3.one;
             instantiate.GetOrAddComponent<Rigidbody>();
             instantiate.name = "Segment" + i;
@@ -50,10 +51,17 @@ public class GenerateRope : MonoBehaviour
             // configurableJoint.anchor anchor= new Vector3(0, 0, 0);
         }
 
-        if (_addJointToStart)
+        if (_configuration.removeTheFirstJoint == false)
         {
             ConfigurableJoint configurableJoint = transform.GetChild(0).gameObject.AddComponent<ConfigurableJoint>();
             configurableJoint.autoConfigureConnectedAnchor = true;
+        }
+        else
+        {
+            ConfigurableJoint joint = transform.GetChild(0).GetComponent<ConfigurableJoint>();
+            if(joint)
+                
+                RuntimeEditorHelper.SmartDestroy(joint);
         }
   
         for (int i = 0; i < length; i++)
@@ -75,9 +83,9 @@ public class GenerateRope : MonoBehaviour
 
         if (configurableJoint)
         {
-            // configurableJoint.xMotion = ConfigurableJointMotion.Locked;
-            // configurableJoint.yMotion = ConfigurableJointMotion.Locked;
-            // configurableJoint.zMotion = ConfigurableJointMotion.Locked;
+            configurableJoint.xMotion = ConfigurableJointMotion.Locked;
+            configurableJoint.yMotion = ConfigurableJointMotion.Locked;
+            configurableJoint.zMotion = ConfigurableJointMotion.Locked;
             //
             // configurableJoint.angularXMotion = ConfigurableJointMotion.Free;
             // configurableJoint.angularYMotion = ConfigurableJointMotion.Free;

@@ -35,6 +35,7 @@ namespace GiantSword
             }
 
             _image.color = _color.WithAlpha(1);
+            _canvasGroup. alpha = 1;
 
             onComplete?.Invoke();
         }

@@ -23,6 +23,8 @@ namespace GiantSword
                 Directory.CreateDirectory(projectPath);
             }
 
+            Debug.Log(dropboxPath);
+            Debug.Log(projectPath);
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "/bin/ln",
@@ -63,8 +65,9 @@ namespace GiantSword
                     onGUI = ()=>
                     {
                         DrawLinkButton("/Users/richard/Dropbox/SoundCollections/CuteFunCasualSounds");
-                        DrawLinkButton("/Users/richard/Dropbox/SoundCollection/SeriousSounds");
-                        DrawLinkButton("/Users/richard/Dropbox/SoundCollection/MassiveSoundCollections");
+                        DrawLinkButton("/Users/richard/Dropbox/SoundCollections/SeriousSounds");
+                        DrawLinkButton("/Users/richard/Dropbox/SoundCollections/MassiveSoundCollections");
+                        DrawLinkButton("/Users/richard/Dropbox/SoundCollections/GenitalJousting");
                     }
                 });
             }

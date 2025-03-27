@@ -25,6 +25,7 @@ namespace GiantSword
         }        
         
        
+        [InlineScriptableObject]
         [SerializeField] SoundAsset _soundAsset;
         [ShowNonSerializedField] private SoundInstance _soundInstance;
  
@@ -65,6 +66,13 @@ namespace GiantSword
             {
                 Stop();
             }
+        }
+
+        [Button]
+        public void ToggleAutoDestroy()
+        {
+            SoundInstance.dontDestroySounds.Toggle();
+            Debug.Log("DontDestroySounds: " + SoundInstance.dontDestroySounds.value);
         }
 
         [Button]

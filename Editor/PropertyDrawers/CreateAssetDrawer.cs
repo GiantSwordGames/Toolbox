@@ -30,12 +30,15 @@ namespace GiantSword
                         folderPath = "Assets/Project/Configurations";
                     }
 
+
                     string prefix = typeof(T).Name;
                     if(customPrefix != "")
                     {
                         prefix = customPrefix;
                     }
                     
+                    RuntimeEditorHelper.CreateFoldersIfNeeded(folderPath);
+
                     string assetName = prefix + "_" + label.text.ToUpperCamelCase();
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);

@@ -300,6 +300,27 @@ namespace GiantSword
                         EditorGUIUtility.PingObject(obj);
 #endif
                 }
+                
+#if UNITY_EDITOR
+
+                public static void CreateFoldersIfNeeded(string directory)
+                {
+                        string[] directories = directory.Split('/');
+                        string currentDirectory = "Assets";
+                        foreach (string dir in directories)
+                        {
+                                if (dir == "Assets")
+                                {
+                                        continue;
+                                }
+                                currentDirectory = Path.Combine(currentDirectory, dir);
+                                if (!AssetDatabase.IsValidFolder(currentDirectory))
+                                {
+                                        AssetDatabase.CreateFolder(Path.GetDirectoryName(currentDirectory), Path.GetFileName(currentDirectory));
+                                }
+                        }
+                }
+#endif
 
                 public static void Ping(List<GameObject> objects)
                 {
@@ -455,6 +476,16 @@ namespace GiantSword
 #endif
 
                 }
+                public static void UndoDestroyObjectImmediate(Component component)
+                {
+                        if (component == null)
+                                return;
+
+#if UNITY_EDITOR
+                        Undo.DestroyObjectImmediate(component);
+#endif
+
+                }
 
                 public static void SetTransformParent(Transform transform, Transform newParent, bool worldPositionStays,
                         string name)
@@ -599,6 +630,21 @@ namespace GiantSword
                         else
                         {
                                 UndoDestroyObjectImmediate(gameObject);
+                        }
+                        
+                }
+                public static void SmartDestroy(this Component component)
+                {
+                        if (component == null)
+                                return;
+
+                        if (Application.isPlaying)
+                        {
+                                GameObject.Destroy(component);
+                        }
+                        else
+                        {
+                                UndoDestroyObjectImmediate(component);
                         }
                         
                 }
