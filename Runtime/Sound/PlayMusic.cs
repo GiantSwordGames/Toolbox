@@ -32,8 +32,16 @@ namespace GiantSword
                 }
             }
 
-            _currentTrack = _track.Play( transform,transform.position);
-            _currentTrack.FadeIn(_crossfadeTime);
+            if (_track)
+            {
+                _currentTrack = _track.Play( transform,transform.position);
+                _currentTrack.FadeIn(_crossfadeTime);
+            }
+            else
+            {
+                _currentTrack = null;
+            }
+           
             if (previousTrack)
             {
                 previousTrack.FadeOut(_crossfadeTime);

@@ -12,7 +12,6 @@ namespace GiantSwordEditor
     [CustomEditor(typeof(AudioClipExporter))]
     public class AudioClipExporterEditor : CustomEditorBase<AudioClipExporter>
     {
-
         [MenuItem("Assets/Trim AudioClip", true)]
         public static bool TrimAudioClipAssetMenuItemValidation(MenuCommand command)
         {
@@ -21,7 +20,7 @@ namespace GiantSwordEditor
         }
         
         [MenuItem("Assets/Trim Audio Clip")]
-        public static void TrimAudioClipAssetMenuItem( MenuCommand command)
+        public static void TrimAudioClipAssetMenuItem(MenuCommand command)
         {
             AudioClip clip = Selection.activeObject as AudioClip;
             
@@ -38,18 +37,15 @@ namespace GiantSwordEditor
             TimelineAsset timelineAsset = playableDirector.playableAsset as TimelineAsset;
             
             var audioTrack = timelineAsset.CreateTrack<AudioTrack>(null, "Audio Track");
-
             var audioPlayableClip = audioTrack.CreateClip(clip);
             audioPlayableClip.displayName = " ";
-
+            
             AudioClipExporter audioClipExporter = gameObject.AddComponent<AudioClipExporter>();
             RuntimeEditorHelper.SelectAndFocus(audioClipExporter);
-            
             // RuntimeEditorHelper.EditorApplicationDelayCall(() => LockInspector());
             OpenTimelineWindow();
-
         }
-
+        
         private static void OpenTimelineWindow()
         {
             EditorWindow.GetWindow(Type.GetType("UnityEditor.Timeline.TimelineWindow,Unity.Timeline.Editor"));
@@ -60,7 +56,6 @@ namespace GiantSwordEditor
             ActiveEditorTracker.sharedTracker.isLocked = true;
             Debug.Log("Inspector is locked " + ActiveEditorTracker.sharedTracker);
             ActiveEditorTracker.sharedTracker.ForceRebuild();
-            
         }
         
         public override void OnInspectorGUI()
@@ -71,12 +66,12 @@ namespace GiantSwordEditor
             //     LockInspector();
             // }
             
-            if (GUILayout.Button("Export Clips", GUILayout.Height(40) ))
+            if (GUILayout.Button("Export Clips", GUILayout.Height(40)))
             {
                 ShowConfirmationWindow();
             }
         }
-
+        
         public void ShowConfirmationWindow()
         {
             ConfirmationWindow window = (ConfirmationWindow)EditorWindow.GetWindow(typeof(ConfirmationWindow));
@@ -84,11 +79,13 @@ namespace GiantSwordEditor
             window.SetAudioClipExporter(targetObject);
             window.ShowModalUtility();
         }
-
+        
         public class ConfirmationWindow : EditorWindow
         {
             public static Preference<bool> deleteOriginalClips = new Preference<bool>("DeleteOriginalClips", false);
             public static Preference<bool> deleteTimelineSession = new Preference<bool>("DeleteTimelineSession", true);
+            // New preference for overwriting the original clip:
+            public static Preference<bool> overwriteOriginal = new Preference<bool>("OverwriteOriginal", false);
 
             private AudioClipExporter _audioClipExporter;
             private string clipNames;
@@ -97,35 +94,47 @@ namespace GiantSwordEditor
 
             private void OnGUI()
             {
-                // EditorGUILayout.LabelField("Clip Names:");
+                // Text field for naming the clip(s)
                 clipNames = EditorGUILayout.TextField("Clip Names:", clipNames);
-
-                // GUILayout.Space(15);
                 GUILayout.Space(15);
 
+                // List the new paths for the exported clip(s)
                 for (var index = 0; index < _audioPlayableAssets.Count; index++)
                 {
                     var audioPlayableAsset = _audioPlayableAssets[index];
-
                     string newPath = AudioClipExporterUtility.GetNewPath(folder, clipNames, index);
-                    EditorGUILayout.LabelField(
-                        $"{index}. {newPath}");
+                    EditorGUILayout.LabelField($"{index}. {newPath}");
                 }
 
                 GUILayout.Space(15);
 
+                // Existing options:
                 deleteOriginalClips.value = GUILayout.Toggle(deleteOriginalClips.value, "Delete Original Clips");
-                deleteTimelineSession.value =
-                    GUILayout.Toggle(deleteTimelineSession.value, "Delete Timeline Session");
+                deleteTimelineSession.value = GUILayout.Toggle(deleteTimelineSession.value, "Delete Timeline Session");
+                GUILayout.Space(15);
+
+                // New option: Overwrite original clip is only available if we have exactly one clip
+                if (_audioPlayableAssets.Count == 1)
+                {
+                    overwriteOriginal.value = GUILayout.Toggle(overwriteOriginal.value, "Overwrite Original Clip");
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("Overwriting original clip is not available when the clip is split into multiple parts.");
+                }
+                
                 GUILayout.Space(15);
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Export", GUILayout.Height(40)))
                 {
-                    AudioClipExporterUtility.ExportAudioClips(_audioClipExporter.GetComponent<PlayableDirector>(),
-                        folder,clipNames);
-
-                  
+                    // Modified call: pass the overwrite flag along with other parameters.
+                    AudioClipExporterUtility.ExportAudioClips(
+                        _audioClipExporter.GetComponent<PlayableDirector>(),
+                        folder,
+                        clipNames,
+                        overwriteOriginal.value
+                    );
                     Close();
                 }
             }
@@ -148,7 +157,6 @@ namespace GiantSwordEditor
                 {
                     clipNames = _audioPlayableAssets[0].clip.name;
                     folder = GetAssetFolderPath(_audioPlayableAssets[0].clip);
-
                 }
             }
         }

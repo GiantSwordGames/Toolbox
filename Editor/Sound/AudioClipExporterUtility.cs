@@ -12,7 +12,8 @@ namespace GiantSword
 {
     public static class AudioClipExporterUtility
     {
-        public static void ExportAudioClips(PlayableDirector playableDirector, string outputPath, string newName)
+        // Added a new bool parameter: overwriteOriginal
+        public static void ExportAudioClips(PlayableDirector playableDirector, string outputPath, string newName, bool overwriteOriginal)
         {
             if (playableDirector == null)
             {
@@ -35,12 +36,10 @@ namespace GiantSword
                 return;
             }
 
-
             IEnumerable<TrackAsset> trackAssets = timelineAsset.GetOutputTracks();
             List<AudioPlayableAsset> audioPlayableAssets = new List<AudioPlayableAsset>();
-            
             List<string> exportedPaths = new List<string>();
-            
+
             // Iterate through all output tracks in the Timeline
             foreach (var track in trackAssets)
             {
@@ -53,10 +52,10 @@ namespace GiantSword
                         var audioPlayableAsset = clip.asset as AudioPlayableAsset;
                         if (audioPlayableAsset != null)
                         {
+                            // Add asset to list for later processing (e.g. deletion)
                             audioPlayableAssets.Add(audioPlayableAsset);
 
                             AudioClip originalClip = audioPlayableAsset.clip;
-
                             if (originalClip == null)
                             {
                                 Debug.LogWarning(
@@ -64,23 +63,38 @@ namespace GiantSword
                                 continue;
                             }
 
-
                             // Get the start time and duration of the clip within the Timeline
                             double startTime = clip.clipIn;
-                            double endtime = clip.clipIn + clip.duration;
+                            double endTime = clip.clipIn + clip.duration;
 
                             // Trim the audio clip based on the Timeline's clip
-                            AudioClip trimmedClip = TrimAudioClip(originalClip, (float)startTime, (float)endtime);
-
+                            AudioClip trimmedClip = TrimAudioClip(originalClip, (float)startTime, (float)endTime);
                             if (trimmedClip == null)
                             {
                                 Debug.LogWarning($"Failed to trim AudioClip '{originalClip.name}'.");
                                 continue;
                             }
 
-                            // Generate a unique filename to prevent overwriting
+                            // Determine the filename:
                             string filename;
-                            filename = GetNewPath(outputPath, newName, index);
+                            // If overwrite option is true and we only have one clip, use the original asset's path.
+                            if (overwriteOriginal && audioPlayableAssets.Count == 1)
+                            {
+                                string originalAssetPath = AssetDatabase.GetAssetPath(originalClip);
+                                if (!string.IsNullOrEmpty(originalAssetPath))
+                                {
+                                    filename = originalAssetPath;
+                                }
+                                else
+                                {
+                                    filename = GetNewPath(outputPath, newName, index);
+                                }
+                            }
+                            else
+                            {
+                                filename = GetNewPath(outputPath, newName, index);
+                            }
+
                             exportedPaths.Add(filename);
                             // Save the trimmed clip as a WAV file
                             SaveWavFile(trimmedClip, filename);
@@ -88,19 +102,19 @@ namespace GiantSword
                     }
                 }
             }
-            
-            // import exported files
+
+            // Import exported files
             foreach (var exportedPath in exportedPaths)
             {
                 AssetDatabase.ImportAsset(exportedPath);
             }
-          
+
             if (AudioClipExporterEditor.ConfirmationWindow.deleteOriginalClips)
             {
                 List<AudioClip> clips = new List<AudioClip>();
                 foreach (var asset in audioPlayableAssets)
                 {
-                    if (clips.Contains(asset.clip) == false)
+                    if (!clips.Contains(asset.clip))
                     {
                         clips.Add(asset.clip);
                     }
@@ -111,24 +125,19 @@ namespace GiantSword
                     Debug.Log("Deleting " + clip.name);
                     AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(clip));
                 }
-            } 
-            
+            }
+
             if (AudioClipExporterEditor.ConfirmationWindow.deleteTimelineSession)
             {
                 Undo.DestroyObjectImmediate(playableDirector.gameObject);
-                // Selection.activeObject = GameObject.FindObjectOfType<Transform>();
-                
-                RuntimeEditorHelper.EditorApplicationDelayCall(()=>  Selection.activeObject = GameObject.FindObjectOfType<Transform>());
-                Debug.Log("  Selection.activeObject " +   Selection.activeObject,   Selection.activeObject);
+                RuntimeEditorHelper.EditorApplicationDelayCall(() =>
+                    Selection.activeObject = GameObject.FindObjectOfType<Transform>());
+                Debug.Log("Selection.activeObject " + Selection.activeObject, Selection.activeObject);
             }
-            
-              
+
             // Select the exported files in the Project window
-
             Selection.objects = exportedPaths.ConvertAll(path => AssetDatabase.LoadAssetAtPath<AudioClip>(path)).ToArray();
-
-            
-            Debug.Log("Export completed." + audioPlayableAssets.Count);
+            Debug.Log("Export completed. " + audioPlayableAssets.Count);
         }
 
         public static string GetNewPath(string outputPath, string originalClipName, int index)
@@ -144,13 +153,11 @@ namespace GiantSword
             return filename;
         }
 
-
         private static AudioClip TrimAudioClip(AudioClip clip, float startTime, float endTime)
         {
             // Calculate sample positions
             int frequency = clip.frequency;
             int channels = clip.channels;
-
             int startSample = Mathf.FloorToInt(startTime * frequency * channels);
             int endSample = Mathf.FloorToInt(endTime * frequency * channels);
 
@@ -166,14 +173,13 @@ namespace GiantSword
 
             // Extract the relevant audio data
             float[] trimmedData = new float[trimmedLength];
-            System.Array.Copy(originalData, startSample, trimmedData, 0, trimmedLength);
+            Array.Copy(originalData, startSample, trimmedData, 0, trimmedLength);
 
             // Set the data for the new clip
             trimmedClip.SetData(trimmedData, 0);
-
             return trimmedClip;
         }
-        
+
         /// <summary>
         /// Saves an AudioClip as a WAV file to the specified filename.
         /// </summary>
@@ -236,27 +242,26 @@ namespace GiantSword
                 {
                     // RIFF header
                     writer.Write(new char[4] { 'R', 'I', 'F', 'F' });
-                    writer.Write(fileSize - 8); // File size minus RIFF header
+                    writer.Write(fileSize - 8);
                     writer.Write(new char[4] { 'W', 'A', 'V', 'E' });
 
                     // fmt subchunk
                     writer.Write(new char[4] { 'f', 'm', 't', ' ' });
-                    writer.Write(16); // Subchunk1Size for PCM
-                    writer.Write((short)1); // AudioFormat (1 = PCM)
-                    writer.Write((short)channels); // NumChannels
-                    writer.Write(frequency); // SampleRate
-                    writer.Write(byteRate); // ByteRate
-                    writer.Write((short)blockAlign); // BlockAlign
-                    writer.Write((short)bitsPerSample); // BitsPerSample
+                    writer.Write(16);
+                    writer.Write((short)1);
+                    writer.Write((short)channels);
+                    writer.Write(frequency);
+                    writer.Write(byteRate);
+                    writer.Write((short)blockAlign);
+                    writer.Write((short)bitsPerSample);
 
                     // data subchunk
                     writer.Write(new char[4] { 'd', 'a', 't', 'a' });
-                    writer.Write(dataSize); // Subchunk2Size
+                    writer.Write(dataSize);
 
                     // Write audio data
                     foreach (var sample in samples)
                     {
-                        // Clamp sample to [-1, 1] and convert to 16-bit PCM
                         short pcmSample = (short)(Mathf.Clamp(sample, -1f, 1f) * short.MaxValue);
                         writer.Write(pcmSample);
                     }

@@ -31,7 +31,7 @@ namespace GiantSword
             }
 
             SoundInstance soundInstance = SoundInstance.Create(soundAsset, parent, position);
-            _lastPlayTime[soundAsset] = Time.time;
+            _lastPlayTime[soundAsset] = Time.realtimeSinceStartup;
             // _soundsPlayedThisFrame.Add(soundAsset);
             return soundInstance;   
         }
@@ -43,7 +43,7 @@ namespace GiantSword
           
             if (_lastPlayTime.ContainsKey(soundAsset))
             {
-                if(Time.time - _lastPlayTime[soundAsset] >= soundAsset.cooldown) // cooldown 0 will limit to 1 play per frame
+                if(Time.realtimeSinceStartup - _lastPlayTime[soundAsset] >= soundAsset.cooldown) // cooldown 0 will limit to 1 play per frame
                 {
                     return true;
                     // _lastPlayTime[soundAsset] = Time.time;

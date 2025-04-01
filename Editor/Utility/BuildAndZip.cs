@@ -23,8 +23,37 @@ namespace GiantSword
             string formattedAppName = applicationName.ToUpperCamelCase();
             string[] scenePaths = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray();
 
+            
+            if (buildForMac.value)
+            {
+                Debug.Log("Begin Mac Build: ");
+                string macBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Mac");
+                Directory.CreateDirectory(macBuildFolder);
+                string macBuildPath = Path.Combine(macBuildFolder, applicationName + ".app");
+
+                var macOptions = new BuildPlayerOptions
+                {
+                    scenes = scenePaths,
+                    locationPathName = macBuildPath,
+                    target = BuildTarget.StandaloneOSX,
+                    options = BuildOptions.None
+                };
+
+                var report = BuildPipeline.BuildPlayer(macOptions);
+                Debug.Log("Mac build completed: " + report.summary.result);
+
+                DeleteDoNotShipArtifacts(macBuildFolder);
+
+                string zipPath = macBuildFolder + ".zip";
+                if (File.Exists(zipPath)) File.Delete(zipPath);
+                ZipFile.CreateFromDirectory(macBuildFolder, zipPath);
+                Debug.Log("Mac build zipped to: " + zipPath);
+            }
+            
             if (buildForWindows.value)
             {
+                Debug.Log("Begin Win Build: ");
+
                 string winBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Win");
                 Directory.CreateDirectory(winBuildFolder);
                 string winBuildPath = Path.Combine(winBuildFolder, applicationName + ".exe");
@@ -48,33 +77,11 @@ namespace GiantSword
                 Debug.Log("Windows build zipped to: " + zipPath);
             }
 
-            if (buildForMac.value)
-            {
-                string macBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Mac");
-                Directory.CreateDirectory(macBuildFolder);
-                string macBuildPath = Path.Combine(macBuildFolder, applicationName + ".app");
-
-                var macOptions = new BuildPlayerOptions
-                {
-                    scenes = scenePaths,
-                    locationPathName = macBuildPath,
-                    target = BuildTarget.StandaloneOSX,
-                    options = BuildOptions.None
-                };
-
-                var report = BuildPipeline.BuildPlayer(macOptions);
-                Debug.Log("Mac build completed: " + report.summary.result);
-
-                DeleteDoNotShipArtifacts(macBuildFolder);
-
-                string zipPath = macBuildFolder + ".zip";
-                if (File.Exists(zipPath)) File.Delete(zipPath);
-                ZipFile.CreateFromDirectory(macBuildFolder, zipPath);
-                Debug.Log("Mac build zipped to: " + zipPath);
-            }
 
             if (buildForLinux.value)
             {
+                Debug.Log("Begin Linux Build: ");
+
                 string linuxBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Linux");
                 Directory.CreateDirectory(linuxBuildFolder);
                 string linuxBuildPath = Path.Combine(linuxBuildFolder, applicationName); // No extension
@@ -100,6 +107,8 @@ namespace GiantSword
 
             if (buildForWebGL.value)
             {
+                Debug.Log("Begin Web Build: ");
+
                 string webglBuildFolder = Path.Combine(desktopPath, formattedAppName + "_WebGL");
                 Directory.CreateDirectory(webglBuildFolder);
 
@@ -120,9 +129,23 @@ namespace GiantSword
                 if (File.Exists(zipPath)) File.Delete(zipPath);
                 ZipFile.CreateFromDirectory(webglBuildFolder, zipPath);
                 Debug.Log("WebGL build zipped to: " + zipPath);
+                
+                // Launch a local HTTP server to serve the WebGL build
+                string escapedPath = webglBuildFolder.Replace(" ", "\\ "); // Handle spaces in folder name
+                string serverCommand = $"cd {escapedPath} && python3 -m http.server 8080";
+                System.Diagnostics.Process.Start("open", $"-a Terminal \"{escapedPath}\""); // Open Terminal at folder
+                System.Diagnostics.Process.Start("osascript", $"-e 'tell application \"Terminal\" to do script \"{serverCommand}\"'");
+                Debug.Log("Started local server for WebGL build at http://localhost:8080");
+                System.Diagnostics.Process.Start("open", "http://localhost:8080");
+
+
             }
 
             Debug.Log("All selected builds complete.");
+            
+            
+            System.Diagnostics.Process.Start(desktopPath);
+            
         }
 
         private static void DeleteDoNotShipArtifacts(string buildRoot)

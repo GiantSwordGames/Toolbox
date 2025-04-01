@@ -37,8 +37,9 @@ namespace GiantSword
         [SerializeField] private TimeMode _timeMode = TimeMode.Scaled;
         [SerializeField] private Mode _mode = Mode.Additive;
 
+        [FormerlySerializedAs("lerp")]
         [Range(0,1)]
-        [SerializeField] public float lerp = 1f;
+        [SerializeField] public float _lerp = 1f;
         [HideInInspector] [SerializeField] protected bool _additive = true;
         [SerializeField] protected SmartTween _tweenSettings;
         [SerializeField] float _duration = Mathf.Infinity;
@@ -50,6 +51,8 @@ namespace GiantSword
         protected bool additive => _mode == Mode.Additive;
 
         public bool running => _running;
+
+        public float lerp => _lerp;
 
         protected virtual void OnEnable()
         {
@@ -110,7 +113,7 @@ namespace GiantSword
 
             // inputTime += _timeOffset;
 
-            _lastEvaluate = (_tweenSettings.Evaluate(inputTime) + _resultOffset) *lerp;
+            _lastEvaluate = (_tweenSettings.Evaluate(inputTime) + _resultOffset) *_lerp;
             return _lastEvaluate;
         }
 

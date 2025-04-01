@@ -18,7 +18,7 @@ namespace GiantSword
         [FormerlySerializedAs("_onClicked")]
         [FormerlySerializedAs("_onClick")] 
         [SerializeField] private UnityEvent _onPlayClickedAnimation;
-        [SerializeField] private float _clickAnimationDuration = 0f;
+        [FormerlySerializedAs("_clickAnimationDuration")] [SerializeField] private float _delayEventInvocation = 0f;
         [FormerlySerializedAs("_onSelect")] [SerializeField] private UnityEvent _onSelected;
         [FormerlySerializedAs("_onDeselect")] [SerializeField] private UnityEvent _onDeselected;
         [SerializeField] private GameObject _selector;
@@ -128,10 +128,12 @@ namespace GiantSword
             _clicked = true;
             _onPlayClickedAnimation.Invoke();
 
-            AsyncHelper.Delay(_clickAnimationDuration, () =>
+
+            AsyncHelper.DelayUnscaled(_delayEventInvocation, () =>
             {
-                _optionAsset.sound?.Play();
                 _optionAsset.Click();
+
+                _optionAsset.sound?.Play();
                 if (_optionAsset.subMenu)
                 {
                     _menuDefinition.Close();

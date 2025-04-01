@@ -1,7 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GiantSword
 {
+    public enum TimeScale
+    {
+        Scaled,
+        Unscaled
+    }
+    
     public static class TimeHelper
     {
         
@@ -57,6 +64,23 @@ namespace GiantSword
             }
 
             return $"{hoursInt}:{minutes:D2} {(isPm ? "PM" : "AM")}";
+        }
+        
+        public static object SmartWaitForSeconds(float seconds, TimeScale timeScale)
+        {
+            if (timeScale == TimeScale.Unscaled)
+            {
+                return new WaitForSecondsRealtime(seconds);
+            }
+            else
+            {
+                return new WaitForSeconds(seconds);
+            }
+        }
+
+        public static float GetDeltaTime(TimeScale scale)
+        {
+            return scale == TimeScale.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
         }
     }
 }

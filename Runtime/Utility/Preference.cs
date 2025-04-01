@@ -229,7 +229,7 @@ namespace GiantSword
 #if UNITY_EDITOR
             
             if (label == "")
-                label = _rawKey.ToTitleCase();
+                label = guiLabel;
             
             
             if (this is Preference<bool> boolPref)
@@ -296,6 +296,8 @@ namespace GiantSword
             throw new NotImplementedException();
 #endif
         }
+
+        public string guiLabel => _rawKey.ToTitleCase();
 
         public void DrawSlider(float min, float max)
         {

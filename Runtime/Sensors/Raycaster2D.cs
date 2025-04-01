@@ -119,9 +119,10 @@ namespace GiantSword
 
         private void OnDrawGizmosSelected()
         {
-            
             Gizmos.color = Color.white;
             Gizmos.DrawRay(transform.position, transform.right * _distance);
+            Gizmos.DrawWireSphere(transform.position, _thickness);
+            Gizmos.DrawWireSphere(transform.position + transform.right * _distance, _thickness);
 
             if (_raycastHits.Length > 0)
             {

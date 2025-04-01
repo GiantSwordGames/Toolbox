@@ -57,7 +57,8 @@ namespace GiantSword
         {
             if (_running)
             {
-                _time += Time.deltaTime;
+                float deltaTime = TimeHelper.GetDeltaTime(_screenShakeAsset.timeScale);
+                _time += deltaTime;
                 _targetTransform.localPosition -= _positionOffset;
                 _targetTransform.localRotation = Quaternion.Inverse(_rotationOffset);
 

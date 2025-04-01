@@ -7,8 +7,8 @@ namespace GiantSword
     [CustomEditor(typeof(SoundAsset))]
     public class SoundAssetEditor : CustomEditorBase<SoundAsset>
     {
-        private AudioSource _previewSource;
-        private AudioClip _lastClip;
+        private static AudioSource _previewSource;
+        private static AudioClip _lastClip;
         private Texture2D _cachedWaveformTexture;
         private bool _displayDefaultSettings = false;
 
@@ -211,7 +211,7 @@ namespace GiantSword
             return Mathf.Clamp(Mathf.Abs(maxDB), 0f, 80f);
         }
 
-        private void PlayAudioClip(SoundAsset soundAsset)
+        public static void PlayAudioClip(SoundAsset soundAsset)
         {
             if (soundAsset.clips == null || soundAsset.clips.Length == 0)
             {
@@ -254,7 +254,7 @@ namespace GiantSword
 
                 _lastClip = clipToPlay;
                 EditorApplication.update += RemovePreviewSource;
-                Repaint();
+                // Repaint();
             }
             else
             {
@@ -280,7 +280,7 @@ namespace GiantSword
             }
         }
 
-        private void RemovePreviewSource()
+        private static void RemovePreviewSource()
         {
             if (_previewSource != null && !_previewSource.isPlaying)
             {

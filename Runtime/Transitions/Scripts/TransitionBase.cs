@@ -32,12 +32,12 @@ namespace GiantSword
 
         protected Coroutine DoTransitionOut()
         {
-            return AsyncHelper.StartCoroutine(IETransitionOut(null));
+            return this.StartCoroutine(IETransitionOut(null));
         }
 
         protected Coroutine DoTransitionIn()
         {
-            return AsyncHelper.StartCoroutine(IETransitionIn(null));
+            return this.StartCoroutine(IETransitionIn(null));
         }
 
         // public void TestAsset()
@@ -49,7 +49,7 @@ namespace GiantSword
         {
             if(_doNotAutoDestroy ==false)
                 DontDestroyOnLoad(gameObject);
-            return AsyncHelper.StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
+            return this.StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
         }
 
         public TransitionBase Instantiate()

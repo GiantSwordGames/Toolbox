@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 namespace GiantSword
 {
+   
     public class DelayedActionList : MonoBehaviour
     {
         [Serializable]
@@ -15,6 +16,9 @@ namespace GiantSword
             public float delay;
             public UnityEvent UnityEvent;
         }
+       
+        
+        [SerializeField] private TimeScale _timeScale;
         
         [SerializeField] private List<Entry> _entries = new List<Entry>();
 
@@ -30,12 +34,13 @@ namespace GiantSword
             {
                 if (_entries[i].delay > 0)
                 {
-                    yield return new WaitForSeconds(_entries[i].delay);
+                    yield return TimeHelper.SmartWaitForSeconds(_entries[i].delay, _timeScale);
                 }
                 
                 _entries[i].UnityEvent?.Invoke();
             }
         }
-        
+
+     
     }
 }

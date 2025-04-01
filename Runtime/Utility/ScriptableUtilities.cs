@@ -25,11 +25,24 @@ namespace GiantSword
         
         public  void Quit()
         {
+            // if not web build
+            #if !UNITY_WEBGL
             Application.Quit();
+            #endif
         }
         public void ToggleFullScreen()
         {
             Screen.fullScreen = !Screen.fullScreen;
+        }
+        
+        public void ExitFullScreen()
+        {
+            Screen.fullScreen = false;
+        }
+        
+        public void EnterFullScreen()
+        {
+            Screen.fullScreen = true;
         }
     }
 }

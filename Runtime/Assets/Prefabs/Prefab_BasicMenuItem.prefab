@@ -97,7 +97,7 @@ MonoBehaviour:
   _onPlayClickedAnimation:
     m_PersistentCalls:
       m_Calls: []
-  _clickAnimationDuration: 0
+  _delayEventInvocation: 0
   _onSelected:
     m_PersistentCalls:
       m_Calls: []

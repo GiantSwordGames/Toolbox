@@ -6,7 +6,7 @@ namespace GiantSword
     public static class CreateVariantInProjectButton
     {
         
-                [MenuItem("Assets/Create/Create Variant In Project", false, 0)]
+                [MenuItem(MenuPaths.QUICK_CREATE +"Create Duplicate In Project", false, 0)]
                public static void CreateVariantInProject()
                {
                    // 1. Get the selected prefab

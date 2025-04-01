@@ -31,7 +31,20 @@ namespace GiantSword
             else
             {
                 // Draw the property field as normal
+                // EditorGUI.PropertyField(position, property, label);
+                var playButtonRect = position;
+                float playWidth = 20;
+                playButtonRect.x += playButtonRect.width - playWidth;
+                playButtonRect.width = playWidth;
+                position.width -= playWidth;
+                
                 EditorGUI.PropertyField(position, property, label);
+                if (GUI.Button(playButtonRect, ">"))
+                {
+                    SoundAsset soundAsset = property.objectReferenceValue as SoundAsset;
+                    SoundAssetEditor.PlayAudioClip(soundAsset);
+                    // soundAsset.Play();
+                }
             }
 
             EditorGUI.EndProperty();

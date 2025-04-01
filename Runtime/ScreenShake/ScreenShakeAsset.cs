@@ -12,7 +12,7 @@ namespace GiantSword
         [SerializeField] public Vector3 componentFrequency= new Vector3(1, 1, 0);
         [SerializeField] public float frequency = 1;
         [SerializeField] public float amplitude = 1;
-
+        
         public Oscillator(float frequency, float amplitude, Vector3 componentFrequency, Vector3 componentAmplitude)
         {
             this.frequency = frequency;
@@ -47,8 +47,11 @@ namespace GiantSword
         [SerializeField] private Oscillator _positionOscillator = new Oscillator(16, 1, new Vector3(1, 2, 0), new Vector3(1, 1, 0));
         [SerializeField] private Oscillator _rotationOscillator = new Oscillator(1, 0, new Vector3(0, 0, 1), new Vector3(0, 0, 1));
         private Coroutine _repeatRoutine;
+        
+        [SerializeField] TimeScale _timeScale = TimeScale.Scaled;
 
         public float duration => _duration;
+        public TimeScale timeScale => _timeScale;
 
         public Vector3 EvaluatePosition(float time)
         {

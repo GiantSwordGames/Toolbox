@@ -20,10 +20,14 @@ namespace GiantSword
 
         public static Coroutine Delay(float delay, Action action)
         {
-           return SafeCoroutineRunner.StartCoroutine(IEDelay(action, delay));
+            return SafeCoroutineRunner.StartCoroutine(IEDelay(action, delay, false));
+        }
+        public static Coroutine DelayUnscaled(float delay, Action action)
+        {
+            return SafeCoroutineRunner.StartCoroutine(IEDelay(action, delay, true));
         }
 
-        private static IEnumerator IEDelay(Action action, float delay)
+        private static IEnumerator IEDelay(Action action, float delay, bool unscaledTime = false)
         {
             if (delay == 0)
             {
@@ -31,7 +35,14 @@ namespace GiantSword
             }
             else
             {
-                yield return new WaitForSeconds(delay);
+                if (unscaledTime)
+                {
+                    yield return new WaitForSecondsRealtime(delay);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(delay);
+                }
                 action();
             }
         }
