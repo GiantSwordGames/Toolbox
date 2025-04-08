@@ -15,7 +15,7 @@ namespace GiantSword
             {
                 _value.value -= _offset;
             }
-            float intensity = _tweenSettings.Evaluate(_time);
+            float intensity = tweenSettings.Evaluate(_time);
             _offset = intensity;
             if (additive)
             {

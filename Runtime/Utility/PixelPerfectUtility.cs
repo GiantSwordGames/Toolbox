@@ -9,17 +9,31 @@ namespace GiantSword
         public static void SnapSpriteToGrid(GameObject selectedObject)
         {
             SpriteRenderer spriteRenderer = selectedObject.GetComponent<SpriteRenderer>();
-
-            if (spriteRenderer != null)
+            var pixelSnappingElement = selectedObject.GetComponent<PixelSnappingElement>();
+            var pixelSnappingParent = selectedObject.GetComponentInParent<PixelSnappingElement>();
+         
             {
-                SnapSpriteToGrid(spriteRenderer);
-            }
-            else
-            {
-                var pixelSnappingElement = selectedObject.GetComponent<PixelSnappingElement>();
-                if (pixelSnappingElement && pixelSnappingElement.dontSnap == false)
+               
+                if (pixelSnappingParent)
+                {
+                    if (pixelSnappingElement == null)
+                    {
+                        // dont snap children
+                        return;
+                    }
+                }
+                
+                if ( pixelSnappingElement && pixelSnappingElement.dontSnap == false)
                 {
                     SnapTransformToGrid(pixelSnappingElement);
+                    return;
+                }
+                
+                if (spriteRenderer != null)
+                {
+                    SnapSpriteToGrid(spriteRenderer);
+                    return;
+
                 }
             }
         }

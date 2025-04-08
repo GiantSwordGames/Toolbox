@@ -27,7 +27,13 @@ namespace GiantSword
         [ShowIf("_type", TweenType.AnimationCurve)]
         [SerializeField] private AnimationCurve _animationCurve;
 
-        
+        public float delay
+        {
+            get => _delay;
+            set => _delay = value;
+        }
+
+
         public float Evaluate(float time)
         {
             if (_delay > 0)

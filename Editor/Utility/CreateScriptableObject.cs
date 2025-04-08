@@ -9,7 +9,7 @@ namespace GiantSwordEditor
 {
     public static class CreateScriptableObject
     {
-        [MenuItem(MenuPaths.QUICK_CREATE + "/ScriptableObject from Script", priority = MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "ScriptableObject from Script", priority = MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateAsset()
         {
             // Get the selected script file
@@ -53,7 +53,7 @@ namespace GiantSwordEditor
             Selection.activeObject = asset;
         }
 
-        [MenuItem(MenuPaths.QUICK_CREATE +"/ScriptableObject from Script", true)]
+        [MenuItem(MenuPaths.QUICK_CREATE +"ScriptableObject from Script", true)]
         public static bool ValidateCreateAsset()
         {
             var selected = Selection.activeObject;

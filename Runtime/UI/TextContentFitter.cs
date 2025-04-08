@@ -14,6 +14,7 @@ namespace GiantSword
 
         private void OnValidate()
         {
+            
             Apply();
         }
 

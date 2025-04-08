@@ -10,7 +10,7 @@ namespace GiantSword
         public static int textureHeight = 1024;
         
 
-        [MenuItem( MenuPaths.QUICK_CREATE + "/Create Texture", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem( MenuPaths.QUICK_CREATE + "Create Texture", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateWhiteTexture(MenuCommand menuCommand)
         {
             // Get the path of the selected folder in the Project window

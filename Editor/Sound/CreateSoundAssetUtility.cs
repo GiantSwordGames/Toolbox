@@ -10,7 +10,7 @@ namespace GiantSword
         private List<SoundAsset> _soundBanks;
         private List<AudioClip> _audioClips;
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "/Assign To Sound Bank")]
+        [MenuItem(MenuPaths.QUICK_CREATE + "Assign To Sound Bank")]
         public static void OpenWindow()
         {
             var window = GetWindow<DynamicContextMenuEditor>("Assign Audio Clip to Sound Bank", true);
@@ -45,7 +45,7 @@ namespace GiantSword
     public static class CreateSoundAssetUtility
     {
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "/Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateSoundAsset()
         {
             var clips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();
@@ -61,7 +61,7 @@ namespace GiantSword
             RuntimeEditorHelper.SelectAndFocus(newAsset);
         }
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "/Create Sound Banks From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "Create Sound Banks From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateSoundAssets()
         {
             var clips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();

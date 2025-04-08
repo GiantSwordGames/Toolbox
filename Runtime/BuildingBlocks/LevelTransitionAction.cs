@@ -13,6 +13,7 @@ namespace GiantSword
         [SerializeField] bool _goToNextLevelInBuildSettings;
         [SerializeField] private Level _level;
         [SerializeField] private TransitionWithAnimation _transition;
+        [SerializeField] private TransitionBase _transitionBase;
         [SerializeField] private float _delay = 0;
 
         [Button]
@@ -22,6 +23,10 @@ namespace GiantSword
         }
         public IEnumerator IETrigger()
         {
+            if (_transition)
+            {
+                _transitionBase = _transition;
+            }
             if (_delay > 0)
             {
                 yield return new WaitForSecondsRealtime(_delay);
@@ -30,7 +35,7 @@ namespace GiantSword
             ScriptableVariableManager.ResetAll(_resetVariableScope);
             if (_restartLevel)
             {
-                _transition.InstantiateAndDoSceneTransition( SceneManager.GetActiveScene().buildIndex);
+                _transitionBase.InstantiateAndDoSceneTransition( SceneManager.GetActiveScene().buildIndex);
             }
             else if (_goToNextLevelInBuildSettings)
             {
@@ -38,12 +43,12 @@ namespace GiantSword
                 int currentSceneBuildIndex = SceneManager.GetActiveScene().buildIndex;
                 int nextSceneIndex = currentSceneBuildIndex + 1;
                 nextSceneIndex %= SceneManager.sceneCountInBuildSettings;
-                _transition.InstantiateAndDoSceneTransition(nextSceneIndex);
+                _transitionBase.InstantiateAndDoSceneTransition(nextSceneIndex);
 
             }
             else
             {
-                _transition.InstantiateAndDoLevelTransition(_level);
+                _transitionBase.InstantiateAndDoLevelTransition(_level);
             }
         }
         

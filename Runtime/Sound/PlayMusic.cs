@@ -47,10 +47,10 @@ namespace GiantSword
                 previousTrack.FadeOut(_crossfadeTime);
             }
 
-            if (_persistAcrossScenes)
+            if (_persistAcrossScenes && _currentTrack)
             {
                 _currentTrack.transform.parent = null;
-                DontDestroyOnLoad(_currentTrack);
+                DontDestroyOnLoad(_currentTrack.gameObject);
             }
         }
         

@@ -26,7 +26,7 @@ namespace GiantSword.AssetRules
             }
         }
 
-        [MenuItem( MenuPaths.QUICK_CREATE + "/Create Asset Naming Rule For This Asset", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem( MenuPaths.QUICK_CREATE + "Create Asset Naming Rule For This Asset", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateNamingRule()
         {
             RuleBase findAsset = RuntimeEditorHelper.FindAsset<RuleBase>();

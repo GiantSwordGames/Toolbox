@@ -54,6 +54,8 @@ namespace GiantSword
 
         public float lerp => _lerp;
 
+        public SmartTween tweenSettings => _tweenSettings;
+
         protected virtual void OnEnable()
         {
             if (_resetBehaviour == ResetBehaviour.ResetOnEnable)

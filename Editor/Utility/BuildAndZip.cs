@@ -138,7 +138,6 @@ namespace GiantSword
                 Debug.Log("Started local server for WebGL build at http://localhost:8080");
                 System.Diagnostics.Process.Start("open", "http://localhost:8080");
 
-
             }
 
             Debug.Log("All selected builds complete.");

@@ -301,6 +301,25 @@ namespace GiantSword
 #endif
                 }
                 
+
+                public static T CreateNewAsset<T>(string assetName, string fallbackLocation = "Assets/Project") where T:ScriptableObject
+                {
+#if UNITY_EDITOR
+                        T newAsset = ScriptableObject.CreateInstance<T>();
+                        string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<T>();
+                        if (folderPath == "")
+                        {
+                                folderPath = fallbackLocation;
+                        }
+                        string newPath = folderPath + "/" + assetName + ".asset";
+                        AssetDatabase.CreateAsset(newAsset, newPath);
+                        var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);
+                        Debug.Log(newPath, loadAssetAtPath);
+                        return newAsset;
+#endif
+
+                        return null;
+                }
 #if UNITY_EDITOR
 
                 public static void CreateFoldersIfNeeded(string directory)

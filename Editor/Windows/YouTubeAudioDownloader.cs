@@ -12,7 +12,7 @@ namespace GiantSword
         private string _endTime = "00:01:00";
         private string _outputFolder = "Assets/Project/Audio/Clips";
 
-        [MenuItem("Windows/GiantSword/Download YouTube Audio")]
+        [MenuItem(MenuPaths.WINDOWS+ "Download YouTube Audio")]
         public static void ShowWindow()
         {
             GetWindow<YouTubeAudioDownloader>("YouTube Audio Downloader");

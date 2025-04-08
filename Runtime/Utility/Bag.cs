@@ -11,6 +11,7 @@ namespace GiantSword
 
         public Bag(List<T> elements, bool shuffle = true)
         {
+            Debug.Log("Shuffle " + shuffle);
             _shuffle = shuffle;
             _elements = elements;
             _shuffledElements.AddRange(_elements);
@@ -42,7 +43,7 @@ namespace GiantSword
             return next;
         }
 
-        private void Refill()
+        public void Refill()
         {
             _shuffledElements.Clear();
             _shuffledElements.AddRange(_elements);
@@ -50,6 +51,11 @@ namespace GiantSword
             {
                 _shuffledElements.Shuffle();
             }
+        }
+
+        public bool IsFinished()
+        {
+            return _shuffledElements.Count == 0;
         }
     }
 }

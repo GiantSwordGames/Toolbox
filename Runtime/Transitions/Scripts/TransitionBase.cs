@@ -73,10 +73,10 @@ namespace GiantSword
             return instance;
         }
         
-        public TransitionBase InstantiateAndDoLevelTransition(Level loadScene)
+        public TransitionBase InstantiateAndDoLevelTransition(Level leve)
         {
             var instance = Instantiate();
-            instance.DoFullTransition(() => loadScene.LoadLevel(), null);
+            instance.DoFullTransition(() => leve.LoadLevel(), null);
             return instance;
         }
         

@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 
 namespace GiantSword
 {
+    
+    [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU +"Level", fileName = "Level_NewLevel")]
     public class Level : ScriptableObject
     {
         [SerializeField]  private SceneReference _scene;
@@ -37,6 +39,14 @@ namespace GiantSword
                 else
                 {
                     _scene.Load(LoadSceneMode.Single);
+                }
+            }
+            
+            foreach (var scene in _additionalScene)
+            {
+                if (scene.isLoaded == false)
+                {
+                    scene.Load(LoadSceneMode.Additive);
                 }
             }
                 
@@ -95,7 +105,6 @@ namespace GiantSword
                     if (allScenes.Contains(sceneAt) == false)
                     {
                         // unload scene
-
                         
                         if (SceneManager.sceneCount > 1)
                         {

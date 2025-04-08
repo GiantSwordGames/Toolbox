@@ -12,7 +12,7 @@ namespace GiantSword
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<T>();
+                    _instance = GameObject.FindFirstObjectByType<T>();
                     if (_instance == null)
                     {
                         Debug.LogError("An instance of " + typeof(T) + " is needed in the scene, but there is none.");
