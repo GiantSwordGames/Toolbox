@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -49,10 +50,24 @@ namespace GiantSword.ClipboardImagePaste
                                 spriteRenderer.sprite = clipboardTexture;
                             }
 
+                            spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition();
+
                             if (Selection.activeTransform)
                             {
                                 spriteRenderer.transform.SetParent(Selection.activeTransform);
                             }
+                            else
+                            {
+                                Collider2D collider2D = Physics2D.OverlapCircle(spriteRenderer.transform.position, 10);
+                                Debug.Log("Collider found: " + collider2D, collider2D);
+
+                                if (collider2D)
+                                {
+                                    EditorSceneManager.MoveGameObjectToScene(spriteRenderer.gameObject, collider2D.transform.root.gameObject.scene);
+                                }
+                            }
+
+
 
                             Selection.activeObject = spriteRenderer;
                         }

@@ -744,6 +744,17 @@ namespace GiantSword
                         return null;
                 }
 
+                public static Vector3 GetSceneCenterPosition()
+                {
+                        Camera sceneCamera = GetSceneCamera();
+                        if (sceneCamera)
+                        {
+                                return sceneCamera.transform.position;
+                        }
+
+                        return Vector3.zero;
+                }
+
                 public static bool IsQuitting => _isQuitting;
 
                 public static void CreateDirectoryFromAssetPath(string folderPath)
