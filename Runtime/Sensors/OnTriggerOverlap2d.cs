@@ -29,6 +29,8 @@ namespace GiantSword
 
         public UnityEvent<Collider2D> onColliderExit { get; set; } = new UnityEvent<Collider2D>();
 
+        public List<Rigidbody2D> rigidbodies => _rigidbodies;
+
         [Foldout("On Rigidbody Enter")]
         public UnityEvent<Rigidbody2D> onRigidbodyEnter;
        

@@ -8,6 +8,13 @@ namespace GiantSword
     
     public class Raycaster2D : MonoBehaviour
     {
+        enum UpdateMode
+        {
+            Manual,
+            OnUpdate
+        }
+        
+        [SerializeField] private UpdateMode _updateMode = UpdateMode.Manual;
         [SerializeField] private float _distance = 1;
         [Min(0)]
         [SerializeField] private float _thickness = 0;
@@ -18,6 +25,9 @@ namespace GiantSword
         [SerializeField] private UnityEvent<Collider2D> _onExit;
         [SerializeField] private UnityEvent _onMovementDetected;
         
+        [SerializeField] private Vector3 _localDirection = Vector3.right;
+        Vector3 worldDirection => transform.TransformVector(_localDirection);
+
         private List<Collider2D> _colliders = new List<Collider2D>();
         private  List<Collider2D> _previousColliders = new List<Collider2D>( );
 
@@ -51,6 +61,14 @@ namespace GiantSword
         {
             Raycast(false);
         }
+        
+        void Update()
+        {
+            if (_updateMode == UpdateMode.OnUpdate)
+            {
+                Raycast(false);
+            }
+        }
 
         public RaycastHit2D Raycast(bool suppressEvents = false)
         {
@@ -61,13 +79,14 @@ namespace GiantSword
                 queryTriggerInteraction = QueryTriggerInteraction.Collide;
             }
 
+       
             if (_thickness == 0)
             {
-                _raycastHits = Physics2D.RaycastAll(transform.position, transform.right, _distance, _layermask);
+                _raycastHits = Physics2D.RaycastAll(transform.position, worldDirection, _distance, _layermask);
             }
             else
             {
-                _raycastHits = Physics2D.CircleCastAll(transform.position, _thickness, transform.right, _distance, _layermask);
+                _raycastHits = Physics2D.CircleCastAll(transform.position, _thickness, worldDirection, _distance, _layermask);
             }
                
             
@@ -120,22 +139,22 @@ namespace GiantSword
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.white;
-            Gizmos.DrawRay(transform.position, transform.right * _distance);
+            Gizmos.DrawRay(transform.position, worldDirection * _distance);
             Gizmos.DrawWireSphere(transform.position, _thickness);
-            Gizmos.DrawWireSphere(transform.position + transform.right * _distance, _thickness);
+            Gizmos.DrawWireSphere(transform.position + worldDirection * _distance, _thickness);
 
             if (_raycastHits.Length > 0)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawRay(transform.position, transform.right * _currentDistance);
+                Gizmos.DrawRay(transform.position, worldDirection * _currentDistance);
             }
             
         }
 
-        private void OnDrawGizmos()
-        {
-            Gizmos.DrawSphere(transform.position, 0.025f);
-            Gizmos.DrawRay(transform.position, transform.right * 0.05f);
-        }
+        // private void OnDrawGizmos()
+        // {
+        //     Gizmos.DrawSphere(transform.position, 0.025f);
+        //     Gizmos.DrawRay(transform.position, transform.right * 0.05f);
+        // }
     }
 }

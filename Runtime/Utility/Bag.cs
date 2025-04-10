@@ -11,7 +11,6 @@ namespace GiantSword
 
         public Bag(List<T> elements, bool shuffle = true)
         {
-            Debug.Log("Shuffle " + shuffle);
             _shuffle = shuffle;
             _elements = elements;
             _shuffledElements.AddRange(_elements);

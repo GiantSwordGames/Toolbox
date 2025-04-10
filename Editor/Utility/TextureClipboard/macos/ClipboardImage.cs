@@ -51,7 +51,8 @@ namespace GiantSword.ClipboardImagePaste
                             }
 
                             spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition();
-
+                            Debug.Log(Selection.activeTransform, Selection.activeTransform);
+                            
                             if (Selection.activeTransform)
                             {
                                 spriteRenderer.transform.SetParent(Selection.activeTransform);

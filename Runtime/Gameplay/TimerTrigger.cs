@@ -34,13 +34,19 @@ namespace GiantSword
                 _currentTime = Mathf.Min(_currentTime, _randomizedDuration);
                 if (_currentTime >= _randomizedDuration)
                 {
-                    _onElapse?.Invoke();
+                    Trigger();
                     if (_repeating)
                     {
                         Reset();
                     }
                 }
             }
+        }
+
+        [Button]
+        private void Trigger()
+        {
+            _onElapse?.Invoke();
         }
     }
 }

@@ -39,6 +39,7 @@ namespace GiantSword
         }
         
         
+        // this generates a lot of garbage and is expensive
         public static float TryEvaluateExpression(string expression, out bool failed)
         {
             try
