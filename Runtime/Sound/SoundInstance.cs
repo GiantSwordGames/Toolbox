@@ -133,6 +133,14 @@ namespace GiantSword
             ApplyPitch();
             _audioSource.Play();
             _soundAsset.IncrementPitch();
+            
+            if (soundAsset)
+            {
+                if(soundAsset.debugLog)
+                {
+                    Debug.Log("Play " + soundAsset, this);
+                }
+            }
         }
 
         private void Update()

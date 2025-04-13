@@ -25,9 +25,13 @@ namespace GiantSword
             RandomBag,
             PureRandom,
             Sequential,
+            IndexedVariant,
+
+            
         }
         
         [SerializeField] private Mode _mode = Mode.RandomBag;
+        [SerializeField] private int _variantIndex = 0;
 
         public Playback _playback = Playback.OneShot;
 
@@ -50,6 +54,7 @@ namespace GiantSword
 
         int _lastPlayedIndex = -1;
         [SerializeField] private float _accumulatedPitch = 0;
+        [SerializeField] private bool _debugLog = false;
 
         public bool isOneShot => _playback == Playback.OneShot;
         public bool isLooping => _playback == Playback.Loop;
@@ -57,6 +62,7 @@ namespace GiantSword
         public AudioMixerGroup mixerGroup => _mixerGroup;
         public AudioRolloffMode rolloffMode => _rolloffMode;
         public FloatRange rolloffDistance => _rolloffDistance;
+        public bool debugLog => _debugLog;
 
         public FloatVariance volume
         {
@@ -103,6 +109,8 @@ namespace GiantSword
                     return _clips[Random.Range(0, _clips.Length)];
                 case Mode.Sequential:
                     return _clips[_lastPlayedIndex++%clips.Length];
+                case Mode.IndexedVariant:
+                    return _clips[Mathf.Clamp( _variantIndex, 0,clips.Length)];
                 default:
                     return _clips[Random.Range(0, _clips.Length)];;
             }
