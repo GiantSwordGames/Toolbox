@@ -122,6 +122,53 @@ namespace GiantSword
                 RuntimeEditorHelper.AddToSelection( spriteRenderer.sprite.texture);
             }
         } 
+        
+        
+        [MenuItem("CONTEXT/Transform/Deparent")]
+        public static void Deparent(MenuCommand command)
+        {
+            Transform transform = (Transform)command.context;
+            Undo.SetTransformParent(transform, null, "Deparent");
+        }
+
+        [MenuItem("CONTEXT/Transform/Move To Scene")]
+        public static void MoveToScene(MenuCommand command)
+        {
+            // create dropdown of open scenes
+            EditorBuildSettingsScene[] scenePaths = EditorBuildSettings.scenes;
+            List<string> sceneNames = new List<string>();
+            foreach (var scenePath in scenePaths)
+            {
+                if (scenePath.enabled)
+                {
+                    string sceneName = Path.GetFileNameWithoutExtension(scenePath.path);
+                    sceneNames.Add(sceneName);
+                }
+            }
+            
+            GenericMenu menu = new GenericMenu();
+            foreach (var sceneName in sceneNames)
+            {
+                menu.AddItem(new GUIContent(sceneName), false, () =>
+                {
+                    string scenePath = sceneName + ".unity";
+                    SceneAsset sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
+                    if (sceneAsset != null)
+                    {
+                        
+                        UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath);
+                        Transform transform = (Transform)command.context;
+                        Undo.SetTransformParent(transform, null, "Move To Scene");
+                        transform.position = Vector3.zero;
+                    }
+                });
+            }
+            
+           
+            
+        }
+
+        
     }
     
 }

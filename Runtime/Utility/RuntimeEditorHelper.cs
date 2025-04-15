@@ -37,6 +37,8 @@ namespace GiantSword
                 }
         }
 
+      
+
 
         public static class RuntimeEditorHelper
         {
@@ -90,7 +92,14 @@ namespace GiantSword
                         return new CacheGuiEnabled(true);
                 }
 
-
+  
+                public static void MoveGameObjectToScene(GameObject gameObject, Scene scene)
+                {
+#if UNITY_EDITOR
+                        EditorSceneManager.MoveGameObjectToScene(gameObject, scene);
+#endif
+                }
+                
                 public static void RegisterCreatedObjectUndo(Object target)
                 {
 #if UNITY_EDITOR
@@ -120,6 +129,15 @@ namespace GiantSword
 #if UNITY_EDITOR
                         if (target)
                                 Undo.RecordObject(target, "RecordUndo");
+#endif
+                }
+                
+                
+                public static void RecordSetTransformParent(Transform transform, Transform newParent)
+                {
+#if UNITY_EDITOR
+                        if (transform)
+                                Undo.SetTransformParent(transform, newParent, "RecordUndo");
 #endif
                 }
 

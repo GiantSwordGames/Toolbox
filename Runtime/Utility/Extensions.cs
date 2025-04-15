@@ -109,6 +109,16 @@ namespace GiantSword
         {
             return to - from;
         }
+
+        public static float GetLengthInSeconds(this AnimationCurve curve)
+        {
+            if (curve == null || curve.length == 0)
+            {
+                return 0;
+            }
+         
+            return curve[curve.length -1].time;
+        }
         
         public static float Dot(this Vector2 lhs, Vector2 rhs)
         {
@@ -563,6 +573,14 @@ namespace GiantSword
             return null;
         }
 
+        public static void SnapLocalPosition(this Transform transform)
+        {
+            Vector3 localPosition = transform.localPosition;
+            localPosition.x = Mathf.Round(localPosition.x);
+            localPosition.y = Mathf.Round(localPosition.y);
+            localPosition.z = Mathf.Round(localPosition.z);
+            transform.localPosition = localPosition;
+        }
         public static Transform GetLastActiveChild(this Transform transform)
         {
             for (int i = transform.childCount - 1; i >= 0; i--)
@@ -774,6 +792,8 @@ namespace GiantSword
                 transform.GetChild(i).gameObject.SetActive(i == current);
             }
         }
+        
+        
         
         public static void SoloPreviousChild(this Transform transform)
         {
@@ -1117,6 +1137,22 @@ namespace GiantSword
         public static int ToInt(this float value)
         {
             return (int)value;
+        }
+
+        public static bool IsInside(this Vector3 point, Vector2 center, Vector2 size)
+        {
+            return point.x > center.x - size.x / 2 && point.x < center.x + size.x / 2 &&
+                   point.y > center.y - size.y / 2 && point.y < center.y + size.y / 2;
+        }
+        
+        public static bool HasComponent<T>(this GameObject gameObject) where T : Component
+        {
+            return gameObject.GetComponent<T>() != null;
+        }
+        
+        public static bool HasComponent<T>(this Component component) where T : Component
+        {
+            return component.GetComponent<T>() != null;
         }
 
         public static float AsPercent(this float value)
