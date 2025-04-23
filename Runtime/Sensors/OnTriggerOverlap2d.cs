@@ -33,6 +33,7 @@ namespace GiantSword
 
         [Foldout("On Rigidbody Enter")]
         public UnityEvent<Rigidbody2D> onRigidbodyEnter;
+        public UnityEvent<Rigidbody2D> onRigidbodyExit;
        
         [Foldout("On Health Enter")]
         public UnityEvent<Health> onHealthEnter;
@@ -146,6 +147,7 @@ namespace GiantSword
                 if (_rigidbodies.Contains(rigidbody))
                 {
                     _rigidbodies.Remove(rigidbody);
+                    onRigidbodyExit?.Invoke(rigidbody);
                 }
             }
             

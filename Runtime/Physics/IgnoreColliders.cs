@@ -1,7 +1,8 @@
 namespace GiantSword
 {
     using UnityEngine;
-    
+
+
     public class IgnoreColliders : MonoBehaviour
     {
         // Start is called before the first frame update
@@ -16,11 +17,13 @@ namespace GiantSword
                 }
             }
         }
-    
+
         // Update is called once per frame
         void Update()
         {
-            
+
         }
     }
+    
+
 }

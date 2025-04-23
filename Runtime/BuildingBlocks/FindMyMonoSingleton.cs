@@ -23,6 +23,11 @@ namespace GiantSword
             }
         }
 
+        public static bool HasInstance()
+        {
+            return _instance != null;
+        }
+
         protected virtual void OnEnable()
         {
             if (_instance == null)

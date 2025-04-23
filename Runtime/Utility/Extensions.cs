@@ -1133,6 +1133,26 @@ namespace GiantSword
             return Mathf.Round(value / increment) * increment;
         }
 
+
+        public static void DoTween(this AnimationCurve curve, Action<float> tweenFunctions)
+        {
+           AsyncHelper.StartCoroutine(IEDoTween(curve, tweenFunctions));
+        }
+        
+
+        private static IEnumerator IEDoTween(this AnimationCurve curve, Action<float> tweenFunctions)
+        {
+            float duration = curve.GetLengthInSeconds();
+            float time = 0;
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.Clamp(time ,0, duration);
+                float value = curve.Evaluate(t);
+                tweenFunctions?.Invoke(value);
+                yield return null;
+            }
+        }
         
         public static int ToInt(this float value)
         {

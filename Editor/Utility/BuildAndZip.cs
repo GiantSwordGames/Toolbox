@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -14,20 +15,23 @@ namespace GiantSword
         public static Preference<bool> buildForWindows = new Preference<bool>("BuildForWindows", true);
         public static Preference<bool> buildForLinux = new Preference<bool>("BuildForLinux", false);
         public static Preference<bool> buildForWebGL = new Preference<bool>("BuildForWeb", false);
-
+        public static string specifiedBuildPath = "/Users/richard/Dropbox/Projects/Squish/Builds";
         [MenuItem("Build/Build All Platforms")]
         public static void BuildAllPlatforms()
         {
-            string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            Debug.Log("specifiedBuildPath exists " + Directory.Exists(specifiedBuildPath));
+            string buildPath = specifiedBuildPath;
             string applicationName = Application.productName;
             string formattedAppName = applicationName.ToUpperCamelCase();
             string[] scenePaths = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray();
+            string timestamp = DateTime.Now.ToString("yyMMdd_HHmm");
 
-            
             if (buildForMac.value)
             {
-                Debug.Log("Begin Mac Build: ");
-                string macBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Mac");
+                Debug.Log("Begin Mac Build:");
+
+                string macBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_Mac_{timestamp}");
                 Directory.CreateDirectory(macBuildFolder);
                 string macBuildPath = Path.Combine(macBuildFolder, applicationName + ".app");
 
@@ -46,15 +50,33 @@ namespace GiantSword
 
                 string zipPath = macBuildFolder + ".zip";
                 if (File.Exists(zipPath)) File.Delete(zipPath);
-                ZipFile.CreateFromDirectory(macBuildFolder, zipPath);
-                Debug.Log("Mac build zipped to: " + zipPath);
+
+                string dittoArgs = $"-c -k --sequesterRsrc --keepParent \"{macBuildFolder}\" \"{zipPath}\"";
+                var dittoProcess = new System.Diagnostics.Process
+                {
+                    StartInfo = new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "ditto",
+                        Arguments = dittoArgs,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    }
+                };
+                dittoProcess.Start();
+                dittoProcess.WaitForExit();
+
+                Debug.Log("Mac build zipped using ditto: " + zipPath);
+
+                Directory.Delete(macBuildFolder, true);
+                Debug.Log("Deleted unzipped Mac build folder: " + macBuildFolder);
             }
-            
+
             if (buildForWindows.value)
             {
-                Debug.Log("Begin Win Build: ");
+                Debug.Log("Begin Win Build:");
 
-                string winBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Win");
+                string winBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_Win_{timestamp}");
                 Directory.CreateDirectory(winBuildFolder);
                 string winBuildPath = Path.Combine(winBuildFolder, applicationName + ".exe");
 
@@ -75,14 +97,16 @@ namespace GiantSword
                 if (File.Exists(zipPath)) File.Delete(zipPath);
                 ZipFile.CreateFromDirectory(winBuildFolder, zipPath);
                 Debug.Log("Windows build zipped to: " + zipPath);
-            }
 
+                Directory.Delete(winBuildFolder, true);
+                Debug.Log("Deleted unzipped Windows build folder: " + winBuildFolder);
+            }
 
             if (buildForLinux.value)
             {
-                Debug.Log("Begin Linux Build: ");
+                Debug.Log("Begin Linux Build:");
 
-                string linuxBuildFolder = Path.Combine(desktopPath, formattedAppName + "_Linux");
+                string linuxBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_Linux_{timestamp}");
                 Directory.CreateDirectory(linuxBuildFolder);
                 string linuxBuildPath = Path.Combine(linuxBuildFolder, applicationName); // No extension
 
@@ -103,13 +127,16 @@ namespace GiantSword
                 if (File.Exists(zipPath)) File.Delete(zipPath);
                 ZipFile.CreateFromDirectory(linuxBuildFolder, zipPath);
                 Debug.Log("Linux build zipped to: " + zipPath);
+
+                Directory.Delete(linuxBuildFolder, true);
+                Debug.Log("Deleted unzipped Linux build folder: " + linuxBuildFolder);
             }
 
             if (buildForWebGL.value)
             {
-                Debug.Log("Begin Web Build: ");
+                Debug.Log("Begin Web Build:");
 
-                string webglBuildFolder = Path.Combine(desktopPath, formattedAppName + "_WebGL");
+                string webglBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_WebGL_{timestamp}");
                 Directory.CreateDirectory(webglBuildFolder);
 
                 var webglOptions = new BuildPlayerOptions
@@ -129,22 +156,19 @@ namespace GiantSword
                 if (File.Exists(zipPath)) File.Delete(zipPath);
                 ZipFile.CreateFromDirectory(webglBuildFolder, zipPath);
                 Debug.Log("WebGL build zipped to: " + zipPath);
-                
-                // Launch a local HTTP server to serve the WebGL build
-                string escapedPath = webglBuildFolder.Replace(" ", "\\ "); // Handle spaces in folder name
+
+                string escapedPath = webglBuildFolder.Replace(" ", "\\ ");
                 string serverCommand = $"cd {escapedPath} && python3 -m http.server 8080";
-                System.Diagnostics.Process.Start("open", $"-a Terminal \"{escapedPath}\""); // Open Terminal at folder
+                System.Diagnostics.Process.Start("open", $"-a Terminal \"{escapedPath}\"");
                 System.Diagnostics.Process.Start("osascript", $"-e 'tell application \"Terminal\" to do script \"{serverCommand}\"'");
-                Debug.Log("Started local server for WebGL build at http://localhost:8080");
                 System.Diagnostics.Process.Start("open", "http://localhost:8080");
 
+                Directory.Delete(webglBuildFolder, true);
+                Debug.Log("Deleted unzipped WebGL build folder: " + webglBuildFolder);
             }
 
             Debug.Log("All selected builds complete.");
-            
-            
-            System.Diagnostics.Process.Start(desktopPath);
-            
+            System.Diagnostics.Process.Start(buildPath);
         }
 
         private static void DeleteDoNotShipArtifacts(string buildRoot)

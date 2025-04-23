@@ -50,7 +50,7 @@ namespace GiantSword.ClipboardImagePaste
                                 spriteRenderer.sprite = clipboardTexture;
                             }
 
-                            spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition();
+                            spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition().WithZ( 0);
                             Debug.Log(Selection.activeTransform, Selection.activeTransform);
                             
                             if (Selection.activeTransform)
