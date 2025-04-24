@@ -4,6 +4,7 @@ using UnityEngine;
 namespace RichardPieterse
 {
     
+    [ExecuteInEditMode]
     public class VerticalLayout : MonoBehaviour
     {
         [SerializeField] private float _spacing = 1;

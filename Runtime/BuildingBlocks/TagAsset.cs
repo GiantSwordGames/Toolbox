@@ -103,6 +103,18 @@ namespace GiantSword
             List<TagAsset> tagAssets = gameObject.GetTagsOnGameObject();
             return (tagAssets.Contains(mustIncludeTags));
         }
+        
+        public static bool HasTag(this GameObject gameObject, TagAsset tag)
+        {
+            if(gameObject == null)
+            {
+                return false;
+            }
+            
+            List<TagAsset> tagAssets = gameObject.GetTagsOnGameObject();
+            return (tagAssets.Contains(tag));
+        }
+        
           public static bool HasTags(this Component component,  List<TagAsset> mustIncludeTags)
         {
             if(component == null)
@@ -111,6 +123,16 @@ namespace GiantSword
             }
             
             return component.gameObject.HasTags(mustIncludeTags);
+        }
+          
+        public static bool HasTag(this Component component,  TagAsset tag)
+        {
+            if(component == null)
+            {
+                return false;
+            }
+            
+            return component.gameObject.HasTag(tag);
         }
         
         public static bool ContainsPlayerTag( this List<TagAsset>  tagAssets)
