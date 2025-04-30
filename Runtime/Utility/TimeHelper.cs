@@ -82,5 +82,11 @@ namespace GiantSword
         {
             return scale == TimeScale.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
         }
+
+        public static float GetNormalizedValue(float _hours)
+        {
+            float normalizedValue = HoursToSeconds(_hours)/SECONDS_IN_A_DAY;
+            return normalizedValue;
+        }
     }
 }

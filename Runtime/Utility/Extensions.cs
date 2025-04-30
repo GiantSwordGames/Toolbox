@@ -179,8 +179,45 @@ namespace GiantSword
         {
             return array[(i+array.Count) % array.Count];
         }
+
+        public static void Encapsulate(this BoxCollider2D boxCollider2D, BoxCollider2D other)
+        {
+            // Calculate bounds for the current box collider
+            Bounds bounds = boxCollider2D.bounds;
+
+            // Encapsulate the bounds of the other collider
+            bounds.Encapsulate(other.bounds);
+
+            // Convert world bounds back into local collider space
+            Vector2 localCenter = boxCollider2D.transform.InverseTransformPoint(bounds.center);
+
+            // Adjust for scale
+            Vector3 lossyScale = boxCollider2D.transform.lossyScale;
+
+            // Calculate new size considering lossyScale
+            Vector2 newSize = new Vector2(bounds.size.x / Mathf.Abs(lossyScale.x), bounds.size.y / Mathf.Abs(lossyScale.y));
+
+            // Assign new values to the collider
+            boxCollider2D.offset = localCenter;
+            boxCollider2D.size = newSize;
+        }
+
+
+        public static void IgnoreCollider(this Collider2D colliderA, Collider2D colliderB, bool ignore = true)
+        {
+            Physics2D.IgnoreCollision(colliderA, colliderB, ignore);
+        }
         
-        
+        public static void TemporarilyIgnoreCollider(this Collider2D colliderA, Collider2D colliderB, float duration, bool ignore = true)
+        {
+            Physics2D.IgnoreCollision(colliderA, colliderB, ignore);
+            AsyncHelper.Delay(duration, () => 
+            {
+                Physics2D.IgnoreCollision(colliderA, colliderB, ignore == false);
+            });
+        }
+
+
 
         public static Vector2 GetContactPosition(this Collision2D collision2D)
         {

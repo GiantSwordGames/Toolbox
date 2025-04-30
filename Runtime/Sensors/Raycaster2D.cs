@@ -11,7 +11,9 @@ namespace GiantSword
         enum UpdateMode
         {
             Manual,
-            OnUpdate
+            OnUpdate,
+            OnFixedUpdate,
+            LateUpdate
         }
         
         [SerializeField] private UpdateMode _updateMode = UpdateMode.Manual;
@@ -65,6 +67,22 @@ namespace GiantSword
         void Update()
         {
             if (_updateMode == UpdateMode.OnUpdate)
+            {
+                Raycast(false);
+            }
+        }
+        
+        void FixedUpdate()
+        {
+            if (_updateMode == UpdateMode.OnFixedUpdate)
+            {
+                Raycast(false);
+            }
+        }
+        
+        void LateUpdate()
+        {
+            if (_updateMode == UpdateMode.LateUpdate)
             {
                 Raycast(false);
             }

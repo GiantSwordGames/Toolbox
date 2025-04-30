@@ -11,7 +11,7 @@ namespace RichardPieterse
         // Update is called once per frame
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.LeftShift))
+            if(Input.GetKeyDown(KeyCode.RightShift))
             {
                 if (TimeHelper.timeScale > SLOW_TIME_SCALE)
                 {

@@ -13,6 +13,8 @@ namespace GiantSword
         [SerializeField] private Image _image;
         [SerializeField] private float _durationIn = 1;
         [SerializeField] private float _durationOut =1;
+        [SerializeField] private AnimationCurve _curveIn = AnimationCurve.Linear(0,0,1,1);
+        [SerializeField] private AnimationCurve _curveOut = AnimationCurve.Linear(0,0,1,1);
         
         protected override IEnumerator IETransitionIn(Action onComplete)
         {
@@ -28,7 +30,7 @@ namespace GiantSword
                 {
                     lerp += Time.unscaledDeltaTime / _durationIn;
                     lerp = Mathf.Clamp01(lerp);
-                    _canvasGroup. alpha = lerp;
+                    _canvasGroup. alpha =  _curveIn.Evaluate(lerp);
                     _image.color = _color.WithAlpha(1);
                     yield return null;
                 }
@@ -49,7 +51,7 @@ namespace GiantSword
                 {
                     lerp += Time.unscaledDeltaTime / _durationOut;
                     lerp = Mathf.Clamp01(lerp);
-                    _canvasGroup. alpha = 1 - lerp;
+                    _canvasGroup. alpha = 1-_curveOut.Evaluate( lerp);
                     _image.color = _color.WithAlpha(1);
                     yield return null;
                 }
