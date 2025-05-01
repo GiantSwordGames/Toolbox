@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
@@ -98,15 +99,17 @@ namespace GiantSword
                 List<SceneReference> allScenes = GetAllSceneReferences();
 
                 List<AsyncOperation> _unloadCommands = new List<AsyncOperation>();
+                Debug.Log(" SceneManager.loadedSceneCount " + SceneManager.loadedSceneCount);
+
                 //unload other scenes
-                for (int i = 0; i < SceneManager.loadedSceneCount; i++)
+                for (int i = SceneManager.loadedSceneCount - 1; i >= 0; i--)
                 {
+
                     Scene sceneAt = SceneManager.GetSceneAt(i);
                     if (allScenes.Contains(sceneAt) == false)
                     {
                         // unload scene
-                        
-                        if (SceneManager.sceneCount > 1)
+                        if (i >= 1)
                         {
                             AsyncOperation unloadSceneAsync = SceneManager.UnloadSceneAsync(sceneAt);
                             _unloadCommands.Add(unloadSceneAsync);
@@ -119,10 +122,18 @@ namespace GiantSword
                     bool complete = true;
                     foreach (var asyncOperation in _unloadCommands)
                     {
-                        if(asyncOperation.isDone == false)
+                        try
                         {
-                            complete = false;
+                            if(asyncOperation.isDone == false)
+                            {
+                                complete = false;
+                            }
                         }
+                        catch (Exception e)
+                        {
+                            Debug.LogException(e);
+                        }
+                      
                     }
 
                     if (complete)

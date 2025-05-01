@@ -9,6 +9,28 @@ namespace GiantSword
 {
     public static class ContextExtensions
     {
+        [MenuItem("CONTEXT/Transform/Reverse Child Order")]
+        private static void ReverseChildOrder(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            int childCount = parent.childCount;
+
+            Undo.RegisterFullObjectHierarchyUndo(parent, "Reverse Child Order");
+
+            // Detach and reattach children in reverse order
+            Transform[] children = new Transform[childCount];
+            for (int i = 0; i < childCount; i++)
+            {
+                children[i] = parent.GetChild(i);
+            }
+
+            for (int i = childCount - 1; i >= 0; i--)
+            {
+                children[i].SetSiblingIndex(childCount - 1 - i);
+            }
+
+            Debug.Log($"Reversed child order of '{parent.name}'");
+        }
 
         [MenuItem("CONTEXT/MeshRenderer/Assign Duplicate Material")]
         static void DuplicateAndAssignMaterial(MenuCommand command)

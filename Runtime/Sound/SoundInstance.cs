@@ -12,7 +12,8 @@ namespace GiantSword
         [FormerlySerializedAs("_soundBank")] 
         [SerializeField] SoundAsset _soundAsset;
        [SerializeField] private bool _autoDestroy = true;
-        
+       [ShowNativeProperty] private bool isPlaying => _audioSource.isPlaying;
+
         private float _randomizedPitch;
         private float _time;
         private float _fade = 1;

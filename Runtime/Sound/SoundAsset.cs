@@ -53,7 +53,7 @@ namespace GiantSword
         [SerializeField] FloatRange _velocityAttenuation = new FloatRange(0, 0);
 
         int _lastPlayedIndex = -1;
-        [SerializeField] private float _accumulatedPitch = 0;
+        [ShowNonSerializedField] private float _accumulatedPitch = 0;
         [SerializeField] private bool _debugLog = false;
 
         public bool isOneShot => _playback == Playback.OneShot;

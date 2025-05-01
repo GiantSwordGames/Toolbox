@@ -142,12 +142,12 @@ namespace GiantSword
             return value + "";
         }
         
-        public Coroutine IncrementValueOverTime( float increment, float duration)
+        public Coroutine IncrementValueOverTime( float increment, float duration, SoundAsset sound = null)
         {
-            return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration));
+            return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration,sound));
         }
     
-        private IEnumerator IEIncrementValueOverTime(float increment, float duration)
+        private IEnumerator IEIncrementValueOverTime(float increment, float duration, SoundAsset sound)
         {
             float startTime = Time.time;
             float endTime = startTime + duration;
@@ -161,7 +161,7 @@ namespace GiantSword
                 float diff = lerp - lerpPrev;
                 lerpPrev = lerp;
                 value += diff * increment;
-
+                sound?.Play();
                 yield return null;
             }
 

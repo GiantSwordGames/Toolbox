@@ -82,5 +82,24 @@ namespace GiantSword
 
             action?.Invoke();
         }
+
+        public static void Lerp( float duration, Action<float> lerpFunction)
+        {
+            SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction));
+        }
+        
+        private static IEnumerator IELerp( float duration, Action<float> lerpFunction)
+        {
+            float timer = 0;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                float lerp = timer / duration;
+                lerp = Mathf.Clamp01(lerp);
+                lerpFunction(lerp);
+                yield return null;
+            }
+            lerpFunction(1);
+        }
     }
 }

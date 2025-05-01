@@ -26,6 +26,10 @@ namespace GiantSword
             transitionText.text = text;
             return transitionText;
         }
+        public void InstantiateAndShow()
+        {
+            TransitionBase instantiateAndDoFullTransition = GetComponent<TransitionBase>().InstantiateAndDoFullTransition();
+        }
         
         void OnValidate()
         {

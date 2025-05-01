@@ -142,6 +142,7 @@ namespace GiantSword
         {
             Reset();
             _running = true;
+            Evaluate();
         }
 
         public void Stop()

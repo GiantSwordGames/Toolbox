@@ -83,4 +83,17 @@ public class AnimateChildren : MonoBehaviour {
             gameObject.transform.GetChild(i).gameObject.SetActive(i == frame);
         }
     }
+
+    public Coroutine WaitForAnimation()
+    {
+        return StartCoroutine(IEWaitForLoopComplete());
+    }
+    
+    private IEnumerator IEWaitForLoopComplete()
+    {
+        while (_isComplete == false)
+        {
+            yield return null;
+        }
+    }
 }
