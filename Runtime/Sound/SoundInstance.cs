@@ -20,6 +20,7 @@ namespace GiantSword
         private float _randomizedVolume;
         private float _pitchIncrement;
         private float _velocityAttenuation =1f;
+        private Coroutine _fadeRoutine;
 
         public float randomizedPitch {
            get
@@ -49,7 +50,11 @@ namespace GiantSword
 
         public void FadeOut(float duration)
         {
-            StartCoroutine(IEFadeOut(duration));
+            if (_fadeRoutine != null)
+            {
+                StopCoroutine(_fadeRoutine);
+            }
+            _fadeRoutine = StartCoroutine(IEFadeOut(duration));
         }
 
         private IEnumerator IEFadeOut(float duration)
@@ -69,7 +74,11 @@ namespace GiantSword
         
         public void FadeIn(float duration)
         {
-            StartCoroutine(IEFadeIn(duration));
+            if (_fadeRoutine != null)
+            {
+                StopCoroutine(_fadeRoutine);
+            }
+            _fadeRoutine = StartCoroutine(IEFadeIn(duration));
         }
         private IEnumerator IEFadeIn(float duration)
         {
@@ -139,7 +148,7 @@ namespace GiantSword
             {
                 if(soundAsset.debugLog)
                 {
-                    Debug.Log("Play " + soundAsset, this);
+                    Debug.Log($"Play {soundAsset} [{_audioSource.clip}]", this);
                 }
             }
         }

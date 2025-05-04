@@ -11,7 +11,6 @@ public class AnimateChildren : MonoBehaviour {
 
     [Min(1)]
     public int fps = 12;
-
     private bool _isPlaying = true;
     public bool loop = true;
     public bool randomOffset = false;
@@ -19,7 +18,8 @@ public class AnimateChildren : MonoBehaviour {
 
     [SerializeField] private UnityEvent _onLoopComplete;
     float timer = 0;
-    int frame = 0;
+    [SerializeField] int _frame = 0;
+    [SerializeField] bool _randomizeStartFrame = false;
 
     public bool isPlaying => _isPlaying;
 
@@ -27,11 +27,20 @@ public class AnimateChildren : MonoBehaviour {
     [Button]
     public void Reset()
     {
-        frame = 0;
+        _frame = 0;
         timer = 0;
         _isComplete = false;
-        SetFrame();
         _isPlaying = true;
+        if (_randomizeStartFrame)
+        {
+            _frame = Random.Range(0, transform.childCount);
+        }
+        SetFrame();
+    }
+
+    private void OnValidate()
+    {
+        SetFrame();
     }
 
     private void OnEnable()
@@ -53,18 +62,18 @@ public class AnimateChildren : MonoBehaviour {
         while (timer >= 1f/fps )
         {
             timer -= 1f / fps;
-            frame++;
+            _frame++;
 
             
-            if(frame > transform.childCount - 1)
+            if(_frame > transform.childCount - 1)
             {
                 if (loop)
                 {
-                    frame = 0;
+                    _frame = 0;
                 }
                 else
                 {
-                    frame = transform.childCount - 1;
+                    _frame = transform.childCount - 1;
                     _isComplete = true;
                     _isPlaying = false;
                 }
@@ -80,7 +89,7 @@ public class AnimateChildren : MonoBehaviour {
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            gameObject.transform.GetChild(i).gameObject.SetActive(i == frame);
+            gameObject.transform.GetChild(i).gameObject.SetActive(i == _frame);
         }
     }
 

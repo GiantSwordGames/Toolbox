@@ -37,7 +37,7 @@ namespace GiantSword
 
         [Tooltip("2D -> 3D")] [Range(0, 1)]
         [SerializeField] public float _spacialBlend = 1f;
-        [SerializeField] private AudioRolloffMode _rolloffMode = AudioRolloffMode.Logarithmic;
+        [SerializeField] private AudioRolloffMode _rolloffMode = AudioRolloffMode.Linear;
         [SerializeField] private FloatRange _rolloffDistance = new FloatRange(1f, 25f);
         [SerializeField]  private AudioClip[] _clips;
 

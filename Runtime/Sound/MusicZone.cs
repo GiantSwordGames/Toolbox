@@ -49,7 +49,6 @@ namespace GiantSword
 
             if (_track)
             {
-
                 if (_myActiveTrack == null)
                 {
                     _myActiveTrack  = _track.Play( transform,transform.position);

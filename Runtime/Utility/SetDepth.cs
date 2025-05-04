@@ -17,7 +17,7 @@ namespace GiantSword
         [SerializeField] private SmartFloat _depth = 0;
         [SerializeField] private Space _space = Space.Local;
         [SerializeField] private bool _updateAtRuntime;
-        [FormerlySerializedAs("_yMultiplier")] [FormerlySerializedAs("_multiplier")] [SerializeField] private float _localYMultiplier = 0;
+        [FormerlySerializedAs("_localYMultiplier")] [FormerlySerializedAs("_multiplier")] [SerializeField] private float _yMultiplier = 0;
         
         
         // Update is called once per frame
@@ -43,7 +43,7 @@ namespace GiantSword
                 return;
             }
 
-            float depth = _depth+ transform.localPosition.y*_localYMultiplier;
+            float depth = _depth+ transform.position.y*_yMultiplier;
             if (_space == Space.Local)
             {
                 if (transform.localPosition.z != depth)

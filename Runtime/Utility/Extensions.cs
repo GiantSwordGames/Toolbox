@@ -120,6 +120,17 @@ namespace GiantSword
             return curve[curve.length -1].time;
         }
         
+        public static bool IsEmpty(this string str)
+        {
+            return string.IsNullOrWhiteSpace(str);
+        }
+        
+        public static bool IsNotEmpty(this string str)
+        {
+            return IsEmpty(str) == false;
+        }
+
+        
         public static float Dot(this Vector2 lhs, Vector2 rhs)
         {
             return Vector2.Dot(lhs, rhs);
@@ -546,16 +557,20 @@ namespace GiantSword
             return component.transform.GetHierarchyPath() + "/" + component.GetType().Name;
         }
    
+        public static bool IsOutOfFrame(this Camera camera, Vector3 point, float marginInViewSpace = 0)
+        {
+            return IsVisible(camera, point, false, 0, marginInViewSpace) == false;
+        }
 
         public static bool IsVisible(this Camera camera, Vector3 point, bool raycast = false,
-            int layerMaskOfBlockingObjects = 0, float margin = 0)
+            int layerMaskOfBlockingObjects = 0, float marginInViewSpace = 0)
         {
             Vector3 viewPoint = camera.WorldToViewportPoint(point);
 
-            if (viewPoint.x > 1 + margin || viewPoint.y > 1 + margin || viewPoint.z > camera.farClipPlane)
+            if (viewPoint.x > 1 + marginInViewSpace || viewPoint.y > 1 + marginInViewSpace || viewPoint.z > camera.farClipPlane)
                 return false;
 
-            if (viewPoint.x < 0 - margin || viewPoint.y < 0 - margin || viewPoint.z < camera.nearClipPlane)
+            if (viewPoint.x < 0 - marginInViewSpace || viewPoint.y < 0 - marginInViewSpace || viewPoint.z < camera.nearClipPlane)
                 return false;
 
             Vector3 vector3 = camera.transform.position.To(point);
@@ -568,6 +583,7 @@ namespace GiantSword
             return true;
         }
 
+        
         public static void SetEnabled(this Object obj, bool enabled)
         {
             if (obj is MonoBehaviour comp)
