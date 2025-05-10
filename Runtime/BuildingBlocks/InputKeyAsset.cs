@@ -13,6 +13,7 @@ namespace GiantSword
         [SerializeField] private KeyCode[] _otherKeyCodes = { };
         [SerializeField] private InputActionReference _actionAsset;
         [SerializeField] private InputKeyAsset[] _compositeKeys = { };
+        [SerializeField] private bool _editorOnly =false;
 
         private void Awake()
         {
@@ -20,6 +21,11 @@ namespace GiantSword
 
         public bool IsDown()
         {
+            if(_editorOnly && Application.isEditor == false)
+            {
+                return false;
+            }
+            
             if (Input.GetKeyDown(_keyCode))
             {
                 return true;
@@ -67,6 +73,11 @@ namespace GiantSword
         
         public bool IsUp()
         {
+            if(_editorOnly && Application.isEditor == false)
+            {
+                return false;
+            }
+            
             if (Input.GetKeyUp(_keyCode))
             {
                 return true;
@@ -113,6 +124,11 @@ namespace GiantSword
 
         public bool IsHeld()
         {
+            if(_editorOnly && Application.isEditor == false)
+            {
+                return false;
+            }
+            
             if (Input.GetKey(_keyCode))
             {
                 return true;

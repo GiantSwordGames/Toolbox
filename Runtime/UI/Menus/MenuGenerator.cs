@@ -236,7 +236,7 @@ namespace RichardPieterse
             Generate();
             _onOpened?.Invoke();
             SelectInitial();
-            AsyncHelper.WaitForFrame(() =>
+            AsyncHelper.DelayByFrame(() =>
                 {
                     this._isOpen = true;
                 }

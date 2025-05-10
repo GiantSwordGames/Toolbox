@@ -31,7 +31,7 @@ namespace GiantSword
             {
                 Debug.Log("Begin Mac Build:");
 
-                string macBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_Mac_{timestamp}");
+                string macBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_{timestamp}_Mac");
                 Directory.CreateDirectory(macBuildFolder);
                 string macBuildPath = Path.Combine(macBuildFolder, applicationName + ".app");
 
@@ -76,7 +76,7 @@ namespace GiantSword
             {
                 Debug.Log("Begin Win Build:");
 
-                string winBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_Win_{timestamp}");
+                string winBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_{timestamp}_Win");
                 Directory.CreateDirectory(winBuildFolder);
                 string winBuildPath = Path.Combine(winBuildFolder, applicationName + ".exe");
 
@@ -106,7 +106,7 @@ namespace GiantSword
             {
                 Debug.Log("Begin Linux Build:");
 
-                string linuxBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_Linux_{timestamp}");
+                string linuxBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_{timestamp}_Linux");
                 Directory.CreateDirectory(linuxBuildFolder);
                 string linuxBuildPath = Path.Combine(linuxBuildFolder, applicationName); // No extension
 
@@ -136,7 +136,7 @@ namespace GiantSword
             {
                 Debug.Log("Begin Web Build:");
 
-                string webglBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_WebGL_{timestamp}");
+                string webglBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_{timestamp}_WebGL");
                 Directory.CreateDirectory(webglBuildFolder);
 
                 var webglOptions = new BuildPlayerOptions

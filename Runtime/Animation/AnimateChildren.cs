@@ -40,6 +40,8 @@ public class AnimateChildren : MonoBehaviour {
 
     private void OnValidate()
     {
+        _frame += transform.childCount;
+        _frame %= transform.childCount;
         SetFrame();
     }
 

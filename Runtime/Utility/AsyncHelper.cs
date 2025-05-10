@@ -7,7 +7,7 @@ namespace GiantSword
     public static class AsyncHelper
     {
 
-        public static void WaitForFrame(Action action)
+        public static void DelayByFrame(Action action)
         {
             SafeCoroutineRunner.StartCoroutine(IEWaitForFrame(action));
         }
