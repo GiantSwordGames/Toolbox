@@ -4,9 +4,6 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    
-    [CreateAssetMenu]
-
     public class ScriptableEvent : ScriptableObject
     {
         public ScriptableVariableScope _scriptableVariableScope;

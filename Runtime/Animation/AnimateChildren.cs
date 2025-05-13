@@ -9,8 +9,8 @@ using Random = UnityEngine.Random;
 
 public class AnimateChildren : MonoBehaviour {
 
-    [Min(1)]
-    public int fps = 12;
+    [Min(0.000001f)]
+    public float fps = 12;
     private bool _isPlaying = true;
     public bool loop = true;
     public bool randomOffset = false;

@@ -3,11 +3,6 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    public class EndOfSoloChain : MonoBehaviour
-    
-    {
-        
-    }
     public class Solo : MonoBehaviour
     {
         

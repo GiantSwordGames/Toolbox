@@ -8,8 +8,6 @@ namespace GiantSword
     {
         [FormerlySerializedAs("_sibling")] [SerializeField] private Transform _target;
 
-        [SerializeField] private bool _chooseRandom = false;    
-        
         [Button]
         public void Trigger()
         {
@@ -17,33 +15,17 @@ namespace GiantSword
             {
                 return;
             }
+
             if (_target)
             {
-                if (_chooseRandom)
+                Solo solo = _target.GetComponent<Solo>();
+                if (solo)
                 {
-                    int index = Random.Range(0, _target.childCount);
-                    Transform child = _target.GetChild(index);
-                    Solo solo = child.GetComponent<Solo>();
-                    if (solo)
-                    {
-                        solo.Trigger();
-                    }
-                    else
-                    {
-                        child.Solo();
-                    }
+                    solo.Trigger();
                 }
                 else
                 {
-                    Solo solo = _target.GetComponent<Solo>();
-                    if (solo)
-                    {
-                        solo.Trigger();
-                    }
-                    else
-                    {
-                        _target.Solo();
-                    }  
+                    _target.Solo();
                 }
             }
         }

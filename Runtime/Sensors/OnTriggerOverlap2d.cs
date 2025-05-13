@@ -97,10 +97,8 @@ namespace GiantSword
             if(_filterIncludeTags.Length > 0)
             {
                 bool match = false;
-                TagList tagList = other.GetComponentInParent<TagList>();
-                if (tagList)
-                {
-                    foreach (TagAsset otherTag in tagList.tags)
+                List<TagAsset> tagList = other.GetTagsOnGameObject();
+                    foreach (TagAsset otherTag in tagList)
                     {
                         foreach (TagAsset filterTag in _filterIncludeTags)
                         {
@@ -111,7 +109,6 @@ namespace GiantSword
                             }
                         }
                     } 
-                }
 
                 if (match == false)
                 {
