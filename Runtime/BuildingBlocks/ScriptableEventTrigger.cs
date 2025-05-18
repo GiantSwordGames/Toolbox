@@ -8,12 +8,12 @@ namespace GiantSword
     {
         [SerializeField] private ScriptableEvent _scriptableEvent;
         [SerializeField] private UnityEvent _onTriggered;
-        private void Start()
+        private void OnEnable()
         {
             _scriptableEvent.onFired += Trigger;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _scriptableEvent.onFired -= Trigger;
         }

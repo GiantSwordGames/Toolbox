@@ -15,7 +15,13 @@ namespace GiantSword
         [SerializeField] private float _durationOut =1;
         [SerializeField] private AnimationCurve _curveIn = AnimationCurve.Linear(0,0,1,1);
         [SerializeField] private AnimationCurve _curveOut = AnimationCurve.Linear(0,0,1,1);
-        
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            _image.color = _color;
+        }
+
         protected override IEnumerator IETransitionIn(Action onComplete)
         {
             if (_startDelay > 0)

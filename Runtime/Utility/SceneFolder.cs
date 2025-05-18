@@ -6,7 +6,7 @@ namespace GiantSword
 {
     public class SceneFolder : MonoBehaviour
     {
-        [SerializeField] private SceneFolderAsset _folderAsset;
+        [SerializeField, CreateAssetButton] private SceneFolderAsset _folderAsset;
 
         private static Dictionary<SceneFolderAsset, SceneFolder> _sceneFolders = new Dictionary<SceneFolderAsset, SceneFolder>();
         

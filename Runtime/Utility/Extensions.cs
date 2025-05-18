@@ -741,14 +741,10 @@ namespace GiantSword
             }
         }
 
-
-        
-
         public static List<T> GetDirectChildren<T>(this GameObject gameObject, bool includeInactive =false ) where T : Component
         {
-            List<Transform> directChildren = gameObject.transform.GetDirectChildren();
             List<T> children = new List<T>();
-            foreach (Transform child in directChildren)
+            foreach (Transform child in gameObject.transform)
             {
                 var component = child.gameObject.GetComponent<T>();
                 if (component)

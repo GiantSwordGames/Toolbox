@@ -8,6 +8,7 @@ namespace GiantSword
     public class ParentUnderSceneFolder : MonoBehaviour
     {
         [SerializeField] private SceneFolderAsset _sceneFolderAsset;
+        [SerializeField] private bool _executeAtRuntime = false;
 
         private void Awake()
         {
@@ -35,7 +36,7 @@ namespace GiantSword
                     return;
 
 
-                if (Application.isPlaying)
+                if (Application.isPlaying && _executeAtRuntime == false)
                 {
                     return;
                 }

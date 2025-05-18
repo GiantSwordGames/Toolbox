@@ -1,13 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GiantSword
 {
-    public class Bag<T>
+    public class Bag<T> : IEnumerable
     {
         private List<T> _elements = new List<T>();
         private List<T> _shuffledElements = new List<T>();
-        private bool _shuffle;
+        private bool _shuffle = true;
 
         public Bag(List<T> elements, bool shuffle = true)
         {
@@ -17,7 +18,13 @@ namespace GiantSword
 
             Refill();
         }
-        
+
+        public Bag(T[] elements)
+        {
+            _shuffle = true;
+            _elements = new List<T>(elements);
+        }
+
         public void Add(T element)
         {
             _elements.Add(element);
@@ -55,6 +62,11 @@ namespace GiantSword
         public bool IsFinished()
         {
             return _shuffledElements.Count == 0;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

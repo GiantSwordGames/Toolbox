@@ -251,6 +251,8 @@ namespace GiantSword
                 _previewSource.spatialBlend = soundAsset.spacialBlend;
                 _previewSource.outputAudioMixerGroup = soundAsset.mixerGroup;
                 _previewSource.Play();
+                
+                Debug.Log(clipToPlay,clipToPlay);
 
                 _lastClip = clipToPlay;
                 EditorApplication.update += RemovePreviewSource;

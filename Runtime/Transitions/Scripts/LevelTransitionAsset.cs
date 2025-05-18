@@ -1,18 +1,27 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GiantSword
 {
     public class LevelTransitionAsset : MonoBehaviour
     {
-        [SerializeField] private Level level;
+        [FormerlySerializedAs("level")] [SerializeField] private Level _level;
         
         [Button]
         public void InstantiateAndDoTransition()
         {
             TransitionBase transitionBase = GetComponent<TransitionBase>();
+            transitionBase.InstantiateAndDoLevelTransition(_level);
+        }
+        
+        [Button]
+        public void InstantiateAndDoTransition(Level level )
+        {
+            TransitionBase transitionBase = GetComponent<TransitionBase>();
             transitionBase.InstantiateAndDoLevelTransition(level);
         }
+
         
     }
 }

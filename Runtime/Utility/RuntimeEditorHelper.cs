@@ -143,6 +143,11 @@ namespace GiantSword
 
                 public static void SetDirty(Object target)
                 {
+
+                        if (Application.isPlaying )
+                        {
+                                return;
+                        }
 #if UNITY_EDITOR
                         if (target)
                                 EditorUtility.SetDirty(target);

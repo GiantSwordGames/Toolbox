@@ -7,6 +7,12 @@ namespace GiantSword
     public static class AsyncHelper
     {
 
+        public static Action onUpdate
+        {
+            get => SafeCoroutineRunner.instance.onUpdate;
+            set => SafeCoroutineRunner.instance.onUpdate = value;
+        }
+
         public static void DelayByFrame(Action action)
         {
             SafeCoroutineRunner.StartCoroutine(IEWaitForFrame(action));

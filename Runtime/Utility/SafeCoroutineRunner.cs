@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace GiantSword
     public class SafeCoroutineRunner : MonoBehaviour
     {
         private static SafeCoroutineRunner _instance;
+        public Action onUpdate;
         public static SafeCoroutineRunner instance
         {
             get
@@ -31,6 +33,14 @@ namespace GiantSword
         {
             MonoBehaviour monoBehaviour = instance;
              monoBehaviour.StopCoroutine(routine);
+        }
+        
+        void Update()
+        {
+            if (onUpdate != null)
+            {
+                onUpdate();
+            }
         }
         
     }

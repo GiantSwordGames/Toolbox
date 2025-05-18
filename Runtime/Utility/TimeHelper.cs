@@ -66,6 +66,26 @@ namespace GiantSword
             return $"{hoursInt}:{minutes:D2} {(isPm ? "PM" : "AM")}";
         }
         
+        
+        public static string GetTimeOfDay2(float hours)
+        {
+            int hoursInt = (int)hours;
+            int minutes = (int)((hours - hoursInt) * 60);
+            
+            bool isPm = hoursInt >= 12;
+            
+            if (hoursInt > 12)
+            {
+                hoursInt -= 12;
+            }
+            else if (hoursInt == 0)
+            {
+                hoursInt = 0;
+            }
+
+            return $"{hoursInt}:{minutes:D2} {(isPm ? "PM" : "AM")}";
+        }
+
         public static object SmartWaitForSeconds(float seconds, TimeScale timeScale)
         {
             if (timeScale == TimeScale.Unscaled)

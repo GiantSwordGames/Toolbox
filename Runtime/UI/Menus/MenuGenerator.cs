@@ -25,6 +25,12 @@ namespace RichardPieterse
         private MenuOptionAsset _generatedBackOption;
         private MenuOption _backOption;
 
+        public MenuDefinition menuDefinition
+        {
+            get => _menuDefinition;
+            set => _menuDefinition = value;
+        }
+
         private void Awake()
         {
             _menuDefinition.onOpen += OnOpen;
