@@ -1,3 +1,4 @@
+using System;
 using GiantSword;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +12,9 @@ public class InputEvent : MonoBehaviour
     [SerializeField] private InputKeyAsset _asset;
     [SerializeField] KeyCode _keyCode = KeyCode.None;
     [SerializeField] bool _skipFirstFrame = false;
+    [SerializeField] float _acceptDelayAfterAppearing = -1f;
     bool _skippedFirstFrame = false;
+    private float _appearTime;
 
     void OnEnable()
     {
@@ -29,8 +32,21 @@ public class InputEvent : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _appearTime = Time.realtimeSinceStartup;
+    }
+
     void Update()
     {
+        if (_acceptDelayAfterAppearing > 0)
+        {
+            if(Time.realtimeSinceStartup - _appearTime < _acceptDelayAfterAppearing)
+            {
+                return;
+            }
+        }
+        
         if (_skipFirstFrame && _skippedFirstFrame ==false)
         {
             _skippedFirstFrame = true;

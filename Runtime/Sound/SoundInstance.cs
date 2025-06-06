@@ -151,6 +151,7 @@ namespace GiantSword
                     Debug.Log($"Play {soundAsset} [{_audioSource.clip}]", this);
                 }
             }
+            
         }
 
         private void Update()

@@ -21,21 +21,23 @@ namespace GiantSword
             Manual,
             PlayOnEnable,
             PlayOnSubsequentEnables,
-            
-        }        
-        
-       
-        [InlineScriptableObject]
-        [SerializeField] SoundAsset _soundAsset;
+            PlayOnDisable,
+        }
+
+
+        [InlineScriptableObject] [SerializeField]
+        SoundAsset _soundAsset;
+
         [ShowNonSerializedField] private SoundInstance _soundInstance;
- 
-        [SerializeField]  Behaviour _behaviour = Behaviour.Manual;
+
+        [SerializeField] Behaviour _behaviour = Behaviour.Manual;
         [SerializeField] Parenting _parenting = Parenting.NoParent;
         [SerializeField] bool _playOnEnable = false;
         [SerializeField] bool _stopOnDisable = false;
         [SerializeField] float _delay;
 
         private int _enableCount;
+
         private void OnValidate()
         {
             if (_playOnEnable)
@@ -66,6 +68,11 @@ namespace GiantSword
             {
                 Stop();
             }
+
+            if (_behaviour == Behaviour.PlayOnDisable)
+            {
+                Trigger();
+            }
         }
 
         [Button]
@@ -92,8 +99,8 @@ namespace GiantSword
         [Button]
         public void Stop()
         {
-         
-             if(_soundInstance)
+
+            if (_soundInstance)
             {
                 _soundInstance.Stop();
             }
@@ -102,30 +109,55 @@ namespace GiantSword
 
         private IEnumerator IEPlay()
         {
-            if(_delay > 0)
-                yield return new WaitForSeconds(_delay); 
-            
-        
+            if (_delay > 0)
+                yield return new WaitForSeconds(_delay);
+
+
             {
                 if (_parenting == Parenting.ParentToThisTransform)
                 {
-                    _soundInstance = _soundAsset.Play( transform, transform.position);
+                    _soundInstance = _soundAsset.Play(transform, transform.position);
                 }
                 else if (_parenting == Parenting.ParentToListenerAtCurrentPosition)
                 {
-                    _soundInstance = _soundAsset.Play( Camera.main.transform, transform.position);
+                    _soundInstance = _soundAsset.Play(Camera.main.transform, transform.position);
                 }
                 else if (_parenting == Parenting.ParentToListenerAtPositionZero)
                 {
-                    _soundInstance = _soundAsset.Play( Camera.main.transform,Camera.main.transform.position);
+                    _soundInstance = _soundAsset.Play(Camera.main.transform, Camera.main.transform.position);
                 }
                 else if (_parenting == Parenting.NoParent)
                 {
-                    _soundInstance = _soundAsset.Play( null, transform.position);
+                    _soundInstance = _soundAsset.Play(null, transform.position);
                 }
 
             }
-            
+
+        }
+
+        public void FadeIn(float duration)
+        {
+            Trigger();
+            if (_soundInstance != null)
+            {
+                _soundInstance.FadeIn(duration);
+            }
+            else
+            {
+                Debug.LogWarning("SoundInstance is null, cannot fade in.");
+            }
+        }
+
+        public void FadeOut(float duration)
+        {
+            if (_soundInstance != null)
+            {
+                _soundInstance.FadeOut(duration);
+            }
+            else
+            {
+                Debug.LogWarning("SoundInstance is null, cannot fade out.");
+            }
         }
     }
 }

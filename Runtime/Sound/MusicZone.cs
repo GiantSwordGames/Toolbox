@@ -74,7 +74,7 @@ namespace GiantSword
         }
         
         [Button]
-        private void TriggerFadeOut()
+        public void TriggerFadeOut()
         {
             if (_myActiveTrack)
             {

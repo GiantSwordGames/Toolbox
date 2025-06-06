@@ -22,12 +22,10 @@ namespace GiantSword
         {
             if (_scriptableBool.value)
             {
-                Debug.Log("OnTrue");
                 onTrue.Invoke();
             }
             else
             {
-                Debug.Log("False");
                 onFalse.Invoke();
             }
         }

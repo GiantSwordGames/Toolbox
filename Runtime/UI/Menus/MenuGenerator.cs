@@ -16,6 +16,7 @@ namespace RichardPieterse
         [SerializeField] protected MenuDefinition _menuDefinition;
         [SerializeField] protected UnityEvent _onClosed;
         [SerializeField] protected UnityEvent _onOpened;
+        [SerializeField] protected UnityEvent _onBackPressedOnMenuRoot;
         [SerializeField] protected bool _invokeOnOpenOnStart;
         
         [ShowNonSerializedField]
@@ -82,13 +83,21 @@ namespace RichardPieterse
                     ClickOnSelected();
                     _menuDefinition.styleDefinition.clickSound?.Play();
                 }
-                
-                if(_backOption != null &&  _menuDefinition.BackButton.IsDown())
+
+                if (_menuDefinition.BackButton.IsDown())
                 {
-                    Select(_backOption);
-                    _backOption.Click();
-                    _menuDefinition.styleDefinition.clickSound?.Play();
+                    if(_backOption != null)
+                    {
+                        Select(_backOption);
+                        _backOption.Click();
+                        _menuDefinition.styleDefinition.clickSound?.Play();
+                    }
+                    else
+                    {
+                        _onBackPressedOnMenuRoot?.Invoke();
+                    }
                 }
+               
             }
         }
 
