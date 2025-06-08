@@ -12,7 +12,7 @@ using Debug = UnityEngine.Debug;
 
 namespace GiantSword
 {
-    [CreateAssetMenu(fileName = "PackageUpdater", menuName = MenuPaths.CREATE_MENU + "/PackageUpdater")]
+    [CreateAssetMenu(fileName = "PackageUpdater", menuName = MenuPaths.CREATE_ASSET_MENU + "/PackageUpdater")]
     public class PackageUpdater : ScriptableObject
     {
         
