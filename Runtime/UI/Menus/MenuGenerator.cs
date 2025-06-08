@@ -84,7 +84,7 @@ namespace RichardPieterse
                     _menuDefinition.styleDefinition.clickSound?.Play();
                 }
 
-                if (_menuDefinition.BackButton.IsDown())
+                if (_menuDefinition.backButton.IsDown())
                 {
                     if(_backOption != null)
                     {
@@ -198,7 +198,7 @@ namespace RichardPieterse
         }
 
         [Button]
-        protected  void Generate()
+        public  void Generate()
         {
             Clear();
             _menuDefinition.RegenerateDynamicOptions();
@@ -210,6 +210,7 @@ namespace RichardPieterse
                 MenuOption menuOption = _menuDefinition.optionPrefab.SmartInstantiate();
                 menuOption.transform.SetParent(transform, false);
                 menuOption.Setup(option, _menuDefinition);
+                menuOption.ApplySelectedColor();
                 _instancedOptions.Add(menuOption);
             }
             
@@ -219,6 +220,7 @@ namespace RichardPieterse
                 _generatedBackOption.text = "Back ";
                 _generatedBackOption.onClicked += CloseFromBackButton;
                 _generatedBackOption.name = _generatedBackOption.text;
+                
             }
             
             if (_generatedBackOption != null)
@@ -226,6 +228,8 @@ namespace RichardPieterse
                 _backOption = _menuDefinition.optionPrefab.SmartInstantiate();
                 _backOption.transform.SetParent(transform, false);
                 _backOption.Setup(_generatedBackOption, _menuDefinition);
+                _backOption.ApplyDeselectedColor();
+
                 _instancedOptions.Add(_backOption);
             }
         }

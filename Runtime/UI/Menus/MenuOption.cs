@@ -46,11 +46,16 @@ namespace GiantSword
                 _selector.gameObject.SetActive(true);
             }
 
-            _textMeshPro.color = _menuDefinition.selectedColor;
+            ApplySelectedColor();
 
             _isSelected = true;
             
             _onSelected?.Invoke();
+        }
+
+        public void ApplySelectedColor()
+        {
+            _textMeshPro.color = _menuDefinition.selectedColor;
         }
 
         public void Deselect()
@@ -60,11 +65,16 @@ namespace GiantSword
                 _selector.gameObject.SetActive(false);
             }
             
-            _textMeshPro.color = _menuDefinition.deselectedColor;
+            ApplyDeselectedColor();
 
             _isSelected = false;
 
             _onDeselected?.Invoke();
+        }
+
+        public void ApplyDeselectedColor()
+        {
+            _textMeshPro.color = _menuDefinition.deselectedColor;
         }
 
         private void SetUp()

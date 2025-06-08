@@ -10,7 +10,7 @@ namespace GiantSword.AssetRules
 {
     public static class AssetRuleMenuItems
     {
-        public const string ASSET_MENU_PATH = "GiantSword/Rules/Asset Rules";
+        public const string ASSET_MENU_PATH = MenuPaths.CREATE_ASSET_MENU + "/Rules/Asset Rules";
         public const string ASSETS_MENU_PATH = "Assets";
 
         [MenuItem("Assets/Check Naming Conventions", false, 18)]

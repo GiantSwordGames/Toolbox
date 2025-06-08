@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    [CreateAssetMenu(menuName = "Create TextSanitizer", fileName = "TextSanitizer", order = 0)]
+    
+    [CreateAssetMenu( menuName =  MenuPaths.CREATE_ASSET_MENU +"/TextSanitizer", fileName = "TextSanitizer_")]
     public class TextSanitizer : ScriptableObject
     {
         [Space]

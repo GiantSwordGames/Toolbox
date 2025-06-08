@@ -47,14 +47,17 @@ namespace GiantSword
 
         public Coroutine DoFullTransition(Action onTransitionInComplete, Action onTransitionOutComplete)
         {
-            if(_doNotAutoDestroy ==false)
+            if (_doNotAutoDestroy == false && Application.isPlaying)
+            {
                 DontDestroyOnLoad(gameObject);
+            }
+
             return this.StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
         }
 
         public TransitionBase Instantiate()
         {
-            GameObject newInstance = Instantiate(gameObject);
+            GameObject newInstance = gameObject.SmartInstantiate();
             TransitionBase transitionFadeToBlack = newInstance.GetComponent<TransitionBase>();
             return transitionFadeToBlack;
         }

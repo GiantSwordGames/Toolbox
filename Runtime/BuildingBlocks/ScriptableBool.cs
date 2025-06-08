@@ -11,7 +11,9 @@ namespace GiantSword
         public abstract void Save();
         public abstract void Load();
     }
-    [CreateAssetMenu]
+    
+    [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU + "/Scriptable Bool")]
+
     public class ScriptableBool : ScriptablePrimitive
     {
         public ScriptableVariableScope _scriptableVariableScope;

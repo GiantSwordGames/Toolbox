@@ -50,8 +50,9 @@ GameObject:
   - component: {fileID: 4755912003434263062}
   - component: {fileID: 6261625562156297259}
   - component: {fileID: 8852771906713900001}
+  - component: {fileID: 620971847037475486}
   m_Layer: 5
-  m_Name: Prefab_BasicMenuItem
+  m_Name: Template_BasicMenuItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +97,19 @@ MonoBehaviour:
   _menuDefinition: {fileID: 0}
   _onPlayClickedAnimation:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 620971847037475486}
+        m_TargetAssemblyTypeName: GiantSword.FlashMenuOption, Runtime
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _delayEventInvocation: 0
   _onSelected:
     m_PersistentCalls:
@@ -225,6 +238,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &620971847037475486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4561957902056793698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47db71bd84bb44c22afddb3548dd274a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textMeshPro: {fileID: 3450409208934211729}
 --- !u!1 &8788786011511796151
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,8 +318,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: QUIT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2f19f755fb7ea4f3ea7a856f775a910c, type: 2}
-  m_sharedMaterial: {fileID: -997010445025848579, guid: 2f19f755fb7ea4f3ea7a856f775a910c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
