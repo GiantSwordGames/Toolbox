@@ -1172,6 +1172,15 @@ namespace GiantSword
             );
         }
         
+        public static Vector3 Snap(this Vector3 vector, Vector3 snapValue)
+        {
+            return new Vector3(
+                Mathf.Round(vector.x / snapValue.x) * snapValue.x,
+                Mathf.Round(vector.y / snapValue.y) * snapValue.y,
+                Mathf.Round(vector.z / snapValue.z) * snapValue.z
+            );
+        }
+        
         public static float Round(this float value, int digits =0)
         {
             return (float)Math.Round(value, digits);
