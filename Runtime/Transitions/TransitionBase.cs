@@ -11,7 +11,7 @@ namespace GiantSword
     {
         [SerializeField] protected float _startDelay = 0f;
         [FormerlySerializedAs("_holdAtApex")] [SerializeField] protected float _hold = 0f;
-        private bool _doNotAutoDestroy;
+        [SerializeField] protected bool __dontDestroyOnLoad = true;
 
         protected virtual void OnValidate()
         {
@@ -47,7 +47,7 @@ namespace GiantSword
 
         public Coroutine DoFullTransition(Action onTransitionInComplete, Action onTransitionOutComplete)
         {
-            if (_doNotAutoDestroy == false && Application.isPlaying)
+            if (__dontDestroyOnLoad  && Application.isPlaying)
             {
                 DontDestroyOnLoad(gameObject);
             }

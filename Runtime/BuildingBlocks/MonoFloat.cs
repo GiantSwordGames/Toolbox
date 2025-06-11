@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -133,6 +134,32 @@ namespace GiantSword
                 min = Mathf.Max(0, min);
             }
             return Mathf.InverseLerp(  min, _max, _value);
+        }
+        
+        public Coroutine IncrementValueOverTime( float increment, float duration)
+        {
+            return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration));
+        }
+        private IEnumerator IEIncrementValueOverTime(float increment, float duration)
+        {
+            float startTime = Time.time;
+            float endTime = startTime + duration;
+            float lerpPrev = 0;
+
+            while (Time.time < endTime)
+            {
+                float currentTime = Time.time;
+                float lerp = Mathf.Clamp01((currentTime - startTime) / duration);
+
+                float diff = lerp - lerpPrev;
+                lerpPrev = lerp;
+                value += diff * increment;
+
+                yield return null;
+            }
+
+            // Ensure final increment in case of precision issues
+            value += (1 - lerpPrev) * increment;
         }
     }
 }

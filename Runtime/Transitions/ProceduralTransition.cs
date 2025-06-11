@@ -37,12 +37,12 @@ namespace GiantSword
                     lerp += Time.unscaledDeltaTime / _durationIn;
                     lerp = Mathf.Clamp01(lerp);
                     _canvasGroup. alpha =  _curveIn.Evaluate(lerp);
-                    _image.color = _color.WithAlpha(1);
+                    _image.color = _color;
                     yield return null;
                 }
             }
 
-            _image.color = _color.WithAlpha(1);
+            _image.color = _color;
             _canvasGroup. alpha = 1;
 
             onComplete?.Invoke();
@@ -58,7 +58,7 @@ namespace GiantSword
                     lerp += Time.unscaledDeltaTime / _durationOut;
                     lerp = Mathf.Clamp01(lerp);
                     _canvasGroup. alpha = 1-_curveOut.Evaluate( lerp);
-                    _image.color = _color.WithAlpha(1);
+                    _image.color = _color;
                     yield return null;
                 }
             }
@@ -69,7 +69,10 @@ namespace GiantSword
         protected override IEnumerator IEDoFullTransition(Action onTransitionInComplete,
             Action onTransitionOutComplete)
         {
-            DontDestroyOnLoad(gameObject);
+            if (__dontDestroyOnLoad  && Application.isPlaying)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
 
             yield return DoTransitionIn();
             yield return null;

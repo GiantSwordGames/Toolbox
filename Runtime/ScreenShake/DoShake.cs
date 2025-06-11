@@ -8,6 +8,7 @@ namespace GiantSword
         [SerializeField] private TargetTransform _targetTransform;
         [SerializeField] private bool _targetCamera = true;
         [SerializeField] private bool _triggerOnEnable = false;
+        [InlineScriptableObject] 
         [SerializeField] private ScreenShakeAsset _screenShakeAsset;
         private float _time = 0f;
         private bool _running = false;

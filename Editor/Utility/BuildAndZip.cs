@@ -15,7 +15,14 @@ namespace GiantSword
         public static Preference<bool> buildForWindows = new Preference<bool>("BuildForWindows", true);
         public static Preference<bool> buildForLinux = new Preference<bool>("BuildForLinux", false);
         public static Preference<bool> buildForWebGL = new Preference<bool>("BuildForWeb", false);
-        public static string specifiedBuildPath = "/Users/richard/Dropbox/Projects/Squish/Builds";
+        public static Preference<string> specifiedBuildPath = new Preference<string>("BuildPath", "/Users/richard/Desktop/Builds");
+
+        [InitializeOnLoadMethod]
+        public static void InitializePreference()
+        {
+            DeveloperPreferences.RegisterPreference(specifiedBuildPath);
+        }
+        
         [MenuItem("Build/Build All Platforms")]
         public static void BuildAllPlatforms()
         {
