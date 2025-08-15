@@ -80,9 +80,10 @@ namespace GiantSword
             onTransitionInComplete?.Invoke();
             yield return null;
 
-            if (_hold > 0)
+            while (_hold > 0)
             {
-                yield return new WaitForSeconds(_hold);
+                _hold -= Time.deltaTime;
+                yield return null;
             }
 
             yield return DoTransitionOut();
@@ -97,6 +98,11 @@ namespace GiantSword
         public void SetTransparentInEditMode()
         {
             _canvasGroup.alpha = 0;
+        }
+
+        public void Close()
+        {
+            _hold = 0;
         }
     }
 }

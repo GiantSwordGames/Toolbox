@@ -1510,6 +1510,51 @@ namespace GiantSword
             return false;
         }
 
+        public static void TweenScale(this Transform transform, Vector3 finalScale, float duration,
+            Action onComplete = null)
+        {
+            
+            AsyncHelper.StartCoroutine(IETweenScale(transform, finalScale, duration, onComplete));
+        }
+
+        private static IEnumerator IETweenScale(Transform transform, Vector3 finalScale, float duration, Action onComplete)
+        {
+            Vector3 startScale = transform.localScale;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / duration);
+                transform.localScale = Vector3.Lerp(startScale, finalScale, t);
+                yield return null;
+            }
+
+            transform.localScale = finalScale; // Ensure final scale is set
+            onComplete?.Invoke();
+        }
+
+        public static void TweenPosition(this Transform transform, Vector3 destination, float duration, Action onComplete = null)
+        {
+            AsyncHelper.StartCoroutine(IETweenPosition(transform, destination, duration, onComplete));
+        }
+
+        private static IEnumerator IETweenPosition(Transform transform, Vector3 destination, float duration, Action onComplete)
+        {
+            Vector3 startPosition = transform.position;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / duration);
+                transform.position = Vector3.Lerp(startPosition, destination, t);
+                yield return null;
+            }
+
+            transform.position = destination; // Ensure final position is set
+            onComplete?.Invoke();
+        }
 
 
         public static Transform GetPreviousSibling(this Transform transform)

@@ -84,5 +84,12 @@ namespace GiantSword
             ResetState();
             _running = true;
         }
+
+        [Button]
+        public void Stop()
+        {
+            ResetState();
+            _running = false;
+        }
     }
 }

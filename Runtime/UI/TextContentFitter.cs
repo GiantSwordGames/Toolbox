@@ -7,6 +7,8 @@ using Object = UnityEngine.Object;
 
 namespace GiantSword
 {
+    
+    
     [ExecuteInEditMode]
     public class TextContentFitter : MonoBehaviour
     {
@@ -34,5 +36,19 @@ namespace GiantSword
             CanvasUtility.FitRectTransformToContainedText(gameObject, _margin);
         }
 
+        public static void RecalculateChildren(GameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                return;
+            }
+            
+            TextContentFitter[] fitters = gameObject.GetComponentsInChildren<TextContentFitter>(true);
+            foreach (TextContentFitter fitter in fitters)
+            {
+                fitter.Apply();
+            }
+            
+        }
     }
 }
