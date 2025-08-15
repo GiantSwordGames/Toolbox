@@ -29,9 +29,21 @@ namespace GiantSword
             set => _amplitude = value;
         }
 
+        
+        public PunchInstance ApplyToRotation(Transform target)
+        {
+            return new PunchInstance(target, this, PunchInstance.Type.Rotation);
+        }
+
+        
         public PunchInstance ApplyToScale(Transform target)
         {
             return new PunchInstance(target, this, PunchInstance.Type.Scale);
+        }
+        
+        public PunchInstance ApplyToPosition(Transform target)
+        {
+            return new PunchInstance(target, this, PunchInstance.Type.Position);
         }
 
         [Button]

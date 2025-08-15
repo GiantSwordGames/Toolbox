@@ -11,16 +11,17 @@ using UnityEngine.SceneManagement;
 namespace GiantSword
 {
     
-    [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU +"Level", fileName = "Level_NewLevel")]
+    // [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU +"Level", fileName = "Level_NewLevel")]
     public class Level : ScriptableObject
     {
         [SerializeField]  private SceneReference _scene;
         [SerializeField]  private SceneReference[] _additionalScene;
         [SerializeField]  private SceneReference[] _persistentScene;
+        [SerializeField]  private TransitionBase _defaultTransition;
 
         public SceneReference scene => _scene;
 
-        List<SceneReference> GetAllSceneReferences()
+        public  List<SceneReference> GetAllSceneReferences()
         {
             List<SceneReference> allScenes = new List<SceneReference>();
             allScenes.Add(_scene);
@@ -87,9 +88,22 @@ namespace GiantSword
         }
         
         [Button(enabledMode: EButtonEnableMode.Playmode)]
-        public void LoadLevel()
+        private void LoadLevelAdditive()
         {
-            AsyncHelper.StartCoroutine(IELoadLevel());
+            scene.Load(LoadSceneMode.Additive);
+        }
+
+        [Button(enabledMode: EButtonEnableMode.Playmode)]
+        public void LoadLevel(bool skipTransition = false)
+        {
+            if (skipTransition || _defaultTransition == null)
+            {
+                AsyncHelper.StartCoroutine(IELoadLevel());
+            }
+            else
+            {
+                TransitionBase transition = _defaultTransition.InstantiateAndDoLevelTransition(this);
+            }
         }
         private IEnumerator IELoadLevel()
         {
@@ -99,10 +113,9 @@ namespace GiantSword
                 List<SceneReference> allScenes = GetAllSceneReferences();
 
                 List<AsyncOperation> _unloadCommands = new List<AsyncOperation>();
-                Debug.Log(" SceneManager.loadedSceneCount " + SceneManager.loadedSceneCount);
 
                 //unload other scenes
-                for (int i = SceneManager.loadedSceneCount - 1; i >= 0; i--)
+                for (int i = SceneManager.sceneCount - 1; i >= 0; i--)
                 {
 
                     Scene sceneAt = SceneManager.GetSceneAt(i);
@@ -148,7 +161,7 @@ namespace GiantSword
 
                 if (scene.isLoaded)
                 {
-                    if (SceneManager.loadedSceneCount > 1)
+                    if (SceneManager.sceneCount > 1)
                     {
                         AsyncOperation asyncOperation = _scene.UnlaodAsync();
 
@@ -190,7 +203,12 @@ namespace GiantSword
             yield break;
             
         }
-
+        [Button(enabledMode: EButtonEnableMode.Editor)]
+        private void OpenScene()
+        {
+            scene.Open();
+            scene.Load(LoadSceneMode.Additive);
+        }
         public void ReloadLevel()
         {
             LoadLevel();

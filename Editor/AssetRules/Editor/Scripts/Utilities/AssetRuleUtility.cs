@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -265,8 +267,8 @@ namespace GiantSword.AssetRules
 
         public static void GetUnique(ref string s1, ref string s2)
         {
-            string[] list1 = s1.Split(" ");
-            string[] list2 = s2.Split(" ");
+            string[] list1 = s1.Split(' ');
+            string[] list2 = s2.Split(' ');
 
             int strip = 0;
             for (int i = 0; i < list1.Length; i++)

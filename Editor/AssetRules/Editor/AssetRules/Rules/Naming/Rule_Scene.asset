@@ -19,12 +19,15 @@ MonoBehaviour:
   _exceptions:
   - Game
   _pathRequirements: []
-  order: 11
-  _customPrefix: Scene_
+  order: 6
+  _customPrefix: 
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 0
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
+  _removeHyphens: 1
+  _removeNonAlphaNumericCharacters: 1
   _includeGrandparentInName: 0
   _parentFolder: 
   _absolutePath: 

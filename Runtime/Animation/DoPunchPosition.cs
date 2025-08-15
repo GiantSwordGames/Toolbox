@@ -25,7 +25,7 @@ namespace GiantSword
         public void Trigger()
         {
             Stop();
-            _instance = _punchAsset.ApplyToScale(_target.target);
+            _instance = _punchAsset.ApplyToPosition(_target.target);
         }
 
         private void Stop()

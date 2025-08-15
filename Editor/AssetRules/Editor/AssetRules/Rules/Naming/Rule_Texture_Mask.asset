@@ -24,7 +24,10 @@ MonoBehaviour:
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 0
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
+  _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: Textures
   _absolutePath: 

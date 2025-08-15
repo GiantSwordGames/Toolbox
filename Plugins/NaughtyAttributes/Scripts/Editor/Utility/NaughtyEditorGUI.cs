@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -203,12 +204,12 @@ namespace NaughtyAttributes.Editor
 
             if (value == null)
             {
-                string warning = string.Format("{0} is null1. {1} doesn't support reference types with null value", ObjectNames.NicifyVariableName(property.Name), typeof(ShowNativePropertyAttribute).Name);
+                string warning = string.Format("{0} is null. {1} doesn't support reference types with null value", ObjectNames.NicifyVariableName(property.Name), typeof(ShowNativePropertyAttribute).Name);
                 HelpBox_Layout(warning, MessageType.Warning, context: target);
             }
             else if (!Field_Layout(value, ObjectNames.NicifyVariableName(property.Name)))
             {
-                string warning = string.Format("{0} doesn't support2 {1} types", typeof(ShowNativePropertyAttribute).Name, property.PropertyType.Name);
+                string warning = string.Format("{0} doesn't support {1} types", typeof(ShowNativePropertyAttribute).Name, property.PropertyType.Name);
                 HelpBox_Layout(warning, MessageType.Warning, context: target);
             }
         }
@@ -219,12 +220,12 @@ namespace NaughtyAttributes.Editor
 
             if (value == null)
             {
-                string warning = string.Format("{0} is null3. {1} doesn't support reference types with null value", ObjectNames.NicifyVariableName(field.Name), typeof(ShowNonSerializedFieldAttribute).Name);
+                string warning = string.Format("{0} is null. {1} doesn't support reference types with null value", ObjectNames.NicifyVariableName(field.Name), typeof(ShowNonSerializedFieldAttribute).Name);
                 HelpBox_Layout(warning, MessageType.Warning, context: target);
             }
             else if (!Field_Layout(value, ObjectNames.NicifyVariableName(field.Name)))
             {
-                string warning = string.Format("{0} doesn't support {1} types4", typeof(ShowNonSerializedFieldAttribute).Name, field.FieldType.Name);
+                string warning = string.Format("{0} doesn't support {1} types", typeof(ShowNonSerializedFieldAttribute).Name, field.FieldType.Name);
                 HelpBox_Layout(warning, MessageType.Warning, context: target);
             }
         }
@@ -349,12 +350,6 @@ namespace NaughtyAttributes.Editor
                 else if (valueType.BaseType == typeof(System.Reflection.TypeInfo))
                 {
                     EditorGUILayout.TextField(label, value.ToString());
-                }
-                else if (valueType == typeof(System.Action))
-                {
-                    int handlerCount = ((System.Action)value).GetInvocationList().Length;
-
-                    EditorGUILayout.LabelField(label, "" + handlerCount);
                 }
                 else
                 {

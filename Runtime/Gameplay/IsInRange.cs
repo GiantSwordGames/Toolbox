@@ -7,7 +7,7 @@ namespace GiantSword
     {
         [SerializeField] private Transform _target;
 
-        [SerializeField] private SmartFloat _range = 2f;
+        [SerializeField] private SmartFloat _range = new SmartFloat(2f);
 
         [SerializeField] private UnityEvent _onEnterRange;
         [SerializeField] private UnityEvent _onExitRange;

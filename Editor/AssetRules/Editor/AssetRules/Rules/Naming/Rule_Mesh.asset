@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2392104bfd4834a40926797827f31f7b, type: 3}
   m_Name: Rule_Mesh
   m_EditorClassIdentifier: 
-  _enabled: 1
+  _enabled: 0
   _example: {fileID: 919132149155446097, guid: a2d37e84e4fa77d44a8fa080262995ac, type: 3}
   _test: {fileID: 919132149155446097, guid: a2d37e84e4fa77d44a8fa080262995ac, type: 3}
   _pathTest: 
@@ -21,12 +21,15 @@ MonoBehaviour:
   - Rig
   - .*@.*
   _pathRequirements: []
-  order: 2
+  order: 1
   _customPrefix: Mesh_
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 0
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
+  _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: Meshes
   _absolutePath: 

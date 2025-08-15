@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using EatTheRich;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -39,6 +41,11 @@ namespace GiantSword
                 Debug.LogException(e);
             }
         }
+
+        public static bool IsHeld(this InputAction action)
+        {
+            return action.ReadValue<float>() > 0;
+        }
         
         public static Vector3 RandomLocalPoint(this BoxCollider boxCollider)
         {
@@ -51,6 +58,26 @@ namespace GiantSword
             localPoint += boxCollider.center;
 
             return localPoint;
+        }
+
+        public static void AddForceAtLocalPosition(this Rigidbody rigidbody, Vector3 localPosition, Vector3 worldForce, bool debugDraw =false)
+        {
+            Vector3 worldPosition = rigidbody.transform.TransformPoint( localPosition);
+            if (debugDraw)
+            {
+                Debug.DrawRay(worldPosition, worldForce, Color.green);
+            }
+            rigidbody.AddForceAtPosition(worldForce, worldPosition);
+        }
+        
+        public static void AddLocalForce(this Rigidbody rigidbody, Vector3 localForce, ForceMode mode,  bool debugDraw =false)
+        {
+            Vector3 worldForce = rigidbody.transform.TransformDirection( localForce);
+            if (debugDraw)
+            {
+                Debug.DrawRay(rigidbody.transform.position, worldForce, Color.green);
+            }
+            rigidbody.AddForce(worldForce, mode);
         }
         
         public static Vector3 RandomWorldPoint(this BoxCollider boxCollider)
@@ -120,6 +147,11 @@ namespace GiantSword
             return curve[curve.length -1].time;
         }
         
+        public static Vector3 Absolute(this Vector3 vector)
+        {
+            return new Vector3(Mathf.Abs(vector.x), Mathf.Abs(vector.y), Mathf.Abs(vector.z));
+        }
+        
         public static bool IsEmpty(this string str)
         {
             return string.IsNullOrWhiteSpace(str);
@@ -150,15 +182,29 @@ namespace GiantSword
         {
             return (to + from) / 2;
         }
+        
+        public static Vector3 Lerp(this Vector3 from, Vector3 to, float lerp)
+        {
+            return Vector3.Lerp(from, to, lerp);
+        }
+        
         public static Vector2 Rotate(this Vector2 from, float min, float max)
         {
             float degrees = Random.Range(min, max);
             return from.Rotate(degrees);
         }
+       
+        
         
         public static Vector3 Rotate(this Vector3 from, float min, float max)
         {
             return Quaternion.Euler( Random.Range(min, max), Random.Range(min, max), Random.Range(min, max))*from;
+        }
+        
+        public static void SetEmissionRate(this ParticleSystem particleSystem, float rate)
+        {
+            ParticleSystem.EmissionModule emission = particleSystem.emission;
+            emission.rateOverTime = rate;
         }
         public static Vector2 Round(this Vector2 from)
         {
@@ -190,6 +236,17 @@ namespace GiantSword
         {
             return array[(i+array.Count) % array.Count];
         }
+        
+        
+        public static T GetElementLoopingSafe<T>(this List<T> array, int i)
+        {
+            if (array.Count == 0)
+            {
+                return default;
+            }
+            
+            return array[(i+array.Count) % array.Count];
+        }
 
         public static void Encapsulate(this BoxCollider2D boxCollider2D, BoxCollider2D other)
         {
@@ -211,6 +268,40 @@ namespace GiantSword
             // Assign new values to the collider
             boxCollider2D.offset = localCenter;
             boxCollider2D.size = newSize;
+        }
+
+        public static void IgnoreCollisions(this IList<Collider> colliders, IList<Collider> otherColliders, bool ignore = true)
+        {
+            for (int i = 0; i < colliders.Count; i++)
+            {
+                for (int j = 0; j < otherColliders.Count; j++)
+                {
+                    Physics.IgnoreCollision(colliders[i], otherColliders[j], ignore);
+                }
+            }
+        }
+
+        public static void IgnoreCollisions(this IList<Collider> colliders, Collider otherCollider, bool ignore = true)
+        {
+            for (int j = 0; j < colliders.Count; j++)
+            {
+                Physics.IgnoreCollision(colliders[j], otherCollider, ignore);
+            }
+        }
+
+        public static void IgnoreCollisions(this Collider collider, IList<Collider> otherColliders, bool ignore = true)
+        {
+            for (int j = 0; j < otherColliders.Count; j++)
+            {
+                Physics.IgnoreCollision(collider, otherColliders[j], ignore);
+            }
+        }
+        
+        public static void IgnoreColliders(this Rigidbody rigidbodyA, Rigidbody rigidbodyB, bool ignore = true)
+        {
+            Collider[] collidersA = rigidbodyA.gameObject.GetComponentsInChildren<Collider>();
+            Collider[] collidersB = rigidbodyB.gameObject.GetComponentsInChildren<Collider>();
+            collidersA.IgnoreCollisions(collidersB, ignore);
         }
 
 
@@ -285,6 +376,10 @@ namespace GiantSword
             return uo.gameObject.AddComponent<T>();
         }
 
+        public static T AddComponent<T>(this Component uo) where T : Component
+        {
+            return uo.gameObject.AddComponent<T>();
+        }
 
         public static Vector3 To(this Transform from, Transform to)
         {
@@ -299,6 +394,12 @@ namespace GiantSword
         {
             return (Vector2)vector3;
         }
+        
+        public static Vector2 XZ(this Vector3 vector3)
+        {
+            return new Vector2(vector3.x, vector3.z);
+        }
+
 
         public static Color WithAlpha(this Color color, float alpha)
         {
@@ -356,6 +457,12 @@ namespace GiantSword
         }
 
 
+        public static Ray GetCenterRay(this Camera camera)
+        {
+            return camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        }
+
+        
         public static JointDrive WithPositionSpring(this JointDrive drive, float spring)
         {
             drive.positionSpring = spring;
@@ -383,10 +490,26 @@ namespace GiantSword
         {
             return AsyncHelper.StartCoroutine(IEDoScaleTween( transform, start, to, duration));
         }
+        
 
         public static void OnComplete(this Coroutine coroutine, Action action)
         {
             AsyncHelper.InvokeOnCoroutineComplete(coroutine, action);
+        }
+
+        
+        public static ParticleSystem InstantiateAndAutoDestroy(this ParticleSystem prefab, Vector3 position) 
+        {
+            ParticleSystem particleSystem =InstantiateAndAutoDestroy(prefab);
+            particleSystem.transform.position = position;
+            return particleSystem;
+        }
+
+        public static ParticleSystem InstantiateAndAutoDestroy(this ParticleSystem prefab) 
+        {
+            ParticleSystem particleSystem = Object.Instantiate(prefab);
+            particleSystem.gameObject.AddComponent<AutoDestroyParticleEffect>();
+            return particleSystem;
         }
 
         public static T Instantate<T>(this T prefab) where T : Object
@@ -408,6 +531,11 @@ namespace GiantSword
         public static T Instantate<T>(this T prefab, Transform parent, Vector3 position) where T : Object
         {
             return Object.Instantiate(prefab, position, Quaternion.identity, parent);
+        }
+        
+        public static T Instantate<T>(this T prefab,  Vector3 position, Quaternion rotation) where T : Object
+        {
+            return Object.Instantiate(prefab, position, rotation);
         }
         private static IEnumerator IEDoScaleTween(Transform transform, Vector3 start, Vector3 to, float duration)
         {
@@ -540,6 +668,16 @@ namespace GiantSword
             
             Gizmos.matrix = cache;
         }
+        public static void AutoDestroyComponent(this MonoBehaviour monoBehaviour, float delay = 0)
+        {
+            AsyncHelper.Delay(delay, () =>
+            {
+                if (monoBehaviour)
+                {
+                    GameObject.Destroy(monoBehaviour);
+                }
+            });
+        }
 
         public static string BitMaskToString(this LayerMask layerMask)
         {
@@ -562,6 +700,11 @@ namespace GiantSword
             return IsVisible(camera, point, false, 0, marginInViewSpace) == false;
         }
 
+        public static bool IsVisible(this Camera camera, Vector3 point, float marginInViewSpace = 0)
+        {
+            return IsVisible(camera, point, false, 0, marginInViewSpace);
+        }
+        
         public static bool IsVisible(this Camera camera, Vector3 point, bool raycast = false,
             int layerMaskOfBlockingObjects = 0, float marginInViewSpace = 0)
         {
@@ -1005,7 +1148,7 @@ namespace GiantSword
                 return default;
             }
 
-            return list[^1];
+            return list[list.Count -1];
         }
 
         public static int GetRandomIndex<T>(this IList<T> list)
@@ -1013,6 +1156,22 @@ namespace GiantSword
             if (list == null || list.Count == 0)
             {
                 throw new System.ArgumentException("The list is empty or null.");
+            }
+
+            return Random.Range(0, list.Count);
+        }
+
+        /// <summary>
+        /// Returns a random index from the list, but returns 0 if the list is null or empty.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static int GetRandomIndexSafe<T>(this IList<T> list)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return 0;
             }
 
             return Random.Range(0, list.Count);
@@ -1064,6 +1223,17 @@ namespace GiantSword
             }
 
             index++;
+            index += list.Count;
+            index %= list.Count;
+            return index;
+        }
+        
+        public static int WrapIndex<T>(this IList<T> list, int index)
+        {
+            if (list == null || list.Count == 0)
+            {
+                throw new System.ArgumentException("The list is empty or null.");
+            }
             index += list.Count;
             index %= list.Count;
             return index;
@@ -1152,6 +1322,20 @@ namespace GiantSword
 
             return list.GetInvocationList().Length;
         }
+        public static float Abs(this float value)
+        {
+            return Mathf.Abs(value);
+        }
+        
+        public static void TriggerPunch(this GameObject go)
+        {
+            DoPunchScale[] doPunchScale = go.GetComponents<DoPunchScale>();
+            foreach (var punch in doPunchScale)
+            {
+                punch.Trigger();
+            }
+            
+        }
 
         public static void SortBySiblingIndex<T>(this List<T> list) where T : Component
         {
@@ -1216,6 +1400,11 @@ namespace GiantSword
         {
             return (int)value;
         }
+        
+        public static string StripNonAlphabetCharacters(this string input)
+        {
+            return Regex.Replace(input, "[^A-Za-z]+", "");
+        }
 
         public static bool IsInside(this Vector3 point, Vector2 center, Vector2 size)
         {
@@ -1228,16 +1417,47 @@ namespace GiantSword
             return gameObject.GetComponent<T>() != null;
         }
         
+        
+        public static bool HasParent<T>(this GameObject gameObject) where T : Component
+        {
+            return gameObject.GetComponentInParent<T>() != null;
+        }
+        
         public static bool HasComponent<T>(this Component component) where T : Component
         {
-            return component.GetComponent<T>() != null;
+            return component.gameObject.GetComponent<T>() != null;
         }
-
+        
+          
+        public static bool HasParent<T>(this Component component) where T : Component
+        {
+            return component.gameObject.GetComponentInParent<T>() != null;
+        }
+        public static bool HasComponentEnabled<T>(this Component component) where T : Behaviour
+        {
+            Behaviour comp = component.gameObject.GetComponent<T>();
+            return comp != null && comp.enabled;
+        }
+        public static bool IsPrefabAsset<T>(this MonoBehaviour monoBehaviour) where T : MonoBehaviour
+        {
+            return ValidationUtility.IsPrefabAsset(monoBehaviour);
+        }
         public static float AsPercent(this float value)
         {
             var percent = (int)(value * 100);
             return percent;
         }
+        
+        public static float Clamp(this float value, float min, float max)
+        {
+            return Mathf.Clamp(value, min, max);
+        }
+                
+        public static float Clamp01(this float value)
+        {
+            return Mathf.Clamp01(value);
+        }
+        
         public static string ToTitleCase(this object obj)
         {
             return obj.ToString().ToTitleCase();
@@ -1371,6 +1591,26 @@ namespace GiantSword
             }
         }
       
+        public static void AddUniqueElementsInRange<T1>(this List<T1> list, List<T1> range)
+        {
+            foreach (T1 v in range)
+            {
+                if (list.Contains(v) == false)
+                {
+                    list.Add(v);
+                }
+            }
+        }
+        public static void AddUniqueElementsInRange<T1>(this List<T1> list, T1[] range)
+        {
+            foreach (T1 v in range)
+            {
+                if (list.Contains(v) == false)
+                {
+                    list.Add(v);
+                }
+            }
+        }
 
         public static Transform SetLossyScale(this Transform transform, Vector3 scale)
         {

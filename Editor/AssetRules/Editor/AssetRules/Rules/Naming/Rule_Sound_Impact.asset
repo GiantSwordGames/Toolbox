@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a595fc0efdd24b57bbf7964096c42c5c, type: 3}
+  m_Name: Rule_Sound_Impact
+  m_EditorClassIdentifier: 
+  _enabled: 0
+  _example: {fileID: 11400000, guid: 90b278ba1574d7d42a3ea0f865ea5672, type: 2}
+  _test: {fileID: 11400000, guid: 40aa9f858d69f6541bfdfd46708c6dfd, type: 2}
+  _pathTest: 
+  _exceptions: []
+  _pathRequirements: []
+  order: 21
+  _customPrefix: Impact_
+  _customPostfix: 
+  _regexValidation: 
+  _removeSpaces: 1
+  _capitalize: 1
+  _replaceSpacesWithUnderscores: 0
+  _removeHyphens: 1
+  _removeParenthesis: 1
+  _includeGrandparentInName: 0
+  _parentFolder: 
+  _absolutePath: Assets/SoundBanks/Impacts/
+  _regexReplaceFromName:
+  - description: 
+    replace: 'Sound_ '
+    with: 
+    disable: 0
+  _regexReplaceInDirectories: []
+  _regexRemoveFromPrefix: []
+  _postProcesses: []

@@ -117,7 +117,7 @@ namespace GiantSword
                         if (parents.Contains(child.parent) == false)
                             parents.Add(child.parent);
                     }
-                    Undo.SetTransformParent(child, newParent, true, "ungroup");
+                    Undo.SetTransformParent(child, newParent,  "ungroup");
                     newSelection.Add(child.gameObject);
                 }
             }
@@ -158,13 +158,10 @@ namespace GiantSword
                     {
                         commonParent = null;
                     }
-
-                 
                 }
                 
                 for (int i = 0; i < transforms.Count; i++)
                 {
-                  
                     if (transforms[i] is RectTransform)
                     {
                         childRectTransform = transforms[i] as RectTransform;   
@@ -174,26 +171,16 @@ namespace GiantSword
                 if (childRectTransform)
                 {
                     RectTransform rectTransform = group.AddComponent<RectTransform>();
-                    // rectTransform.sizeDelta = Vector2.one * 100;
                     rectTransform.sizeDelta = childRectTransform.rect.size;
-                    // rectTransform.pivot = childRectTransform.pivot;
-                    // rectTransform.anchorMin = childRectTransform.anchorMin;
-                    // rectTransform.anchorMax = childRectTransform.anchorMax;
+                    rectTransform.pivot = childRectTransform.pivot;
+                    rectTransform.anchorMin = childRectTransform.anchorMin;
+                    rectTransform.anchorMax = childRectTransform.anchorMax;
                     // rectTransform.anchoredPosition = childRectTransform.anchoredPosition;
-                    // rectTransform.anchoredPosition3D = childRectTransform.anchoredPosition3D;
-                    // rectTransform.offsetMax = childRectTransform.offsetMax;
-                    // rectTransform.offsetMin = childRectTransform.offsetMin;
-
-
-
-                    // set child rect to stretch
-                    // childRectTransform.anchorMin = Vector2.zero;
-                    // childRectTransform.anchorMax = Vector2.one;
-
-
+                    // rectTransform.localRotation = childRectTransform.localRotation;
+                    
                 }
 
-                Undo.SetTransformParent( group.transform, commonParent, true, "Group");
+                Undo.SetTransformParent( group.transform, commonParent,  "Group");
 
                 if (alt)
                 {
@@ -203,7 +190,7 @@ namespace GiantSword
                 {
                     group.transform.localPosition = transforms[0].localPosition;
                     group.transform.localRotation = transforms[0].localRotation;
-                    group.transform.localScale = transforms[0].localScale;
+                    // group.transform.localScale = transforms[0].localScale;
                 }
 
                 for (int i = 0; i < transforms.Count; i++)

@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using UnityEngine.Serialization;
 
 namespace GiantSword
 {
@@ -8,13 +9,14 @@ namespace GiantSword
     public class SuspendRigidbody : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField]  private float _springStrength = 1; 
-        [SerializeField]  private float _springDamper= 1;
+        [SerializeField]  private float _springStrength = 100; 
+        [SerializeField]  private float _springDamper= 10;
         [SerializeField]  private float _targetHeight = 1;
         [SerializeField] private float _raycastOverShoot = 1.2f;
         [SerializeField] private LayermaskAsset _raycastLayerMask;
+        [FormerlySerializedAs("_applyGravityOnlyWhenOutOfRange")]
         [Space]
-        [SerializeField] private bool _applyGravityOnlyWhenOutOfRange = true;
+        [SerializeField] private bool _applyGravityOnlyWhenAboveTargetHeight = true;
         [SerializeField] private bool _applyDownwards = true;
         [Space]
         [ShowNonSerializedField] private Collider _collider;
@@ -26,7 +28,7 @@ namespace GiantSword
     
             Vector3 origin = _rigidbody.worldCenterOfMass;
             
-            Physics.Raycast(origin, _downDirection, out RaycastHit _rayHit, raycastDistance,  _raycastLayerMask);
+            Physics.Raycast(origin, _downDirection, out RaycastHit _rayHit, raycastDistance,  _raycastLayerMask.NullSafe());
     
             _collider = _rayHit.collider;
     
@@ -34,13 +36,13 @@ namespace GiantSword
     
             if (hitGround)
             {
-                Vector3 velocity = _rigidbody.linearVelocity;
+                Vector3 velocity = _rigidbody.velocity;
                 Vector3 rayDirection = _downDirection;
                 Vector3 otherVelocity = Vector3.zero;
                 Rigidbody hitBody = _rayHit.rigidbody;
                 
                 if (hitBody != null)
-                    otherVelocity = hitBody.linearVelocity;
+                    otherVelocity = hitBody.velocity;
                 
                 float rayDirectionVelocity = Vector3.Dot(rayDirection, velocity);
                 float otherVelocityDirection = Vector3.Dot(rayDirection, otherVelocity);
@@ -58,7 +60,7 @@ namespace GiantSword
                 _rigidbody.AddForce(rayDirection * springForce);
             }
     
-            if (_applyGravityOnlyWhenOutOfRange)
+            if (_applyGravityOnlyWhenAboveTargetHeight)
             {
                 _rigidbody.useGravity = hitGround == false;
             }

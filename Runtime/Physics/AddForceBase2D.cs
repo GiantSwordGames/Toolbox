@@ -14,7 +14,7 @@ namespace GiantSword
         }
         [SerializeField] protected Rigidbody2D _rigidbody2D;
         [SerializeField] protected Vector2 _normalizedForce = Vector2.right;
-        [SerializeField] protected SmartFloat _multiplier = 1f;
+        [SerializeField] protected SmartFloat _multiplier = new SmartFloat( 1f);
         [SerializeField] protected Space _space = Space.World;
         
         private float _lerp = 1;

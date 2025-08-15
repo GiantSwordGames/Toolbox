@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a595fc0efdd24b57bbf7964096c42c5c, type: 3}
   m_Name: Rule_Physics
   m_EditorClassIdentifier: 
-  _enabled: 1
+  _enabled: 0
   _example: {fileID: 13400000, guid: 8b4af0e2b74dd4a5c86cb8455a9d23a4, type: 2}
   _test: {fileID: 13400000, guid: 7e8b2279e0e4e426a81fe127cad7873b, type: 2}
   _pathTest: 
@@ -26,6 +26,7 @@ MonoBehaviour:
   _capitalize: 1
   _replaceSpacesWithUnderscores: 1
   _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: Physics
   _absolutePath: 

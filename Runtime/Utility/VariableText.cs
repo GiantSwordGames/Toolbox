@@ -1,13 +1,15 @@
     using System;
+    using System.Collections;
     using NaughtyAttributes;
     using UnityEngine;
     using UnityEngine.Events;
+    using UnityEngine.Serialization;
 
     namespace GiantSword
     {
         public class VariableText : MonoBehaviour
         {
-            [SerializeField] private UnityEvent _onRefresh;
+            [FormerlySerializedAs("_onRefresh")] [SerializeField] private UnityEvent _onDisplayValueChanged;
             [SerializeField] private UnityEvent _onValueChanged;
             [SerializeField] private SmartFloat _value;
             [SerializeField] private TMPro.TMP_Text _text;
@@ -15,7 +17,8 @@
             [SerializeField] private string _postFix;
             [SerializeField] private string _format = "F1";
             [SerializeField] private SmartFloat[] _additionalValues = {};
-
+            [SerializeField] private float _incrementOverDuration = 0;
+            private float _previousValue ;
 
             public SmartFloat value => _value;
 
@@ -30,6 +33,7 @@
 
             void Start()
             {
+                _previousValue = _value.value;
                 _value.onValueChanged += OnValueValueChanged;
                 Refresh();
             }
@@ -42,8 +46,17 @@
 
             private void OnValueValueChanged(float obj)
             {
-               Refresh();
+                if (_incrementOverDuration > 0)
+                {
+                 
+                    StartCoroutine(IEIncrementTowardsNewValue(_previousValue));
+                }
+                else
+                {
+                    Refresh();
+                }
                _onValueChanged?.Invoke();
+               _previousValue = _value.value;
             }
 
 
@@ -60,15 +73,31 @@
                     return;
                 }
 
-                _text.text = _prefix +_value.value.ToString(_format) + _postFix;
+                float value = _value.value;
+                
+                SetText(value);
+            }
+
+            private void SetText(float value)
+            {
+                string previousText = _text.text;
+
+                string newText = _prefix + value.ToString(_format) + _postFix;
                 for (int i = 0; i < _additionalValues.Length; i++)
                 {
                     string oldValue = $"{{{i}}}";
-                    _text.text = _text.text.Replace(oldValue, _additionalValues[i].value + "");
+                    newText = newText.Replace(oldValue, _additionalValues[i].value + "");
                 }
 
-                _onRefresh?.Invoke();
-                name = "Stat_" + _prefix;
+                if (newText != previousText)
+                {
+                    _text.text = newText;
+                    _onDisplayValueChanged?.Invoke();
+
+                }
+
+                name = name = "STAT_" + _prefix.StripNonAlphabetCharacters();
+
             }
 
             public void SetValue(float value)
@@ -76,5 +105,27 @@
                 _value.value = value;
                 Refresh();
             }
+            
+            
+
+            private IEnumerator IEIncrementTowardsNewValue(float oldValue)
+            {
+
+                float duration = _incrementOverDuration;
+                float startValue = oldValue;
+                float endValue = value.value;
+                float elapsed = 0f;
+
+                while (elapsed < duration)
+                {
+                    elapsed += Time.deltaTime;
+                    float t = Mathf.Clamp01(elapsed / duration);
+                    float newValue = Mathf.Lerp(startValue, endValue, t);
+                    SetText(newValue);
+                    yield return null;
+                }
+                Refresh();
+            }
+            
         }
     }

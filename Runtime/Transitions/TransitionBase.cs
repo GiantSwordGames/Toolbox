@@ -9,9 +9,10 @@ namespace GiantSword
 {
     public abstract class TransitionBase : MonoBehaviour
     {
+        [SerializeField] protected bool __dontDestroyOnLoad = true;
+        [SerializeField] protected bool _autoDestroy = true;
         [SerializeField] protected float _startDelay = 0f;
         [FormerlySerializedAs("_holdAtApex")] [SerializeField] protected float _hold = 0f;
-        [SerializeField] protected bool __dontDestroyOnLoad = true;
 
         protected virtual void OnValidate()
         {
@@ -20,7 +21,14 @@ namespace GiantSword
         [Button]
         public void Trigger()
         {
-            InstantiateAndDoFullTransition();
+            if (ValidationUtility.IsPrefabAsset(gameObject))
+            {
+                InstantiateAndDoFullTransition();
+            }
+            else
+            {
+                this.DoFullTransition(null, null);
+            }
         }
 
         protected abstract IEnumerator IETransitionIn(Action onComplete);
@@ -51,7 +59,7 @@ namespace GiantSword
             {
                 DontDestroyOnLoad(gameObject);
             }
-
+            
             return this.StartCoroutine(IEDoFullTransition(onTransitionInComplete, onTransitionOutComplete));
         }
 
@@ -76,17 +84,17 @@ namespace GiantSword
             return instance;
         }
         
-        public TransitionBase InstantiateAndDoLevelTransition(Level leve)
+        public TransitionBase InstantiateAndDoLevelTransition(Level level)
         {
             var instance = Instantiate();
-            instance.DoFullTransition(() => leve.LoadLevel(), null);
+            instance.DoFullTransition(() => level.LoadLevel(true), null);
             return instance;
         }
         
         public TransitionBase InstantiateAndDoFullTransition()
         {
             var instance = Instantiate();
-            instance.DoFullTransition(null, null);
+                instance.DoFullTransition(null, null);
             return instance;
         }
         
@@ -100,6 +108,14 @@ namespace GiantSword
         {
             var instance = Instantiate();
             instance.DoFullTransition(() => sceneReference.Load(), null);  
+            return instance;
+        }
+        
+        
+        public TransitionBase InstantiateAndDoSceneTransition(string sceneName)
+        {
+            var instance = Instantiate();
+            instance.DoFullTransition(() => SceneManager.LoadScene(sceneName), null);  
             return instance;
         }
     }

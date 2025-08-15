@@ -16,7 +16,7 @@ namespace GiantSword
             public int weight =1; 
             public UnityEvent events;
         }
-        [SerializeField] private SmartFloat _delay = 0;
+        [SerializeField] private SmartFloat _delay = new SmartFloat(0f);
 
         [SerializeField]  private List<Option> _options = new List<Option>();
 

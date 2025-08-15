@@ -1,12 +1,15 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 namespace GiantSword
 {
-    public class MouseListener : MonoBehaviour
+    public class MouseListener : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerExitHandler, IPointerUpHandler
     {
+       
+
         [SerializeField] private UnityEvent _mouseEnter = new UnityEvent();
         [SerializeField] private UnityEvent _mouseExit = new UnityEvent();
         [SerializeField] private UnityEvent _mouseDown = new UnityEvent();
@@ -81,6 +84,26 @@ namespace GiantSword
                     mouseListener._mouseUp.AddListener( _mouseUp.Invoke);
                 }
             }
+        }
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            OnMouseEnter();
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            OnMouseDown();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            OnMouseExit();
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            OnMouseUp();
         }
     }
 }

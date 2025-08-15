@@ -40,6 +40,7 @@ public class HierarchyCutPaste
         {
             // Record the current state for undo functionality.
             Undo.SetTransformParent(go.transform, targetParent, "Paste GameObject");
+            
         }
         Debug.Log("Pasted " + cutGameObjects.Count + " GameObject(s).");
 

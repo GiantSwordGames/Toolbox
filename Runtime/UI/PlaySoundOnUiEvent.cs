@@ -6,18 +6,18 @@ namespace GiantSword
 {
     public class PlaySoundOnUiEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler
     {
-        [SerializeField] private SoundAsset _onPointerEnter;
-        [SerializeField] private SoundAsset _onPointerExit;
-        [SerializeField] private SoundAsset _onPointerClick;
-        
+        // [SerializeField] private SoundAsset _onPointerEnter;
+        // [SerializeField] private SoundAsset _onPointerExit;
+        // [SerializeField] private SoundAsset _onPointerClick;
+        //
         public void OnPointerEnter(PointerEventData eventData)
         {
-            _onPointerEnter?.Play();
+            // _onPointerEnter?.Play();
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            _onPointerExit?.Play();
+            // _onPointerExit?.Play();
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -33,7 +33,7 @@ namespace GiantSword
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            _onPointerClick?.Play();
+            // _onPointerClick?.Play();
         }
     }
 }

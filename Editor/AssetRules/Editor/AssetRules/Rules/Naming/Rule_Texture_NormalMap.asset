@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e775ae0a5f50b2749847a83cbb0d2f77, type: 3}
   m_Name: Rule_Texture_NormalMap
   m_EditorClassIdentifier: Assembly-CSharp-Editor:NightTools.Utility.Validation:NamingRuleForTypeForTexture
-  _enabled: 1
+  _enabled: 0
   _example: {fileID: 2800000, guid: 09a4252e01b942a46a129f3467361243, type: 3}
   _test: {fileID: 2800000, guid: 93623dcf5163644d78c7914909f39ccb, type: 3}
   _pathTest: Assets/Game/Environment/Sprites/Characters/Squish/Little Dude Textures/Animations/Get
@@ -20,12 +20,15 @@ MonoBehaviour:
   _exceptions:
   - Environment
   _pathRequirements: []
-  order: 16
+  order: 15
   _customPrefix: Texture_
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 1
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 0
+  _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: Textures
   _absolutePath: 

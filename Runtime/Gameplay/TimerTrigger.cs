@@ -6,8 +6,8 @@ namespace GiantSword
 {
     public class TimerTrigger : MonoBehaviour
     {
-        [SerializeField] private SmartFloat _duration = 1f;
-        [SerializeField] private SmartFloat _durationRandom = 0f;
+        [SerializeField] private SmartFloat _duration = new SmartFloat( 1f);
+        [SerializeField] private SmartFloat _durationRandom = new SmartFloat( 0f);
         [SerializeField] private UnityEvent _onElapse;
         [SerializeField] private bool _repeating = false;
         [ShowNonSerializedField] private float _randomizedDuration = 0;

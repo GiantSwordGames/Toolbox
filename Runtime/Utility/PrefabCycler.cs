@@ -1,13 +1,23 @@
 using System;
-using GiantSword;
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-using System.IO;
-#endif
 
-[ExecuteInEditMode]
-public class PrefabCycler : MonoBehaviour
+namespace GiantSword
 {
-   
+    /// <summary>
+    /// Add this to prefab assets you want to be cycleable.
+    /// No runtime logic; used as a marker + inspector UI.
+    /// </summary>
+    [DisallowMultipleComponent]
+    public class PrefabCycler : MonoBehaviour
+    {
+        // Reserved for future options if you want them (e.g., grouping).
+
+        private void OnValidate()
+        {
+            if (ValidationUtility.IsPrefabAsset(this))
+            {
+                // transform.SetSiblingIndex(0);
+            }
+        }
+    }
 }

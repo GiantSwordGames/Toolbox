@@ -19,7 +19,7 @@ namespace GiantSword
 
         [SerializeField] private WrapBehaviour _wrapBehaviour;
         [SerializeField] private SmartFloat _value;
-        [SerializeField] private SmartFloat _max = 100f; 
+        [SerializeField] private SmartFloat _max = new SmartFloat(100); 
         [SerializeField] private Action<float> _onValueChangedAction;
         [SerializeField] private UnityEvent _onValueChanged;
         [SerializeField] private UnityEvent _onValueDecreasedUnclamped;
@@ -36,7 +36,15 @@ namespace GiantSword
 
         public void Start()
         {
-            _max.onValueChanged += onValueChangedAction;
+            _value.onValueChanged += OnValueChanged;
+            _max.onValueChanged += OnValueChanged;
+        }
+
+        private void OnValueChanged(float obj)
+        {
+            _onValueChangedAction?.Invoke(obj);
+            onValueChanged.Invoke();
+
         }
 
         public float value
@@ -45,7 +53,7 @@ namespace GiantSword
             set
             {
                 float previous = _value;
-                _value = value;
+                _value.value = value;
 
                 if (value < previous)
                 {
@@ -54,13 +62,13 @@ namespace GiantSword
                 
                 if(_wrapBehaviour == WrapBehaviour.Clamp)
                 {
-                    _value = Mathf.Clamp(_value, 0, _max.value);
+                    _value.value = Mathf.Clamp(_value, 0, _max.value);
                 }
 
                 if (previous != _value || _fireEventsOnNoChange)
                 {
                     onValueChanged.Invoke();
-                    onValueChangedAction?.Invoke(_value);
+                    _onValueChangedAction?.Invoke(_value);
                     
                     if (_value < previous)
                     {
@@ -83,7 +91,7 @@ namespace GiantSword
                     }
                     if (_wrapBehaviour == WrapBehaviour.Wrap)
                     {
-                        _value = Mathf.Repeat(_value, _max.value);
+                        _value.value = Mathf.Repeat(_value, _max.value);
                     }
 
                   
@@ -95,6 +103,14 @@ namespace GiantSword
                 
             }
         }
+        public float max
+        {
+            get => _max;
+            set
+            {
+                _max.value = value;
+            }
+        }
         
 
         public bool isFull
@@ -103,10 +119,10 @@ namespace GiantSword
         }
 
 
-        public Action<float> onValueChangedAction
+        public event Action<float> onValueChangedAction
         {
-            get => _onValueChangedAction;
-            set => _onValueChangedAction = value;
+            add => _onValueChangedAction += value;
+            remove => _onValueChangedAction -= value;
         }
 
         public UnityEvent onValueChanged => _onValueChanged;
@@ -136,6 +152,12 @@ namespace GiantSword
             return Mathf.InverseLerp(  min, _max, _value);
         }
         
+        public Coroutine IncrementValueTo( float newValue, float duration)
+        {
+            float difference = newValue - value;
+            return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(difference, duration));
+        }
+        
         public Coroutine IncrementValueOverTime( float increment, float duration)
         {
             return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration));
@@ -154,7 +176,7 @@ namespace GiantSword
                 float diff = lerp - lerpPrev;
                 lerpPrev = lerp;
                 value += diff * increment;
-
+Debug.Log(value);
                 yield return null;
             }
 

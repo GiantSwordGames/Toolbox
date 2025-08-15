@@ -75,7 +75,7 @@ namespace GiantSword
         [Button(enabledMode:EButtonEnableMode.Editor)]
         public void GenerateInScene()
         {
-            MenuGenerator[] menuGenerators = FindObjectsByType<MenuGenerator>(FindObjectsSortMode.None);
+            MenuGenerator[] menuGenerators = FindObjectsOfType<MenuGenerator>();
             MenuGenerator menuGenerator =null;
             foreach (MenuGenerator generator in menuGenerators)
             {

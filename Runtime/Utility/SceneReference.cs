@@ -75,6 +75,7 @@ namespace GiantSword
         /// <param name="mode">The scene loading mode to use</param>
         public void Load(LoadSceneMode mode = LoadSceneMode.Single)
         {
+            Debug.Log("Load");
             Assert.IsTrue(IsValid, "Invalid scene");
     
             SceneManager.LoadScene(_sceneName, mode);

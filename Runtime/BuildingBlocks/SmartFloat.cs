@@ -26,43 +26,46 @@ public class SmartFloat
 
     public event Action onPing;
     public event Action<float> onConstantValueChanged;
-    public Action<float> onValueChanged
+    public event Action<float> onValueChanged
     {
-        get
+        add
         {
             switch (_mode)
             {
                 case Mode.Variable:
-                    return _variable.onValueChanged;
+                    _variable.onValueChanged += value;
+                    break;
                 case Mode.MonoFloat:
-                    return _monoFloat.onValueChangedAction;
+                    _monoFloat.onValueChangedAction += value;
+                    break;
                 case Mode.ConfigurationFloat:
-                    return _configurationFloat.onValueChanged;
+                    _configurationFloat.onValueChanged += value;
+                    break;
                 case Mode.Constant:
-                    return onConstantValueChanged;
-                default:
-                    return null;
+                    onConstantValueChanged += value;
+                    break;
             }
         }
-        set
+        remove
         {
             switch (_mode)
             {
                 case Mode.Variable:
-                    _variable.onValueChanged = value;
+                    _variable.onValueChanged -= value;
                     break;
                 case Mode.MonoFloat:
-                    _monoFloat.onValueChangedAction = value;
+                    _monoFloat.onValueChangedAction -= value;
                     break;
                 case Mode.ConfigurationFloat:
-                    _configurationFloat.onValueChanged = value;
+                    _configurationFloat.onValueChanged -= value;
                     break;
                 case Mode.Constant:
-                    onConstantValueChanged = value;
+                    onConstantValueChanged -= value;
                     break;
             }
         }
     }
+
 
     public SmartFloat(Mode mode)
     {
@@ -78,6 +81,19 @@ public class SmartFloat
     private SmartFloat()
     {
     }
+
+    public SmartFloat(float constantValue)
+    {
+        _mode = Mode.Constant;
+        _constantValue = constantValue;
+    }
+    
+    public SmartFloat(int constantValue)
+    {
+        _mode = Mode.Constant;
+        _constantValue = constantValue;
+    }
+
 
     public float value
     {
@@ -109,7 +125,7 @@ public class SmartFloat
                     _constantValue = value;
                     if (!Mathf.Approximately(previous, value))
                     {
-                        onValueChanged?.Invoke(value);
+                        onConstantValueChanged?.Invoke(value);
                     }
                     break;
                 case Mode.Variable:
@@ -175,16 +191,16 @@ public class SmartFloat
         }
     }
 
-    // implicit operator to convert float to SmartFloat
-    public static implicit operator SmartFloat(float value)
-    {
-        return new SmartFloat
-        {
-            _mode = Mode.Constant,
-            _constantValue = value
-        };
-    }
-    
+    // // implicit operator to convert float to SmartFloat
+    // public static implicit operator SmartFloat(float value)
+    // {
+    //     return new SmartFloat
+    //     {
+    //         _mode = Mode.Constant,
+    //         _constantValue = value
+    //     };
+    // }
+    //
     // implicit operator to convert float to SmartFloat
     public static implicit operator SmartFloat(ScriptableFloat scriptableFloat)
     {

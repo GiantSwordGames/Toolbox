@@ -52,7 +52,13 @@ namespace GiantSword
                     var newAsset = ScriptableObject.CreateInstance(type);
                     
                     // Define folder path for asset creation
-                    string folderPath = "Assets/Project/Configurations";
+
+                   
+                    string folderPath =  RuntimeEditorHelper.GetMostCommonDirectoryForAssetType(type);
+                    if (folderPath.IsEmpty())
+                    {
+                        folderPath = "Assets";
+                    }
                     RuntimeEditorHelper.CreateFoldersIfNeeded(folderPath);
 
                     // Use custom prefix if provided

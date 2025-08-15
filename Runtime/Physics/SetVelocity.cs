@@ -10,7 +10,7 @@ namespace GiantSword
         // Update is called once per frame
         void FixedUpdate()
         {
-            _rigidbody.linearVelocity = transform.forward * _speed;
+            _rigidbody.velocity = transform.forward * _speed;
         }
     }
 }

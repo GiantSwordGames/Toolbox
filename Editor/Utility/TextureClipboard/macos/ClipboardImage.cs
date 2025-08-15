@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -28,51 +29,51 @@ namespace GiantSword.ClipboardImagePaste
         {
             TryPasteIntoScene();
         }
-
         private static void TryPasteIntoScene()
         {
             Event e = Event.current;
-            if (e != null)
+            if (e != null && e.type == EventType.KeyDown && e.keyCode == KeyCode.V)
             {
-                if (e.type == EventType.KeyDown)
+                Sprite clipboardSprite = PasteClipboardImage();
+                if (clipboardSprite)
                 {
-                    if (e.keyCode == KeyCode.V)
+                    e.Use();
+                    
+                    // PRIORITY 1: Assign to Selected UI Image (UnityEngine.UI.Image)
+                    foreach (var obj in Selection.gameObjects)
                     {
-                        Sprite clipboardTexture = PasteClipboardImage();
-                        if (clipboardTexture)
+                        Debug.Log(obj);
+                        Image uiImage = obj.GetComponent<Image>();
+                        if (uiImage != null)
                         {
-                            e.Use();
-
-                            GameObject go = new GameObject(clipboardTexture.name);
-                            SpriteRenderer spriteRenderer = go.AddComponent<SpriteRenderer>();
-                            if (clipboardTexture != null)
-                            {
-                                spriteRenderer.sprite = clipboardTexture;
-                            }
-
-                            spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition().WithZ( 0);
-                            Debug.Log(Selection.activeTransform, Selection.activeTransform);
-                            
-                            if (Selection.activeTransform)
-                            {
-                                spriteRenderer.transform.SetParent(Selection.activeTransform);
-                            }
-                            else
-                            {
-                                Collider2D collider2D = Physics2D.OverlapCircle(spriteRenderer.transform.position, 10);
-                                Debug.Log("Collider found: " + collider2D, collider2D);
-
-                                if (collider2D)
-                                {
-                                    EditorSceneManager.MoveGameObjectToScene(spriteRenderer.gameObject, collider2D.transform.root.gameObject.scene);
-                                }
-                            }
-
-
-
-                            Selection.activeObject = spriteRenderer;
+                            Undo.RecordObject(uiImage, "Paste Sprite to UI Image");
+                            uiImage.sprite = clipboardSprite;
+                            Debug.Log("Pasted image assigned to UI Image: " + obj.name, obj);
+                            return; // Exit early, we're done
                         }
                     }
+
+                    // PRIORITY 2: Spawn a SpriteRenderer in Scene View
+                    GameObject go = new GameObject(clipboardSprite.name);
+                    SpriteRenderer spriteRenderer = go.AddComponent<SpriteRenderer>();
+                    spriteRenderer.sprite = clipboardSprite;
+                    spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition().WithZ(0);
+
+                    if (Selection.activeTransform)
+                    {
+                        spriteRenderer.transform.SetParent(Selection.activeTransform);
+                    }
+                    else
+                    {
+                        Collider2D collider2D = Physics2D.OverlapCircle(spriteRenderer.transform.position, 10);
+                        if (collider2D)
+                        {
+                            EditorSceneManager.MoveGameObjectToScene(spriteRenderer.gameObject, collider2D.transform.root.gameObject.scene);
+                        }
+                    }
+
+                    Selection.activeObject = spriteRenderer;
+                    Debug.Log("Pasted image spawned in Scene View as SpriteRenderer", spriteRenderer);
                 }
             }
         }
@@ -87,9 +88,11 @@ namespace GiantSword.ClipboardImagePaste
                 {
                     if (e.keyCode == KeyCode.V)
                     {
-                        if (PasteClipboardImage())
+                        Sprite sprite = PasteClipboardImage();
+                        if (sprite)
                         {
                             e.Use();
+                            RuntimeEditorHelper.SelectAndFocus(sprite);
                         }
                     }
                 }
@@ -128,7 +131,6 @@ namespace GiantSword.ClipboardImagePaste
                 AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
                 result = AssetDatabase.LoadAssetAtPath<Sprite>(texturePath);
                 Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
-                Selection.activeObject = texture2D;
             }
             Debug.Log("Image pasted and saved as Texture2D at: " + texturePath, result);
             return result;

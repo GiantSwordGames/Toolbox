@@ -189,8 +189,8 @@ namespace GiantSword
             joint.SetAngularLimitY(_angularLimitY);
             joint.SetAngularLimitZ(_angularLimitZ);
 
-            rigidbody.linearDamping = _drag;
-            rigidbody.angularDamping = _angularDrag;
+            rigidbody.drag = _drag;
+            rigidbody.angularDrag = _angularDrag;
         }
 
         private void OnDrawGizmosSelected()

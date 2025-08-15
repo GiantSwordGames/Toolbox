@@ -1,4 +1,5 @@
 using System;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace GiantSword
@@ -11,6 +12,18 @@ namespace GiantSword
         public virtual Color primaryColor { get; set; }
         public virtual Color secondary { get; set; }
 
+
+        private void OnValidate()
+        {
+            Refresh();
+        }
+
+        [Button]
+        private void Refresh()
+        {
+            UpdateBar(_value.value);
+        }
+
         public SmartFloat value
         {
             get => _value;
@@ -20,16 +33,30 @@ namespace GiantSword
         private void Start()
         {
             _value.onValueChanged += UpdateBar;
+            Refresh();
+
+        }
+
+        private void OnEnable()
+        {
         }
 
         private void UpdateBar(float value)
         {
-            _primaryBar.localScale = new Vector3( _value.value, 1, 1);
-            _secondaryBar.localScale = new Vector3( _value.value, 1, 1);
+            if (_primaryBar)
+            {
+                _primaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
+            }
+            
+            if (_secondaryBar)
+            {
+                _secondaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
+            }
         }
 
         public void SetValue(float newValue)
         {
+            newValue = Mathf.Clamp01(newValue);
             _value.value = newValue;
             // UpdateBar(newValue);
         }

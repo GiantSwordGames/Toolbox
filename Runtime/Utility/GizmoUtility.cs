@@ -23,34 +23,7 @@ namespace GiantSword
         
        
     
-        public static LineGizmo CreateLineGizmo(Object createdBy = null)
-        {
-            Debug.Log("CreateLineGizmo");
-    
-            LineGizmo line;
-            line = RuntimeEditorHelper.InstantiatePrefabAsset<LineGizmo>("Gizmo_Line");
-            line.transform.SetParent(gizmoParent);
-            line.createdBy = createdBy;
-            return line;
-        }
-    
-    
-        public static void GetArrowGizmo( ref Arrow arrow, Object createdBy = null)
-        {
-            if (arrow == null)
-            {
-                arrow = CreateArrowGizmo(createdBy);
-            }
-        }
-        public static Arrow CreateArrowGizmo(Object createdBy = null)
-        {
-            Arrow _debugArrow = null;
-            // _debugArrow = RuntimeEditorHelper.InstantiatePrefabAsset<Arrow>("Gizmo_Arrow");
-            // _debugArrow.transform.SetParent(gizmoParent);
-            // _debugArrow.createdBy = createdBy;
-            //
-            return _debugArrow;
-        }
+      
         
         /// <summary>
         /// Draws an arrow gizmo that billboards towards the scene camera.
@@ -109,36 +82,35 @@ namespace GiantSword
             // Restore the previous Gizmos color
         }
     
-        /// <summary>
-        /// Draws an arrow gizmo from the start position to the end position that billboards towards the scene camera.
-        /// </summary>
-        /// <param name="startPosition">The starting position of the arrow.</param>
-        /// <param name="endPosition">The ending position of the arrow.</param>
-        /// <param name="color">The color of the arrow.</param>
-        /// <param name="arrowHeadLength">The length of the arrowhead.</param>
-        /// <param name="arrowHeadAngle">The angle of the arrowhead.</param>
-        public static void DrawArrow(Vector3 startPosition, Vector3 endPosition,  float arrowHeadLength = 0.25f,
-            float arrowHeadAngle = 20.0f)
+        public static void DrawArrow(Vector3 startPosition, Vector3 endPosition, float arrowHeadLength = 0.25f,  float arrowPositionPercent = 1.0f)
         {
+            float arrowHeadAngle = 45.0f;
+            arrowPositionPercent = Mathf.Clamp01(arrowPositionPercent);
+
             Vector3 direction = endPosition - startPosition;
-            Gizmos.DrawRay(startPosition, direction);
-    
+            Vector3 arrowPosition = Vector3.Lerp(startPosition, endPosition, arrowPositionPercent);
+
+            // Draw main line from start to arrow position
+            Gizmos.DrawLine(startPosition, arrowPosition);
+
+            // Draw remaining line (optional, if you want the arrowhead to be "on top" of the line)
+            if (arrowPositionPercent < 1.0f)
+                Gizmos.DrawLine(arrowPosition, endPosition);
+
+            // Draw Arrowhead
             Camera sceneCamera = RuntimeEditorHelper.GetSceneCamera();
-            if (sceneCamera != null)
-            {
-                Vector3 cameraPosition = sceneCamera.transform.position;
-                Vector3 toCamera = (cameraPosition - endPosition).normalized;
-    
-                Vector3 right = Quaternion.LookRotation(toCamera) * Quaternion.Euler(0, arrowHeadAngle, 0) *
-                                Vector3.forward;
-                Vector3 left = Quaternion.LookRotation(toCamera) * Quaternion.Euler(0, -arrowHeadAngle, 0) *
-                               Vector3.forward;
-    
-                Gizmos.DrawRay(endPosition, right * arrowHeadLength);
-                Gizmos.DrawRay(endPosition, left * arrowHeadLength);
-            }
+            if (sceneCamera == null)
+                return;
+
+            Vector3 cameraForward = (sceneCamera.transform.position - arrowPosition).normalized;
+            Vector3 sideAxis = Vector3.Cross(direction.normalized, cameraForward).normalized;
+
+            Vector3 right = Quaternion.AngleAxis(arrowHeadAngle, sideAxis) * -direction.normalized;
+            Vector3 left = Quaternion.AngleAxis(-arrowHeadAngle, sideAxis) * -direction.normalized;
+
+            Gizmos.DrawRay(arrowPosition, right * arrowHeadLength);
+            Gizmos.DrawRay(arrowPosition, left * arrowHeadLength);
         }
-        
         public static void DrawCircle(Vector3 center, float radius,  Vector3 axis, int resolution = 32)
         {
             float angle = 0f;

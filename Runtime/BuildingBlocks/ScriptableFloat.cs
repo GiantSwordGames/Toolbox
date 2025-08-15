@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace GiantSword
 {
-    [CreateAssetMenu]
     public class ScriptableFloat : ScriptableObject
     {
         enum Constraints
@@ -44,32 +43,28 @@ namespace GiantSword
             }
         }
         
-        public Action<float> onValueChanged
+        public event Action<float> onValueChanged
         {
-            get
+            add
             {
-                if (RuntimeEditorHelper.IsQuitting)
-                {
-                    return null;
-                }
-                ScriptableFloatManager.GetState(this, out ScriptableFloatManager.State state);
-                return state.onValueChanged;
+                if (RuntimeEditorHelper.IsQuitting) return;
+                ScriptableFloatManager.GetState(this, out var state);
+                state.onValueChanged += value;
             }
-            set
+            remove
             {
-                if (RuntimeEditorHelper.IsQuitting)
-                {
-                    return;
-                }
-                
-                ScriptableFloatManager.GetState(this, out ScriptableFloatManager.State state);
-                state.onValueChanged = value;
-                
-                // if (_logEventRegistration)
-                // {
-                        // Debug.Log("_logEventRegistration" , this);
-                // }
+                if (RuntimeEditorHelper.IsQuitting) return;
+                ScriptableFloatManager.GetState(this, out var state);
+                state.onValueChanged -= value;
             }
+        }
+
+// Helper to fire it
+        public void RaiseOnValueChanged(float v)
+        {
+            if (RuntimeEditorHelper.IsQuitting) return;
+            ScriptableFloatManager.GetState(this, out var state);
+            state.onValueChanged?.Invoke(v);
         }
 
 
@@ -104,7 +99,8 @@ namespace GiantSword
                     trackedValue = newValue;
                     if (Application.isPlaying)
                     {
-                        onValueChanged?.Invoke(trackedValue);
+                        RaiseOnValueChanged(trackedValue);
+                        // onValueChanged?.Invoke(trackedValue);
                     }
                 }
             }
@@ -142,12 +138,12 @@ namespace GiantSword
             return value + "";
         }
         
-        public Coroutine IncrementValueOverTime( float increment, float duration, SoundAsset sound = null)
+        public Coroutine IncrementValueOverTime( float increment, float duration)
         {
-            return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration,sound));
+            return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration));
         }
     
-        private IEnumerator IEIncrementValueOverTime(float increment, float duration, SoundAsset sound)
+        private IEnumerator IEIncrementValueOverTime(float increment, float duration)
         {
             float startTime = Time.time;
             float endTime = startTime + duration;
@@ -161,7 +157,6 @@ namespace GiantSword
                 float diff = lerp - lerpPrev;
                 lerpPrev = lerp;
                 value += diff * increment;
-                sound?.Play();
                 yield return null;
             }
 

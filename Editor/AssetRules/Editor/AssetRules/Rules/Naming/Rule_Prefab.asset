@@ -13,22 +13,24 @@ MonoBehaviour:
   m_Name: Rule_Prefab
   m_EditorClassIdentifier: 
   _enabled: 1
-  _example: {fileID: 2599034425568005952, guid: f56a617271e505940843aee32fe8af5d, type: 3}
+  _example: {fileID: 2599034425568005952, guid: f56a617271e505940843aee32fe8af5d,
+    type: 3}
   _test: {fileID: 2599034425568005952, guid: f56a617271e505940843aee32fe8af5d, type: 3}
   _pathTest: 
   _exceptions:
   - Transition_
   _pathRequirements: []
   order: 14
-  _customPrefix: Prefab_
+  _customPrefix: 
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 1
   _capitalize: 1
   _replaceSpacesWithUnderscores: 0
   _removeHyphens: 1
+  _removeNonAlphaNumericCharacters: 1
   _includeGrandparentInName: 0
-  _parentFolder: Prefabs
+  _parentFolder: 
   _absolutePath: 
   _regexReplaceFromName:
   - description: 

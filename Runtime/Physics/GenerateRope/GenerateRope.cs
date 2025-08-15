@@ -78,7 +78,7 @@ public class GenerateRope : MonoBehaviour
         if (rigidbody)
         {
             rigidbody.mass = _configuration.segmentMass;
-            rigidbody.linearDamping = _configuration.segmentDrag;
+            rigidbody.drag = _configuration.segmentDrag;
         }
 
         if (configurableJoint)

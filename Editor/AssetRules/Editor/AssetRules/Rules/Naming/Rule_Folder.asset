@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 254434f570eb40945b5525fdf71c4501, type: 3}
   m_Name: Rule_Folder
   m_EditorClassIdentifier: 
-  _enabled: 1
+  _enabled: 0
   _example: {fileID: 102900000, guid: ca5837889b949cb489cdda7b0b77547f, type: 3}
   _test: {fileID: 102900000, guid: 22735b5f059e34d67849099928629fd0, type: 3}
   _pathTest: 
@@ -24,7 +24,10 @@ MonoBehaviour:
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 1
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 0
+  _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: 
   _absolutePath: 

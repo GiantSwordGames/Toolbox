@@ -435,7 +435,7 @@ namespace GiantSword.AssetRules
                 var ruleResult = selectedResults[i];
                 EditorUtility.DisplayProgressBar("Renaming",
                     ruleResult.oldPath + " -> " + ruleResult.newPath,
-                    (selectedResults.Count - i) / (float)selectedResults.Count);
+                    ( i) / (float)selectedResults.Count);
 
                 if (Fix(ruleResult))
                 {

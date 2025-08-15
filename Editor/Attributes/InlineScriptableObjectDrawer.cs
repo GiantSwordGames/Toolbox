@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [CustomPropertyDrawer(typeof(InlineScriptableObjectAttribute))]
 public class InlineScriptableObjectDrawer : PropertyDrawer
 {
-    private static readonly Dictionary<string, bool> foldouts = new();
+    private static readonly Dictionary<string, bool> foldouts = new Dictionary<string, bool>();
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
@@ -59,7 +59,7 @@ public class InlineScriptableObjectDrawer : PropertyDrawer
         float backgroundY = y;
         float backgroundHeight = 0f;
 
-        List<(SerializedProperty, float)> propsToDraw = new();
+        List<(SerializedProperty, float)> propsToDraw = new List<(SerializedProperty, float)>();
 
         if (iterator.NextVisible(true))
         {

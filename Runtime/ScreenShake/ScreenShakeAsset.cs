@@ -46,6 +46,7 @@ namespace GiantSword
 
         [SerializeField] private Oscillator _positionOscillator = new Oscillator(16, 1, new Vector3(1, 2, 0), new Vector3(1, 1, 0));
         [SerializeField] private Oscillator _rotationOscillator = new Oscillator(1, 0, new Vector3(0, 0, 1), new Vector3(0, 0, 1));
+        [SerializeField] private Oscillator _scaleOscillator = new Oscillator(1, 0, new Vector3(0, 0, 1), new Vector3(1, 1, 0));
         private Coroutine _repeatRoutine;
         
         [SerializeField] TimeScale _timeScale = TimeScale.Scaled;
@@ -58,20 +59,24 @@ namespace GiantSword
             return  EvaluateOscillator(_positionOscillator, time);
         }
 
+        public Vector3 EvaluateRotation(float time)
+        {
+            return  EvaluateOscillator(_rotationOscillator, time);
+        }
+        public Vector3 EvaluateScale(float time)
+        {
+            return  EvaluateOscillator(_scaleOscillator, time);
+        }
         private Vector3 EvaluateOscillator(Oscillator oscillator, float time)
         {
             Vector3 result = Vector3.zero;
             result += oscillator.Evaluate(time*_frequency);
             result *= _amplitude;
             result *= _decay.Evaluate(Mathf.Clamp01(time / _duration));
+            Debug.Log($"Evaluating Oscillator at time {time}: {result} with frequency {_frequency} and amplitude {_amplitude}");
             return result;
         }
 
-        public Vector3 EvaluateRotation(float time)
-        {
-            return  EvaluateOscillator(_rotationOscillator, time);
-        }
-        
         [Button(enabledMode: EButtonEnableMode.Playmode)]
         public void Trigger()
         {

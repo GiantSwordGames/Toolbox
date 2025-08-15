@@ -108,5 +108,10 @@ namespace GiantSword
             float normalizedValue = HoursToSeconds(_hours)/SECONDS_IN_A_DAY;
             return normalizedValue;
         }
+
+        public static void ResetTimeScale()
+        {
+            Time.timeScale = 1;
+        }
     }
 }

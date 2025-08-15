@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -9,6 +11,184 @@ namespace GiantSword
 {
     public static class ContextExtensions
     {
+        [MenuItem("CONTEXT/Transform/Set Y to Zero")]
+        private static void SetYToZero(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            children = System.Array.FindAll(children, t => t != parent);
+
+            if (children.Length == 0)
+            {
+                Debug.LogWarning("No children found to center on.");
+                return;
+            }
+
+
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+
+            Vector3 originalPosition = parent.position;
+
+            parent.localPosition = parent.localPosition.WithY(0);
+
+            Vector3 delta = parent.position - originalPosition;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position -= delta;
+            }
+        }
+
+
+
+        [MenuItem("CONTEXT/Transform/Zero Position")]
+        private static void ZeroPosition(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            children = System.Array.FindAll(children, t => t != parent);
+
+            if (children.Length == 0)
+            {
+                Debug.LogWarning("No children found to center on.");
+                return;
+            }
+
+           
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            
+            Vector3 originalPosition = parent.position;
+
+            parent.localPosition = Vector3.zero;
+            
+            Vector3 delta = parent.position - originalPosition;
+            // parent.position -= delta;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position -= delta;
+            }
+
+        }
+        
+        [MenuItem("CONTEXT/Transform/Center On Children")]
+        private static void CenterOnChildren(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            children = System.Array.FindAll(children, t => t != parent);
+
+            if (children.Length == 0)
+            {
+                Debug.LogWarning("No children found to center on.");
+                return;
+            }
+
+            Vector3 center = Vector3.zero;
+            foreach (Transform child in children)
+            {
+                center += child.position;
+            }
+            center /= children.Length;
+
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            Vector3 delta = parent.position - center;
+            parent.position -= delta;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position += delta;
+            }
+
+            Debug.Log($"Centered '{parent.name}' on its children.");
+        }
+        [MenuItem("CONTEXT/Transform/Normalize Scale")]
+        private static void NormalizeScale(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            children = System.Array.FindAll(children, t => t != parent);
+
+            // Save world matrices of children
+            Matrix4x4[] childWorldMatrices = new Matrix4x4[children.Length];
+            for (int i = 0; i < children.Length; i++)
+            {
+                childWorldMatrices[i] = children[i].localToWorldMatrix;
+                RuntimeEditorHelper.RecordObjectUndo(children[i]);
+            }
+
+            // Normalize parent's scale
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            parent.localScale = Vector3.one;
+
+            // Re-apply each child's world matrix
+            for (int i = 0; i < children.Length; i++)
+            {
+                Matrix4x4 worldMatrix = childWorldMatrices[i];
+                Matrix4x4 parentWorldToLocal = parent.worldToLocalMatrix;
+                Matrix4x4 newLocalMatrix = parentWorldToLocal * worldMatrix;
+
+                // Decompose the new local matrix
+                Vector3 pos = newLocalMatrix.GetColumn(3);
+                Vector3 forward = newLocalMatrix.GetColumn(2);
+                Vector3 upwards = newLocalMatrix.GetColumn(1);
+                Vector3 scale = new Vector3(
+                    newLocalMatrix.GetColumn(0).magnitude,
+                    newLocalMatrix.GetColumn(1).magnitude,
+                    newLocalMatrix.GetColumn(2).magnitude
+                );
+                Quaternion rot = Quaternion.LookRotation(forward, upwards);
+
+                children[i].localPosition = pos;
+                children[i].localRotation = rot;
+                children[i].localScale = scale;
+            }
+        }
+
+        [MenuItem("CONTEXT/Transform/Normalize Rotation")]
+        private static void NormalizeRotation(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            children = System.Array.FindAll(children, t => t != parent);
+
+            // Save world matrices of children
+            Matrix4x4[] childWorldMatrices = new Matrix4x4[children.Length];
+            for (int i = 0; i < children.Length; i++)
+            {
+                childWorldMatrices[i] = children[i].localToWorldMatrix;
+                RuntimeEditorHelper.RecordObjectUndo(children[i]);
+            }
+
+            // Normalize parent's rotation
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            parent.localRotation = Quaternion.identity;
+
+            // Re-apply each child's world matrix
+            for (int i = 0; i < children.Length; i++)
+            {
+                Matrix4x4 worldMatrix = childWorldMatrices[i];
+                Matrix4x4 parentWorldToLocal = parent.worldToLocalMatrix;
+                Matrix4x4 newLocalMatrix = parentWorldToLocal * worldMatrix;
+
+                // Decompose the new local matrix
+                Vector3 pos = newLocalMatrix.GetColumn(3);
+                Vector3 forward = newLocalMatrix.GetColumn(2);
+                Vector3 upwards = newLocalMatrix.GetColumn(1);
+                Vector3 scale = new Vector3(
+                    newLocalMatrix.GetColumn(0).magnitude,
+                    newLocalMatrix.GetColumn(1).magnitude,
+                    newLocalMatrix.GetColumn(2).magnitude
+                );
+                Quaternion rot = Quaternion.LookRotation(forward, upwards);
+
+                children[i].localPosition = pos;
+                children[i].localRotation = rot;
+                children[i].localScale = scale;
+            }
+        }
+            
+        
         [MenuItem("CONTEXT/Transform/Reverse Child Order")]
         private static void ReverseChildOrder(MenuCommand command)
         {
@@ -32,10 +212,14 @@ namespace GiantSword
             Debug.Log($"Reversed child order of '{parent.name}'");
         }
 
+        [MenuItem("CONTEXT/ParticleSystem/Assign Duplicate Material")]
+        [MenuItem("CONTEXT/SkinnedMeshRenderer/Assign Duplicate Material")]
         [MenuItem("CONTEXT/MeshRenderer/Assign Duplicate Material")]
+        [MenuItem("CONTEXT/TrailRenderer/Assign Duplicate Material")]
+        [MenuItem("CONTEXT/LineRenderer/Assign Duplicate Material")]
         static void DuplicateAndAssignMaterial(MenuCommand command)
         {
-            MeshRenderer meshRenderer = (MeshRenderer)command.context;
+            Renderer meshRenderer = (Renderer)command.context;
 
             if (meshRenderer != null && meshRenderer.sharedMaterial != null)
             {
@@ -47,8 +231,9 @@ namespace GiantSword
                 string originalPath = AssetDatabase.GetAssetPath(originalMaterial);
                 string directory = Path.GetDirectoryName(originalPath);
 
-                string name = "Material_" + meshRenderer.name + "_Duplicate.mat";
-                if (directory.Contains("com.unity"))
+                Debug.Log(directory);
+                string name = "M_" + meshRenderer.name + "2.mat";
+                if (directory.Contains("com.unity") || directory == "Resources")
                 {
                     directory = "Assets/Project/Materials";
                 }
@@ -68,7 +253,7 @@ namespace GiantSword
                 meshRenderer.sharedMaterial = duplicatedMaterial;
 
                 // Set the duplicated material as the active object in the selection
-                Selection.activeObject = duplicatedMaterial;
+                // Selection.activeObject = duplicatedMaterial;
             }
         }
 
@@ -114,11 +299,61 @@ namespace GiantSword
             MonoBehaviour monoBehaviour = (MonoBehaviour)command.context;
             if (monoBehaviour != null)
             {
+                RuntimeEditorHelper.RecordObjectUndo(monoBehaviour.gameObject);
                 string newName = monoBehaviour.GetType().Name;
                 monoBehaviour.gameObject.name = newName;
             }
         }
+
+        [MenuItem("GameObject/Rename Instance to Prefab Name", false, -9)]
+        private static void RenameInstanceToPrefabName()
+        {
+            foreach (GameObject gameObject in Selection.gameObjects)
+            {
+                if (ValidationUtility.IsPrefabAsset(gameObject) == false)
+                {
+                    // Get the prefab asset
+                    GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+                    if (prefabAsset != null)
+                    {
+                        // Get the name of the prefab asset
+                        string prefabName = prefabAsset.name;
+
+                        // Record undo for the game object
+                        RuntimeEditorHelper.RecordObjectUndo(gameObject);
+
+                        // Rename the game object to match the prefab name
+                        gameObject.name = prefabName;
+                    }
+                    
+                }
+            }
+            
+        }
+        [MenuItem("CONTEXT/TextMeshProUGUI/Name GameObject To Match Text")]
+        public static void NameGameObjectToMatchUGUIText(MenuCommand command)
+        {
+            TextMeshProUGUI textMeshProUGUI = (TextMeshProUGUI)command.context;
+            if (textMeshProUGUI != null)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(textMeshProUGUI.gameObject);
+                string newName = textMeshProUGUI.text;
+                textMeshProUGUI.gameObject.name = newName;
+            }
+        }
         
+        [MenuItem("CONTEXT/TextMeshPro/Name GameObject To Match Text")]
+        public static void NameGameObjectToMatchText(MenuCommand command)
+        {
+            TextMeshPro textMeshProUGUI = (TextMeshPro)command.context;
+            if (textMeshProUGUI != null)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(textMeshProUGUI.gameObject);
+                string newName = textMeshProUGUI.text;
+                textMeshProUGUI.gameObject.name = newName;
+            }
+        }
+
         [MenuItem("CONTEXT/SpriteRenderer/Rename Sprite To Match Game Object")]
         public static void RenameSpriteToMatchGameObject(MenuCommand command)
         {
@@ -144,7 +379,13 @@ namespace GiantSword
                 RuntimeEditorHelper.AddToSelection( spriteRenderer.sprite.texture);
             }
         } 
-        
+           
+        [MenuItem("GameObject/Set As First Sibling", false, 18)]
+        public static void SetAsFirstSibling(MenuCommand command)
+        {
+            Undo.RecordObject(Selection.activeGameObject.transform, "Set As First Sibling");
+            Selection.activeGameObject.transform.SetSiblingIndex(0);
+        }
         
         [MenuItem("CONTEXT/Transform/Deparent")]
         public static void Deparent(MenuCommand command)

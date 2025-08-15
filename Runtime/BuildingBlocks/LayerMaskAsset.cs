@@ -2,6 +2,18 @@ using UnityEngine;
 
 namespace GiantSword
 {
+    public static class LayermaskUtility 
+    {
+        public static int NullSafe(this LayermaskAsset layermaskAsset)
+        {
+            if (layermaskAsset == null)
+            {
+                return 1;
+            }
+            return layermaskAsset.value;
+        }
+    }
+    
     public class LayermaskAsset : ScriptableObject
     {
         [SerializeField] private LayerMask _layerMasks;
@@ -12,6 +24,10 @@ namespace GiantSword
         // implicit operator
         public static implicit operator int(LayermaskAsset layermaskAsset)
         {
+            if(layermaskAsset == null)
+            {
+                return 1; // Default layer mask value if null
+            }
             return layermaskAsset.layerMask;
         }
         public static implicit operator bool(LayermaskAsset layermaskAsset)
@@ -55,6 +71,22 @@ namespace GiantSword
         public Collider2D[] OverlapCircleAll2D(Vector3 position, float raduis)
         {
             return Physics2D.OverlapCircleAll(position, raduis, layerMask.value);
+        }
+
+        public void Raycast(Ray ray, out RaycastHit hit)
+        {
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask.value) == false)
+            {
+                hit = default;
+            }
+        }
+        
+        public void SphereCast(Ray ray, float thickness, out RaycastHit hit)
+        {
+            if (Physics.SphereCast(ray, thickness, out hit, Mathf.Infinity, layerMask.value) == false)
+            {
+                hit = default;
+            }
         }
     }
 }

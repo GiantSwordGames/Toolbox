@@ -9,7 +9,8 @@ namespace GiantSword
         public enum Type
         {
             Scale,
-            Position
+            Position,
+            Rotation
         }
 
         public enum State
@@ -43,6 +44,12 @@ namespace GiantSword
             {
                 function = ApplyToPosition;
             }
+            else if (type== Type.Rotation)
+            {
+                function = ApplyToRotation;
+            }
+            
+            
             _routine = AsyncHelper.StartCoroutine(Apply(asset.delay, asset.amplitudeVector, asset.oscilations, asset.duration, function));
         }
 
@@ -62,7 +69,11 @@ namespace GiantSword
                 AsyncHelper.StopRoutine(_routine);
                 _routine = null;
             }
+
+            if (_transform)
+            {
             _transform.localScale -= _offset;
+            }
             _offset = Vector3.zero;
 
             _state = State.Killed;
@@ -71,6 +82,11 @@ namespace GiantSword
         
         private void ApplyToScale(Vector3 value)
         {
+            if (_transform == null)
+            {
+                Kill();
+                return;
+            }
             _transform.localScale += value;
         }
         
@@ -78,6 +94,12 @@ namespace GiantSword
         {
             _transform.localPosition += value;
         }
+        
+        private void ApplyToRotation(Vector3 value)
+        {
+            _transform.localRotation *= Quaternion.Euler(value);
+        }
+
        
         private  IEnumerator Apply( float delay,  Vector3 amplitude, int oscillations, float duration, Action<Vector3> function)
         {

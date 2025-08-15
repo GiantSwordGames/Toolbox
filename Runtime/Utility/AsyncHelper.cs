@@ -89,23 +89,34 @@ namespace GiantSword
             action?.Invoke();
         }
 
-        public static void Lerp( float duration, Action<float> lerpFunction)
+        public static Coroutine LerpUnscaled( float duration, Action<float> lerpFunction)
         {
-            SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction));
+            return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Unscaled));
         }
         
-        private static IEnumerator IELerp( float duration, Action<float> lerpFunction)
+        public static Coroutine Lerp( float duration, Action<float> lerpFunction)
+        {
+            return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Scaled));
+        }
+        
+        private static IEnumerator IELerp( float duration, Action<float> lerpFunction, TimeScale scale)
         {
             float timer = 0;
             while (timer < duration)
             {
-                timer += Time.deltaTime;
+                timer += TimeHelper.GetDeltaTime(scale);
                 float lerp = timer / duration;
                 lerp = Mathf.Clamp01(lerp);
                 lerpFunction(lerp);
                 yield return null;
             }
             lerpFunction(1);
+        }
+
+        public static void Flash(float duration, GameObject gameObject)
+        {
+            gameObject.SetActive(true);
+            AsyncHelper.Delay(duration, () => gameObject.SetActive(false));
         }
     }
 }

@@ -7,10 +7,14 @@ namespace GiantSword
     [CustomPropertyDrawer(typeof(ScriptableBool))]
     public  class BoolAssetDrawerBase : PropertyDrawer
     {
-        private string fallbackPath => "Assets/Project/Configurations";
+        private string fallbackPath =>  MenuPaths.CONFIGURATIONS_PATH;
 
         protected  bool GetValue( SerializedProperty property)
         {
+            if(property.objectReferenceValue == null)
+            {
+                return false;
+            }
             var targetObject = property.objectReferenceValue as ScriptableBool;
             if (targetObject != null)
             {
@@ -58,7 +62,8 @@ namespace GiantSword
             {
                 // Allow editing the float value
                 EditorGUI.BeginChangeCheck();
-                bool currentValue = GetValue(property);
+                bool currentValue = false;
+                currentValue = GetValue(property);
                 bool newValue = EditorGUI.Toggle(valueRect, currentValue);
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -80,7 +85,9 @@ namespace GiantSword
                     {
                         folderPath = fallbackPath;
                     }
+                    RuntimeEditorHelper.CreateFoldersIfNeeded(folderPath);
 
+                    Debug.Log(folderPath);
                     string assetName = typeof(ScriptableBool).Name + "_" + label.text;
                     string newPath = folderPath + "/" + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);

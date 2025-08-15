@@ -12,7 +12,6 @@ namespace GiantSword
         [SerializeField] bool _restartLevel;
         [SerializeField] bool _goToNextLevelInBuildSettings;
         [SerializeField] private Level _level;
-        [SerializeField] private TransitionWithAnimation _transition;
         [SerializeField] private TransitionBase _transitionBase;
         [SerializeField] private float _delay = 0;
 
@@ -23,10 +22,7 @@ namespace GiantSword
         }
         public IEnumerator IETrigger()
         {
-            if (_transition)
-            {
-                _transitionBase = _transition;
-            }
+        
             if (_delay > 0)
             {
                 yield return new WaitForSecondsRealtime(_delay);

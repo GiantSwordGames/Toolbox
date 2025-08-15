@@ -17,7 +17,6 @@
             [Space] [SerializeField] private bool _drawArrow = true;
             [SerializeField] private float _intendedForceRange = 1;
             [SerializeField] private Vector3 _arrowOffset;
-            [SerializeField] private Arrow _debugArrow;
             private float _lerp = 1;
 
             public Vector3 force
@@ -43,28 +42,8 @@
 
             private void LateUpdate()
             {
-                UpdateArrow();
             }
 
-            void UpdateArrow()
-            {
-                if (_debugArrow == null)
-                {
-                    _debugArrow = GizmoUtility.CreateArrowGizmo(this);
-                    _debugArrow.transform.SetParent(transform);
-                }
-
-                if (force.magnitude != 0)
-                {
-                    _debugArrow.transform.forward = force * Mathf.Sign(force.magnitude);
-                }
-
-                _debugArrow.length = Mathf.Abs(force.magnitude) * _multiplier / _intendedForceRange;
-                _debugArrow.transform.position = transform.position + _arrowOffset;
-
-                _debugArrow.gameObject.SetActive(_drawArrow);
-
-            }
 
 
             public void Poke()

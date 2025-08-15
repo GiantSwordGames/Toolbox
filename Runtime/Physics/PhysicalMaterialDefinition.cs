@@ -9,7 +9,7 @@ namespace GiantSword
         [FormerlySerializedAs("_density")] [SerializeField] private float _scienitifDensity = 1;
         [SerializeField] private float _densityMultiplierForGameFeel = 1;
         [SerializeField] private TagAsset _tag;
-        [SerializeField] private PhysicsMaterial _physicMaterial;
+        [SerializeField] private PhysicMaterial _physicMaterial;
 
         // [SerializeField] private SoundBank[] _knockSounds;
         // [SerializeField] private SoundBank[] _impactSounds;
@@ -18,7 +18,7 @@ namespace GiantSword
         
         [ShowNativeProperty] public float density => _scienitifDensity*_densityMultiplierForGameFeel;
 
-        public PhysicsMaterial physicMaterial => _physicMaterial;
+        public PhysicMaterial physicMaterial => _physicMaterial;
 
         [Button]
         private void RefreshAllInScene()

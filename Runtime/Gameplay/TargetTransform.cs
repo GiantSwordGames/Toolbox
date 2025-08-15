@@ -11,7 +11,6 @@ namespace GiantSword
         {
             Self, 
             Other, 
-            Player
         }
 
         [SerializeField] private Mode _mode;
@@ -35,10 +34,7 @@ namespace GiantSword
                         return _self;
                     case Mode.Other:
                         return _otherTransform;
-                    case Mode.Player:
-                    {
-                        return Player.instance.bodyTransform;
-                    }
+                  
                         return null;
                 }
 

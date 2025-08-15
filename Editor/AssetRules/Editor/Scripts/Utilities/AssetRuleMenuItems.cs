@@ -13,7 +13,7 @@ namespace GiantSword.AssetRules
         public const string ASSET_MENU_PATH = MenuPaths.CREATE_ASSET_MENU + "/Rules/Asset Rules";
         public const string ASSETS_MENU_PATH = "Assets";
 
-        [MenuItem("Assets/Check Naming Conventions", false, 18)]
+        [MenuItem("Assets/Check Naming Conventions", false, 112)]
         private static void SearchForCrimes()
         {
             List<RuleResult> results = new List<RuleResult>();

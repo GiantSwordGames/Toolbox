@@ -9,7 +9,7 @@ public class InputEvent : MonoBehaviour
 {
     [SerializeField] private UnityEvent _onPressed;
     [SerializeField]  [FormerlySerializedAs("inputAction")] private InputActionReference _inputAction;
-    [SerializeField] private InputKeyAsset _asset;
+    // [SerializeField] private InputKeyAsset _asset;
     [SerializeField] KeyCode _keyCode = KeyCode.None;
     [SerializeField] bool _skipFirstFrame = false;
     [SerializeField] float _acceptDelayAfterAppearing = -1f;
@@ -65,11 +65,11 @@ public class InputEvent : MonoBehaviour
 
         }
 
-        if (_asset.IsDown())
-        {
-            Trigger();
-            return;
-        }
+        // if (_asset.IsDown())
+        // {
+        //     Trigger();
+        //     return;
+        // }
     }
 
     private void Trigger()

@@ -44,10 +44,6 @@ namespace GiantSword
                     // Display Other Transform field
                     EditorGUI.PropertyField(transformRect, otherTransformProperty, GUIContent.none);
                     break;
-                case TargetTransform.Mode.Player:
-                    // Show Player as a label/placeholder
-                    EditorGUI.LabelField(transformRect, "Player");
-                    break;
             }
 
             EditorGUI.EndProperty();

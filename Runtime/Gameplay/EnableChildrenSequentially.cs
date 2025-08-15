@@ -10,7 +10,7 @@ namespace GiantSword
         [SerializeField] Transform _parent;
         [SerializeField] bool _randomizeOrder =false;
         [SerializeField] float _floatInterval = 0.1f;
-        [SerializeField] SmartFloat _maxCount = 1000000;
+        [SerializeField] SmartFloat _maxCount = new SmartFloat( 1000000);
 
         [SerializeField] private UnityEvent _onComplete;
         void Start()

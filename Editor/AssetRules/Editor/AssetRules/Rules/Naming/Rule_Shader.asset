@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a595fc0efdd24b57bbf7964096c42c5c, type: 3}
   m_Name: Rule_Shader
   m_EditorClassIdentifier: 
-  _enabled: 1
+  _enabled: 0
   _example: {fileID: 4800000, guid: 4eaa4f9e5dfc17d4d829fbb0a3384705, type: 3}
   _test: {fileID: 4800000, guid: 4eaa4f9e5dfc17d4d829fbb0a3384705, type: 3}
   _pathTest: 
@@ -20,12 +20,15 @@ MonoBehaviour:
   - Assets/Silverlake/System/
   _pathRequirements:
   - Assets/Silverlake/
-  order: 12
+  order: 7
   _customPrefix: Shader_
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 0
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
+  _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: Shaders
   _absolutePath: Assets/Silverlake/Shaders/

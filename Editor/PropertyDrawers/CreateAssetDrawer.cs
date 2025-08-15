@@ -27,7 +27,8 @@ namespace GiantSword
                     string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<T>();
                     if (folderPath == "")
                     {
-                        folderPath = "Assets/Project/Configurations";
+                      
+                        folderPath = MenuPaths.CONFIGURATIONS_PATH;
                     }
 
 

@@ -154,13 +154,6 @@ namespace GiantSword
 #endif
                 }
 
-                public static void ClearDirty(Object target)
-                {
-#if UNITY_EDITOR
-                        if (target)
-                                EditorUtility.ClearDirty(target);
-#endif
-                }
 
                 public static void SelectAndFocus(Object selection)
                 {
@@ -207,7 +200,11 @@ namespace GiantSword
 #if UNITY_EDITOR
                 public static string GetMostCommonDirectoryForAssetType<T>() where T : Object
                 {
-                        List<T> findAssetsOfType = RuntimeEditorHelper.FindAssetsOfType<T>();
+                        return GetMostCommonDirectoryForAssetType(typeof(T));
+                }
+                public static string GetMostCommonDirectoryForAssetType(Type type)
+                {
+                        List<Object> findAssetsOfType = RuntimeEditorHelper.FindAssetsOfType(type);
                         Dictionary<string, int> directoryPolpularity = new Dictionary<string, int>();
 
                         foreach (var asset in findAssetsOfType)
@@ -271,7 +268,7 @@ namespace GiantSword
                 public static List<T> FindObjectsOfType<T>() where T : Component
                 {
                         List<T> results = new List<T>();
-                        for (int i = 0; i < SceneManager.loadedSceneCount; i++)
+                        for (int i = 0; i < SceneManager.sceneCount; i++)
                         {
                                 Scene scene = EditorSceneManager.GetSceneAt(i);
                                 results.AddRange(scene.GetRootGameObjects().GetComponentsInChildren<T>());
@@ -308,7 +305,7 @@ namespace GiantSword
                 public static void PingSelection()
                 {
 #if UNITY_EDITOR
-                        for (var i = 0; i < Selection.count; i++) EditorGUIUtility.PingObject(Selection.objects[i]);
+                        for (var i = 0; i < Selection.objects.Length; i++) EditorGUIUtility.PingObject(Selection.objects[i]);
 #endif
                 }
 
@@ -536,7 +533,7 @@ namespace GiantSword
                 {
 
 #if UNITY_EDITOR
-                        Undo.SetTransformParent(transform, newParent, worldPositionStays, name);
+                        Undo.SetTransformParent(transform, newParent, name);
 #endif
                 }
 
@@ -554,6 +551,21 @@ namespace GiantSword
                         return list;
                 }
 
+                
+                public static List<Object> FindAssetsOfType(Type type) 
+                {
+                        var list = new List<Object>();
+
+#if UNITY_EDITOR
+                        var guids = AssetDatabase.FindAssets($"t:{type.Name}");
+
+                        foreach (var guid in guids)
+                                list.Add(AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), type));
+#endif
+
+                        return list;
+                }
+                
                 public static T FindAsset<T>() where T : Object
                 {
 #if UNITY_EDITOR
@@ -741,23 +753,6 @@ namespace GiantSword
 #endif
                 }
 
-                public static void SetGameObjectIcon(GameObject gameObject, string iconName)
-                {
-#if UNITY_EDITOR
-                        var texture2D = EditorGUIUtility.GetIconForObject(gameObject);
-                        string currentName = "";
-                        if (texture2D)
-                        {
-                                currentName = texture2D.name;
-                        }
-
-                        if (currentName.Equals(iconName) == false)
-                        {
-                                var iconContent = EditorGUIUtility.IconContent(iconName);
-                                EditorGUIUtility.SetIconForObject(gameObject, (Texture2D)iconContent.image);
-                        }
-#endif
-                }
 
                 public static Camera GetSceneCamera()
                 {
@@ -812,6 +807,23 @@ namespace GiantSword
                 public static void ReloadCurrentScene()
                 {
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
+
+                public static void RenameToMatchPrefab(GameObject gameObject)
+                {
+#if UNITY_EDITOR
+                        GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+                        if (prefab != null)
+                        {
+                                string newName = prefab.name;
+                                RuntimeEditorHelper.RecordObjectUndo(gameObject);
+                                gameObject.name = newName;
+                        }
+                        else
+                        {
+                                Debug.LogWarning("No corresponding prefab found for " + gameObject.name);
+                        }
+#endif
                 }
         }
 }

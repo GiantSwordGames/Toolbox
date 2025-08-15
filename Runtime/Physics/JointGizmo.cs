@@ -7,7 +7,6 @@ namespace GiantSword
     public class JointGizmo : MonoBehaviour
     {
          private Joint _joint;
-        [SerializeField] private LineGizmo _lineGizmo;
         [SerializeField] private float _gizmoScale = 1f;
         [SerializeField] private Vector3 _offset;
     
@@ -27,10 +26,6 @@ namespace GiantSword
                 enabled = false;
                 return;
             }
-            if (_lineGizmo == null)
-            {
-                // _lineGizmo = GizmoUtility.CreateLineGizmo(this);
-            }
     
             Vector3 connectedAnchorPosition;
                 if (_joint.connectedBody != null)
@@ -48,10 +43,6 @@ namespace GiantSword
                 Vector3 anchorPosition = transform.TransformPoint(_joint.anchor);
     
     
-                _lineGizmo.start = anchorPosition + _offset;
-                _lineGizmo.end = connectedAnchorPosition +_offset;
-                _lineGizmo.scale = _gizmoScale;
-                // Set the gizmo color
     
         }
     

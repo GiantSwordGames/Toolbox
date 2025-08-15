@@ -26,6 +26,7 @@ namespace GiantSword.AssetRules
         [SerializeField] protected bool _capitalize = true;
         [SerializeField] protected bool _replaceSpacesWithUnderscores = true;
         [SerializeField] protected bool _removeHyphens = true;
+        [FormerlySerializedAs("_removeParenthesis")] [SerializeField] protected bool _removeNonAlphaNumericCharacters = true;
      
         [Tooltip("Specifically for environment folder assets that need to include there super category in there name")]
         [SerializeField] protected bool _includeGrandparentInName = false;
@@ -197,12 +198,15 @@ namespace GiantSword.AssetRules
 
             if (_replaceSpacesWithUnderscores)
                 formattedName = formattedName.Replace(" ", "_");
+            
+            if (_removeNonAlphaNumericCharacters)
+                formattedName =Regex.Replace(formattedName, @"[^A-Za-z0-9 _]+", "");;
 
             formattedName = RegexReplace(formattedName, _regexReplaceFromName);
 
             if (_includeGrandparentInName)
             {
-                string[] folders = formattedDirectoryPath.Split("/");
+                string[] folders = formattedDirectoryPath.Split('/');
                 for (int i = folders.Length - 1; i >= 0; i--)
                 {
                     if (folders[i] != "" && folders[i] != _parentFolder)

@@ -18,12 +18,15 @@ MonoBehaviour:
   _pathTest: 
   _exceptions: []
   _pathRequirements: []
-  order: 22
+  order: 13
   _customPrefix: PostProcess_
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 1
+  _capitalize: 1
   _replaceSpacesWithUnderscores: 1
+  _removeHyphens: 1
+  _removeParenthesis: 1
   _includeGrandparentInName: 0
   _parentFolder: 
   _absolutePath: Assets/Frogtown/Effects/Postprocessing/

@@ -14,7 +14,7 @@ namespace GiantSword
             World
         }
         
-        [SerializeField] private SmartFloat _depth = 0;
+        [SerializeField] private SmartFloat _depth = new SmartFloat( 0);
         [SerializeField] private Space _space = Space.Local;
         [SerializeField] private bool _updateAtRuntime;
         [FormerlySerializedAs("_localYMultiplier")] [FormerlySerializedAs("_multiplier")] [SerializeField] private float _yMultiplier = 0;
