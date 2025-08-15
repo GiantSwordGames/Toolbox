@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
      class RulesAssetPostProcessor : AssetPostprocessor
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(RuleForUnityType))]

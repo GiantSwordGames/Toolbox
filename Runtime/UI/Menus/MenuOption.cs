@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace GiantSword
+namespace JamKit
 {
     public class MenuOption : MonoBehaviour
     {

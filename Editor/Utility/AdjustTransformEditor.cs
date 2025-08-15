@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomEditor(typeof(AdjustTransform))]
     public class AdjustTransformEditor : UnityEditor.Editor

@@ -3,7 +3,7 @@ using UnityEditor;
 using System.Diagnostics;
 using System.IO;
 
-namespace GiantSword
+namespace JamKit
 {
     public class YouTubeAudioDownloader : EditorWindow
     {

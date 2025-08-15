@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(LayermaskAsset))]
     public class LayerMaskAssetDrawer : CreateAssetDrawer<LayermaskAsset>

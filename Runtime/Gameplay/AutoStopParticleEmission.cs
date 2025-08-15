@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class AutoStopParticleEmission : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-namespace GiantSword
+namespace JamKit
 {
     // public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
     // {

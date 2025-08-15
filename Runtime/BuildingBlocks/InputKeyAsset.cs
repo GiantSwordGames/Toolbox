@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     
     public class InputKeyAsset : ScriptableObject

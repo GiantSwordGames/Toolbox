@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GiantSword;
+using JamKit;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.Events;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(ActionSequence.Entry))]
     public class EntryDrawer : PropertyDrawer

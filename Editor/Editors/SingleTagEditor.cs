@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomEditor(typeof(SingleTag))]
     public class SingleTagEditor : CustomEditorBase<SingleTag>

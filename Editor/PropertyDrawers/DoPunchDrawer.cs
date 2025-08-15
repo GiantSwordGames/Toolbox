@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(PunchAsset))]
     public class PunchAssetDrawer : CreateAssetDrawer<PunchAsset>

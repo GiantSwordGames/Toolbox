@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     public static class AssetRuleUtility
     {

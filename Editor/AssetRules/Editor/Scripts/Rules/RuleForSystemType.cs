@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH + "/Rule for System Type ")]
     public class RuleForSystemType : RuleBase

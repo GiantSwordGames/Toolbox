@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSwordEditor
+namespace JamKitEditor
 {   
     [CustomPropertyDrawer(typeof(SmartFloat))]
     public class SmartFloatDrawer : PropertyDrawer

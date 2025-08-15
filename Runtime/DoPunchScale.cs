@@ -1,4 +1,4 @@
-using GiantSword;
+using JamKit;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;

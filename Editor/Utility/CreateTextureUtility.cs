@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 
 
-namespace GiantSword
+namespace JamKit
 {
     public  class CreateTextureUtility
     {

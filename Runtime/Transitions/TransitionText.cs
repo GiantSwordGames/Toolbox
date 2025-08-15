@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class TransitionText : MonoBehaviour
     {

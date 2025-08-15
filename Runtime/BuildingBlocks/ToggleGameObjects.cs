@@ -2,7 +2,7 @@ using System;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ToggleGameObjects : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword.Plugins.Framework.Generic.Editor.GiantSword
+namespace JamKit.Plugins.Framework.Generic.Editor.JamKit
 {
     
     [CustomPropertyDrawer(typeof(ScriptableFloat))]

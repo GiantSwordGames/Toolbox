@@ -4,7 +4,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public class PlaySound : MonoBehaviour
     {

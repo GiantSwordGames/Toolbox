@@ -1,8 +1,8 @@
-﻿using GiantSword.AssetRules;
+﻿using JamKit.AssetRules;
 using UnityEngine;
 using Object = System.Object;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     public abstract class AssetRulePostProcess: ScriptableObject
     {

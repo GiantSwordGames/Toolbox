@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace GiantSword
+namespace JamKit
 {
     public static class SymbolicLinkCreator
     {

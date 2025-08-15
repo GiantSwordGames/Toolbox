@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-namespace GiantSword.Utility
+namespace JamKit.Utility
 {
     using UnityEngine;
     using UnityEditor;

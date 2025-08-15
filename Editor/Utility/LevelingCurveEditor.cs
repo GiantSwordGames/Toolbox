@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomEditor(typeof(LevellingCurve))]
     public class LevelingCurveEditor : CustomEditorBase<LevellingCurve>

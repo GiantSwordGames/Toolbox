@@ -7,7 +7,7 @@ using UnityEngine.Audio;
 using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
-namespace GiantSword
+namespace JamKit
 {
     public class SoundAsset : ScriptableObject
     {

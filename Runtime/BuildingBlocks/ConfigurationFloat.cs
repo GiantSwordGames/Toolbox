@@ -1,7 +1,7 @@
   using System;
   using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     
     [CreateAssetMenu( menuName =  MenuPaths.CREATE_ASSET_MENU +"/Configuration Float", fileName = "ConfigurationFloat_")]

@@ -1,4 +1,4 @@
-using GiantSword;
+using JamKit;
 using UnityEditor;
 using UnityEngine;
 

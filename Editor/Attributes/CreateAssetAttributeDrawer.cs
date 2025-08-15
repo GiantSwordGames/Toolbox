@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(CreateAssetButtonAttribute))]
     public class CreateAssetAttributeDrawer : PropertyDrawer

@@ -6,7 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace GiantSword
+namespace JamKit
 {
     #region Menu Items
 

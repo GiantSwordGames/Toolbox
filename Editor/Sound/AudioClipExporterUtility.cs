@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GiantSwordEditor;
+using JamKitEditor;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace GiantSword
+namespace JamKit
 {
     public static class AudioClipExporterUtility
     {

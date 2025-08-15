@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GiantSword
+namespace JamKit
     {
         [ExecuteInEditMode]
         public class ImpulseForce2D : AddForceBase2D

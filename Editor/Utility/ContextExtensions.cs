@@ -7,7 +7,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 
 
-namespace GiantSword
+namespace JamKit
 {
     public static class ContextExtensions
     {

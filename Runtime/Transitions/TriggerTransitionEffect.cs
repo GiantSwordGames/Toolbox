@@ -1,7 +1,7 @@
-using GiantSword;
+using JamKit;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class TriggerTransitionEffect : MonoBehaviour
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace GiantSword
+namespace JamKit
 {
     
     using UnityEngine;

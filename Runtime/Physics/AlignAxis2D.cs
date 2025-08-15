@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class AlignAxis2D : MonoBehaviour

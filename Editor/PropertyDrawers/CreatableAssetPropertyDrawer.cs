@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class CreatableAssetPropertyDrawer<T> : PropertyDrawer where T : ScriptableObject
     {

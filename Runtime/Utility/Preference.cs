@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 using UnityEditor;
 #endif
 
-namespace GiantSword
+namespace JamKit
 {
     public enum PreferenceMode
     {

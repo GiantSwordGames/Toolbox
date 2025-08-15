@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ShowAction : MonoBehaviour
     {

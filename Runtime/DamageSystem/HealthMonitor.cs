@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GiantSword
+namespace JamKit
 {
     public class HealthMonitor : MonoBehaviour
     {

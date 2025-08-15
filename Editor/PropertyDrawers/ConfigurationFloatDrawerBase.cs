@@ -1,7 +1,7 @@
 using System;
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(ConfigurationFloat))]
     public class ConfigurationFloatDrawer : FloatAssetDrawerBase<ConfigurationFloat>

@@ -5,9 +5,9 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword.EditorTools
+namespace JamKit.EditorTools
 {
-    [CustomEditor(typeof(GiantSword.Level))]
+    [CustomEditor(typeof(JamKit.Level))]
     public class LevelEditor_MissingScenes : Editor
     {
         private void OnEnable()
@@ -112,7 +112,7 @@ namespace GiantSword.EditorTools
 
         private List<string> GetAllReferencedScenePaths()
         {
-            Level level = target as GiantSword.Level;
+            Level level = target as JamKit.Level;
 
             List<string> scenePaths = new List<string>(); 
             List<SceneReference> allSceneReferences = level.GetAllSceneReferences();

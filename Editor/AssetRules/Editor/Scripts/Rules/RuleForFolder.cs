@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Rule For Folder" )]
     public class RuleForFolder : RuleBase

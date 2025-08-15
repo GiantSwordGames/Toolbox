@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-namespace GiantSword
+namespace JamKit
 {
     public static class PrefabVariantGenerator
     {

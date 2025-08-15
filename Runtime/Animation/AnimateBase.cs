@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public abstract class AnimateBase : MonoBehaviour
     {

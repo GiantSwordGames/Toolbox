@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     public  class AssetRuleList : ScriptableSingleton<AssetRuleList>
     {

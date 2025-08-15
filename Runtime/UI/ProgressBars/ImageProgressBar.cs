@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ImageProgressBar : ProgressBar
     {

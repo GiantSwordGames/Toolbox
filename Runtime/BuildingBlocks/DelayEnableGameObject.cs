@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using GiantSword;
+using JamKit;
 using UnityEngine;
 
 public class DelayEnableGameObject : MonoBehaviour

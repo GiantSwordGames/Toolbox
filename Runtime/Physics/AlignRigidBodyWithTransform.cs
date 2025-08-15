@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class AlignRigidBodyWithTransform : AlignRigidBodyToDirectionBase
     {

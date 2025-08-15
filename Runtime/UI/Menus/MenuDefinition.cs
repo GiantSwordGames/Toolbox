@@ -5,7 +5,7 @@ using RichardPieterse;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GiantSword
+namespace JamKit
 {
     public class MenuDefinition : ScriptableObject
     {

@@ -2,7 +2,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Audio;
 
-namespace GiantSword
+namespace JamKit
 {
     public class MuteMixer : MonoBehaviour 
     {

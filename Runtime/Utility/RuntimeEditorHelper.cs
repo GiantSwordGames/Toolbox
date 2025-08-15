@@ -14,7 +14,7 @@ using System;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-namespace GiantSword
+namespace JamKit
 {
 
         public class CacheGuiEnabled : IDisposable

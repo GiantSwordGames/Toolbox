@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Warning" )]
     public class WarningRule : ScriptableObject

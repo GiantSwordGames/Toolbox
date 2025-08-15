@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public class SingleTag : MonoBehaviour
     {

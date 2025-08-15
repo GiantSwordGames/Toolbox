@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-namespace GiantSword
+namespace JamKit
 {
     [InitializeOnLoad]
     public class PixelPerfectAutoSnapper

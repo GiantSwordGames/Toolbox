@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace GiantSword
+namespace JamKit
 {
     public static  class ScriptableVariableManager 
     {

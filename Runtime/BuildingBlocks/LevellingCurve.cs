@@ -6,7 +6,7 @@ using System.Data;
 using NaughtyAttributes;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public class LevellingCurve : ScriptableObject
     {

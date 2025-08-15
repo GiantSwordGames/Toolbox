@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CanEditMultipleObjects]
     [CustomEditor(typeof(SoundAsset))]

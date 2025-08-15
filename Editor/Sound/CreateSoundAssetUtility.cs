@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-namespace GiantSword
+namespace JamKit
 {
 
     public class DynamicContextMenuEditor : EditorWindow

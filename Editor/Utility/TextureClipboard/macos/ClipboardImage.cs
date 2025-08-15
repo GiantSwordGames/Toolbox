@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace GiantSword.ClipboardImagePaste
+namespace JamKit.ClipboardImagePaste
 {
     public class ClipboardImagePasteUtility : Editor
     {

@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(ScreenShakeAsset))]
     public class ScreenShakeAssetDrawer : CreateAssetDrawer<ScreenShakeAsset>

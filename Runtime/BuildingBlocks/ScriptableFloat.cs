@@ -3,7 +3,7 @@ using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ScriptableFloat : ScriptableObject
     {

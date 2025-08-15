@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [ExecuteInEditMode]
     public class TorqueImpulseForce : AddForceBase

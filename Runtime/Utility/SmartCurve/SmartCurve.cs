@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 using System;
 
 
-namespace GiantSword.Utility
+namespace JamKit.Utility
 {
     [Serializable]
     public class SmartCurve

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     // [FilePath("NightTools/AssetNamingPrefs.prefs", FilePathAttribute.Location.PreferencesFolder)]
     public class AssetNamingPrefs : ScriptableSingleton<AssetNamingPrefs>

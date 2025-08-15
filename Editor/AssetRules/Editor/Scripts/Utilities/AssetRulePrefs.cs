@@ -1,9 +1,9 @@
-using GiantSword;
-using GiantSword;
+using JamKit;
+using JamKit;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     public static class AssetRulePreferences
     {

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GiantSword;
+using JamKit;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     public static class AssetRuleMenuItems
     {

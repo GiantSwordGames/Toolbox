@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-  using GiantSword;
+  using JamKit;
   using UnityEngine;
 
-  namespace GiantSword
+  namespace JamKit
 {
     public class TransitionWithAnimation : TransitionBase
     {

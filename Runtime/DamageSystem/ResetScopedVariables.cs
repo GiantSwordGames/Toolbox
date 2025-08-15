@@ -3,7 +3,7 @@
     using NaughtyAttributes;
     using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
    
     public class ResetScopedVariables : MonoBehaviour

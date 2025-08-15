@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-namespace GiantSword
+namespace JamKit
 {
     public class CustomEditorGenerator : ScriptableObject
     {
@@ -37,7 +37,7 @@ namespace GiantSword
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {{
     [CustomEditor(typeof({className}))]
     public class {className}Editor : CustomEditorBase<{className}>

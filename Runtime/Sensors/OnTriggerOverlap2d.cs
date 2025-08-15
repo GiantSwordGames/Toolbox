@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using GiantSword;
+using JamKit;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public class OnTriggerOverlap2d: MonoBehaviour
     {

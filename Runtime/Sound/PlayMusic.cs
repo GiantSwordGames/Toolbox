@@ -2,7 +2,7 @@ using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class PlayMusic : MonoBehaviour
     {

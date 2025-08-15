@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomEditor(typeof(FlipObject))]
     public class FlipObjectEditor : Editor

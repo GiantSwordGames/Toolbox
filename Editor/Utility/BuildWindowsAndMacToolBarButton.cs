@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public static class BuildWindowsAndMacToolBarButton
     {

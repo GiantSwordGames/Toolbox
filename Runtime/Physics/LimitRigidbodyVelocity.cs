@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     
     [DefaultExecutionOrder(100000)]

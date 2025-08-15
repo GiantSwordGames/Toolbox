@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace GiantSword
+namespace JamKit
 {
     [System.Serializable]
     public struct FloatVariance

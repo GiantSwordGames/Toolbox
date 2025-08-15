@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Linq;
-using GiantSword;
+using JamKit;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSwordEditor
+namespace JamKitEditor
 {
     public static class CreateScriptableObject
     {

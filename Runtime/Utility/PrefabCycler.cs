@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     /// <summary>
     /// Add this to prefab assets you want to be cycleable.

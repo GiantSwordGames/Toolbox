@@ -3,7 +3,7 @@ using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [Serializable]
     public class Oscillator

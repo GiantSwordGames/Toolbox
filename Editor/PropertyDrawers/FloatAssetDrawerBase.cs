@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public abstract class FloatAssetDrawerBase<T> : PropertyDrawer where T: ScriptableObject
     {

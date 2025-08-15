@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GiantSword
+namespace JamKit
 {
    
     public class ProceduralTransition : TransitionBase

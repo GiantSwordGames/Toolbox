@@ -2,7 +2,7 @@
     using UnityEditor;
     using UnityEngine;
 
-    namespace GiantSword
+    namespace JamKit
     {
         [CanEditMultipleObjects]
         [CustomEditor(typeof(PokeForce))]

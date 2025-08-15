@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using GiantSword;
+using JamKit;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class BuildAndZip
     {

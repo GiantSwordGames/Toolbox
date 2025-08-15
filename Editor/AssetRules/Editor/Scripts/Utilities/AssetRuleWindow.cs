@@ -6,10 +6,10 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Text;
-using GiantSword;
-using GiantSword;
+using JamKit;
+using JamKit;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     class AssetRuleWindow : EditorWindow
     {

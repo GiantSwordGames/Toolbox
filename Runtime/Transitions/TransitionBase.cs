@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public abstract class TransitionBase : MonoBehaviour
     {

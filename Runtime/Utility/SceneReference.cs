@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
    
 

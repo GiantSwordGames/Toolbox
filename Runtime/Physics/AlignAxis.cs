@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
 
-namespace GiantSword
+namespace JamKit
 {
     public class AlignAxis : MonoBehaviour
     {

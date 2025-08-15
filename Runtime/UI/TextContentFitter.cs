@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using Object = UnityEngine.Object;
 
-namespace GiantSword
+namespace JamKit
 {
     
     

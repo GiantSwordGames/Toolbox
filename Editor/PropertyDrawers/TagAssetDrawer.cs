@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(TagAsset))]
     public class TagAssetDrawer : CreateAssetDrawer<TagAsset>

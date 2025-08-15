@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     [ExecuteInEditMode]
     public class SetDepth : MonoBehaviour

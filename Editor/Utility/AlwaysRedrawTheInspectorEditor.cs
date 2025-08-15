@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomEditor(typeof(AlwaysRedrawTheInspector))]
     public class AlwaysRedrawTheInspectorEditor : Editor

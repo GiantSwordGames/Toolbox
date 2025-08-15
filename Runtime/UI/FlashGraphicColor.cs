@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace GiantSword
+namespace JamKit
 {
     public class FlashGraphicColor : MonoBehaviour
     {

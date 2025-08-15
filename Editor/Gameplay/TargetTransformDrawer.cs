@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(TargetTransform))]
     public class TargetTransformDrawer : PropertyDrawer

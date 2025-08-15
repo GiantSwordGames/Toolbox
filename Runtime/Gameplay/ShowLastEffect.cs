@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ShowLastEffect : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(FloatVariance))]
     public class RandomFloatDrawer : PropertyDrawer

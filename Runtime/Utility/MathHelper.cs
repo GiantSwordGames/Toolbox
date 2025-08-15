@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace GiantSword
+namespace JamKit
 {
     public static class MathHelper
     {

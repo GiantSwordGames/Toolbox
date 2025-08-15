@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     
     [CreateAssetMenu( menuName =  MenuPaths.CREATE_ASSET_MENU +"/TextSanitizer", fileName = "TextSanitizer_")]

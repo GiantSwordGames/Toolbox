@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
-namespace GiantSword
+namespace JamKit
 {
    
     

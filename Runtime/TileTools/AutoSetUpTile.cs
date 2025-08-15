@@ -1,7 +1,7 @@
 using Meat;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class AutoSetUpTile : MonoBehaviour
     {

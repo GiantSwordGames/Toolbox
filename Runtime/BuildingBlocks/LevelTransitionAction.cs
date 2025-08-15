@@ -1,10 +1,10 @@
 using System.Collections;
-using GiantSword;
+using JamKit;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace GiantSword
+namespace JamKit
 {
     public class LevelTransitionAction : MonoBehaviour
     {

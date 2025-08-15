@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GiantSword
+namespace JamKit
 {
     public class TriggerAnimation : MonoBehaviour
     { 

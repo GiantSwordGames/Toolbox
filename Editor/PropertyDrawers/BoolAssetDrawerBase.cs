@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(ScriptableBool))]
     public  class BoolAssetDrawerBase : PropertyDrawer

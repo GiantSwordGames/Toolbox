@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace GiantSword
+namespace JamKit
 {
     
     public class MonoFloat : MonoBehaviour

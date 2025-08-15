@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace GiantSword
+namespace JamKit
 {
     public class SelectButtonOnEnable : MonoBehaviour
     {

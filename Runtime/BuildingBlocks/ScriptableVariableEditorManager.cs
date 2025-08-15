@@ -1,4 +1,4 @@
-namespace GiantSword
+namespace JamKit
 {
     // public static class ScriptableVariableEditorManager
     // {

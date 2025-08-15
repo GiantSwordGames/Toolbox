@@ -9,7 +9,7 @@ using UnityEditor;
 using System.Reflection;
 using UnityEngine.UIElements;
 
-namespace GiantSword
+namespace JamKit
 {
 	public static class UnityToolbarExtender
 	{

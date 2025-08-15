@@ -1,8 +1,8 @@
-using GiantSword;
+using JamKit;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace GiantSword
+namespace JamKit
 {
     public class SceneTransition : MonoBehaviour
     {

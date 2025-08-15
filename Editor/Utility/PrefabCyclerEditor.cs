@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomEditor(typeof(PrefabCycler))]
     public class PrefabCyclerEditor : Editor

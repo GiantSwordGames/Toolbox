@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public abstract class CustomEditorBase<T> : UnityEditor.Editor where T : Object
     {

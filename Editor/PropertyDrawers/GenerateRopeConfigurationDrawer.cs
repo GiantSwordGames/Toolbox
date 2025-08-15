@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace GiantSword
+namespace JamKit
 {
     [CustomPropertyDrawer(typeof(GenerateRopeConfiguration))]
     public class GenerateRopeConfigurationDrawer : CreateAssetDrawer<GenerateRopeConfiguration>

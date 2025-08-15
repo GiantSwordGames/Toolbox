@@ -2,7 +2,7 @@
 // using System.Collections.Generic;
 // using UnityEngine;
 //
-// namespace GiantSword
+// namespace JamKit
 // {
 //     public  class ScopedEventManager: MonoBehaviour
 //     {

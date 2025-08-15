@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-namespace GiantSword
+namespace JamKit
 {
     public class CreateTimelineUtility
     {

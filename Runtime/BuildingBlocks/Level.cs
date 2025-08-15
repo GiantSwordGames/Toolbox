@@ -8,7 +8,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace GiantSword
+namespace JamKit
 {
     
     // [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU +"Level", fileName = "Level_NewLevel")]

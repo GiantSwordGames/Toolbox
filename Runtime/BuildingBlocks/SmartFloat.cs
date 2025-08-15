@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using GiantSword;
+using JamKit;
 using UnityEngine;
 
 [System.Serializable]

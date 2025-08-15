@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace GiantSword
+namespace JamKit
 {
     public class OnStartTrigger : MonoBehaviour
     {

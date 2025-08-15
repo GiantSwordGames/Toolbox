@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class FaceTargetTransform : MonoBehaviour
     {

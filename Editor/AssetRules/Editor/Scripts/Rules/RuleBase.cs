@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Object = UnityEngine.Object;
 
-namespace GiantSword.AssetRules
+namespace JamKit.AssetRules
 {
     public abstract class RuleBase : AbstractRule
     {

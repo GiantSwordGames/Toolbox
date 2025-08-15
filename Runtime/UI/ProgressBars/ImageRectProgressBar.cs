@@ -2,7 +2,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ImageRectProgressBar : MonoBehaviour
     {

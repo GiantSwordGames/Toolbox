@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GiantSword
+namespace JamKit
 {
     public class ScriptableSingleton<T> : ScriptableObject where T : ScriptableObject
     {

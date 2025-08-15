@@ -1,5 +1,5 @@
 using System;
-using GiantSword;
+using JamKit;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
