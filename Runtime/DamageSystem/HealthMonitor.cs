@@ -24,7 +24,7 @@ namespace GiantSword
             _health.onDamageTaken.AddListener(Reevaluate);
         }
 
-        void Reevaluate(DamageIncident arg0)
+        void Reevaluate()
         {
             if (_state == State.LessThan)
             {

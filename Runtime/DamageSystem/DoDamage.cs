@@ -7,7 +7,7 @@ namespace GiantSword
     {
         [SerializeField] private Damage _damage;
         [SerializeField] private MonoBehaviour _sender;
-        [SerializeField] SmartFloat _cooldown = 0f;
+        [SerializeField] private SmartFloat _cooldown = new SmartFloat(0f);
         [ShowNonSerializedField] private DamageIncident _lastDamageIncident;
         private float lastTimeStamp = 0;
 

@@ -117,10 +117,6 @@ namespace GiantSword
             return null;
         }
 
-        public void Play()
-        {
-            
-        }
 
         public void AddClips(List<AudioClip> newClips)
         {

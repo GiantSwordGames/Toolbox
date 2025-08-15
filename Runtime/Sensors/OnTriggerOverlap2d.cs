@@ -25,9 +25,9 @@ namespace GiantSword
         [ShowNativeProperty]  private int overlappingHealthCount => _healths.Count;
         
         [FormerlySerializedAs("onTriggerEnter")] [Foldout("On Trigger Enter")]
-        public UnityEvent<Collider2D> onColliderEnter;
+        public UnityEvent onColliderEnter;
 
-        public UnityEvent<Collider2D> onColliderExit { get; set; } = new UnityEvent<Collider2D>();
+        public UnityEvent onColliderExit { get; set; } = new UnityEvent();
 
         public List<Rigidbody2D> rigidbodies => _rigidbodies;
 
@@ -57,7 +57,7 @@ namespace GiantSword
             
             _overlappingColliders.Add(other);
             
-            onColliderEnter?.Invoke(other);
+            onColliderEnter?.Invoke();
 
             Rigidbody2D rigidbody = other.GetComponentInParent<Rigidbody2D>();
             if (rigidbody && rigidbody.isKinematic == false)
@@ -136,7 +136,7 @@ namespace GiantSword
 
             _overlappingColliders.Remove(other);
             
-            onColliderExit?.Invoke(other);
+            onColliderExit?.Invoke();
             
             Rigidbody2D rigidbody = other.GetComponentInParent<Rigidbody2D>();
             if (rigidbody)

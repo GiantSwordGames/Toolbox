@@ -9,16 +9,16 @@ namespace GiantSword
 {
     public class Health : MonoBehaviour
     {
-        [FormerlySerializedAs("_value")] [SerializeField] private SmartFloat _health = 1f;
+        [FormerlySerializedAs("_value")] [SerializeField] private SmartFloat _health = new SmartFloat( 1f);
         [SerializeField] private float _maxHealth = 100;        
         [SerializeField] private int _randomHealth = 0;        
         [SerializeField] private float _gibThreshold = -10;        
         [SerializeField] private bool _startAtMax = true;   
         [SerializeField] private bool _invulnerable = false;   
         
-         [SerializeField] private UnityEvent<DamageIncident> _onDamageTaken = new UnityEvent<DamageIncident>();
-         [SerializeField] private UnityEvent<DamageIncident> _onDeath = new UnityEvent<DamageIncident>();
-         [SerializeField] private UnityEvent<DamageIncident> _onGib = new UnityEvent<DamageIncident>();
+         [SerializeField] private UnityEvent _onDamageTaken = new UnityEvent();
+         [SerializeField] private UnityEvent _onDeath = new UnityEvent();
+         [SerializeField] private UnityEvent _onGib = new UnityEvent();
 
          
          [Header("Not Implemented")]
@@ -26,9 +26,9 @@ namespace GiantSword
          [SerializeField] private List<TagAsset> _exclude;
 
          private bool _isDead; 
-         public UnityEvent<DamageIncident> onDamageTaken => _onDamageTaken;
+         public UnityEvent onDamageTaken => _onDamageTaken;
 
-         public UnityEvent<DamageIncident> onDeath => _onDeath;
+         public UnityEvent onDeath => _onDeath;
 
          public float currentHealth => _health;
          public float maxHealth => _maxHealth;
@@ -49,7 +49,7 @@ namespace GiantSword
              if (_startAtMax)
              {
                  _maxHealth += Random.Range(0, _randomHealth);
-                 _health = _maxHealth;
+                 _health.value =  _maxHealth;
                  
              }
          }
@@ -58,7 +58,7 @@ namespace GiantSword
          {
              if (_startAtMax)
              {
-                 _health = _maxHealth;
+                 _health.value = _maxHealth;
              }
          }
 
@@ -92,7 +92,7 @@ namespace GiantSword
 
             if (remainingDamage > 0)
             {
-                onDamageTaken.SafeInvoke(damageIncident);
+                onDamageTaken.SafeInvoke();
             }
             
 
@@ -100,13 +100,13 @@ namespace GiantSword
             {
                 _isDead = true;
 
-                _onDeath.SafeInvoke(damageIncident);
+                _onDeath.SafeInvoke();
                 
             }
 
             if (previousValue > _gibThreshold && _health <= _gibThreshold )
             {
-                _onGib.SafeInvoke(damageIncident);
+                _onGib.SafeInvoke();
             }
             
         }
@@ -151,7 +151,7 @@ namespace GiantSword
         {
             _health.value = 0;
             _isDead = true;
-            _onDeath?.Invoke(null);
+            _onDeath?.Invoke();
         }
         
         [Button]
@@ -159,7 +159,7 @@ namespace GiantSword
         {
             _health.value = _gibThreshold;
             _isDead = true;
-            _onGib?.Invoke(null);
+            _onGib?.Invoke();
         }
     }
 }
