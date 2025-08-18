@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
@@ -13,6 +14,9 @@ namespace JamKit
         [SerializeField] protected bool _autoDestroy = true;
         [SerializeField] protected float _startDelay = 0f;
         [FormerlySerializedAs("_holdAtApex")] [SerializeField] protected float _hold = 0f;
+
+        [SerializeField] protected UnityEvent _onTransitionInBegin = default;
+        [SerializeField] protected UnityEvent _onTransitionOutBegin = default;
 
         protected virtual void OnValidate()
         {

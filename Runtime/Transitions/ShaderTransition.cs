@@ -36,6 +36,7 @@ public class ShaderTransition : TransitionBase
             {
                 yield return new WaitForSecondsRealtime(_startDelay);
             }
+            _onTransitionInBegin?.Invoke();
 
             float lerp = 0;
             if (_durationIn > 0)
@@ -56,6 +57,8 @@ public class ShaderTransition : TransitionBase
 
         protected override IEnumerator IETransitionOut(Action onComplete)
         {
+            
+            _onTransitionOutBegin?.Invoke();
             float lerp = 0;
             if (_durationOut > 0)
             {

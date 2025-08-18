@@ -102,7 +102,7 @@ namespace JamKit
 
             Debug.Log($"Centered '{parent.name}' on its children.");
         }
-        [MenuItem("CONTEXT/Transform/Normalize Scale")]
+        [MenuItem("CONTEXT/Transform/Normalize/Normalize Scale")]
         private static void NormalizeScale(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -145,7 +145,7 @@ namespace JamKit
             }
         }
 
-        [MenuItem("CONTEXT/Transform/Normalize Rotation")]
+        [MenuItem("CONTEXT/Transform/Normalize/Normalize Rotation")]
         private static void NormalizeRotation(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
