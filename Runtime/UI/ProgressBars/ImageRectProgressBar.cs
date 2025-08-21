@@ -38,9 +38,12 @@ namespace JamKit
 
         private void UpdateBar(float v)
         {
+            
             if (_primaryBar)
             {
-                _primaryBar.rectTransform.sizeDelta = _primaryBar.rectTransform.sizeDelta .WithX( _filledWidth*value.normalizedValue);
+                float lerp = value.normalizedValue;
+                lerp = Mathf.Clamp01(lerp);
+                _primaryBar.rectTransform.sizeDelta = _primaryBar.rectTransform.sizeDelta .WithX( _filledWidth*lerp);
             }
             
             // if (_secondaryBar)

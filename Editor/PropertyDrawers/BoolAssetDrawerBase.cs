@@ -80,16 +80,15 @@ namespace JamKit
                 if (GUI.Button(valueRect, "Create"))
                 {
                     ScriptableBool newAsset = ScriptableObject.CreateInstance<ScriptableBool>();
-                    string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<ScriptableBool>();
+                    string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<ScriptableBool>() +"/";
                     if (folderPath == "")
                     {
                         folderPath = fallbackPath;
                     }
                     RuntimeEditorHelper.CreateFoldersIfNeeded(folderPath);
 
-                    Debug.Log(folderPath);
-                    string assetName = typeof(ScriptableBool).Name + "_" + label.text;
-                    string newPath = folderPath + "/" + assetName + ".asset";
+                    string assetName =  "Bool_" + label.text;
+                    string newPath = folderPath  + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<ScriptableBool>(newPath);
                     Debug.Log(newPath, loadAssetAtPath);

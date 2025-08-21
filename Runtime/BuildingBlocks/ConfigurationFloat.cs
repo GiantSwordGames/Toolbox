@@ -4,7 +4,6 @@
 namespace JamKit
 {
     
-    [CreateAssetMenu( menuName =  MenuPaths.CREATE_ASSET_MENU +"/Configuration Float", fileName = "ConfigurationFloat_")]
     public class ConfigurationFloat : ScriptableObject
     {
         [SerializeField] private float _value;

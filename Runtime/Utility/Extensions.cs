@@ -389,7 +389,7 @@ namespace JamKit
         {
             return (to - from).magnitude;
         }
-        
+    
         public static Vector2 XY(this Vector3 vector3)
         {
             return (Vector2)vector3;
@@ -1370,6 +1370,12 @@ namespace JamKit
             return (float)Math.Round(value, digits);
         }
         
+        public static int RoundUp(this float value)
+        {
+            return (int)Mathf.Ceil(value);
+        }
+
+        
         public static float RoundToNearest(this float value, float increment)
         {
             return Mathf.Round(value / increment) * increment;
@@ -1432,6 +1438,12 @@ namespace JamKit
         public static bool HasParent<T>(this Component component) where T : Component
         {
             return component.gameObject.GetComponentInParent<T>() != null;
+        }
+        
+        public static bool HasParentEnabled<T>(this Component component) where T : Behaviour
+        {
+            Behaviour comp = component.gameObject.GetComponentInParent<T>();
+            return comp != null && comp.enabled;
         }
         public static bool HasComponentEnabled<T>(this Component component) where T : Behaviour
         {

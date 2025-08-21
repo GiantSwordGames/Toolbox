@@ -94,7 +94,7 @@ namespace JamKit
             return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Unscaled));
         }
         
-        public static Coroutine Lerp( float duration, Action<float> lerpFunction)
+        public static Coroutine LerpRoutine( float duration, Action<float> lerpFunction)
         {
             return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Scaled));
         }

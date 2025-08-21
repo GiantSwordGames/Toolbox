@@ -475,6 +475,33 @@ namespace JamKit
 #endif
 
                 }
+
+        public static void ZeroPositionWithoutMovingChildren(Transform parent)
+        {
+                Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+                children = System.Array.FindAll(children, t => t != parent);
+
+                if (children.Length == 0)
+                {
+                        Debug.LogWarning("No children found to center on.");
+                        return;
+                }
+
+           
+                RuntimeEditorHelper.RecordObjectUndo(parent);
+            
+                Vector3 originalPosition = parent.position;
+
+                parent.localPosition = Vector3.zero;
+            
+                Vector3 delta = parent.position - originalPosition;
+                // parent.position -= delta;
+                foreach (Transform child in children)
+                {
+                        RuntimeEditorHelper.RecordObjectUndo(child);
+                        child.position -= delta;
+                }
+        }
 #if UNITY_EDITOR
                 public static T GetSerializedValue<T>(this PropertyDrawer propertyDrawer, SerializedProperty property)
                 {

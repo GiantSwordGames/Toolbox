@@ -60,10 +60,8 @@ namespace JamKit
             if(_filterIncludeTags.Length > 0)
             {
                 bool match = false;
-                TagList tagList = other.GetComponentInParent<TagList>();
-                if (tagList)
-                {
-                    foreach (TagAsset otherTag in tagList.tags)
+                List<TagAsset> tags = other.gameObject.GetTagsInParents();
+                    foreach (TagAsset otherTag in tags)
                     {
                         foreach (TagAsset filterTag in _filterIncludeTags)
                         {
@@ -74,7 +72,6 @@ namespace JamKit
                             }
                         }
                     } 
-                }
 
                 if (match == false)
                 {

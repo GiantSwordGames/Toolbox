@@ -13,7 +13,7 @@ namespace JamKit.AssetRules
         public const string ASSET_MENU_PATH = MenuPaths.CREATE_ASSET_MENU + "/Rules/Asset Rules";
         public const string ASSETS_MENU_PATH = "Assets";
 
-        [MenuItem("Assets/Check Naming Conventions", false, 112)]
+        [MenuItem(MenuPaths.QUICK_CREATE + "Check Naming Conventions", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         private static void SearchForCrimes()
         {
             List<RuleResult> results = new List<RuleResult>();
@@ -26,7 +26,7 @@ namespace JamKit.AssetRules
             }
         }
 
-        [MenuItem( MenuPaths.QUICK_CREATE + "Create Asset Naming Rule For This Asset", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        // [MenuItem( MenuPaths.QUICK_CREATE + "Create Asset Naming Rule For This Asset", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateNamingRule()
         {
             RuleBase findAsset = RuntimeEditorHelper.FindAsset<RuleBase>();

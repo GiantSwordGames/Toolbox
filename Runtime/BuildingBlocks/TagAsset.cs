@@ -70,11 +70,17 @@ namespace JamKit
 
             return _tagAssets;
         }
-        
+
+
         public static List<TagAsset> GetTagsInParents(this Component component)
         {
-            TagList[] taglists = component.GetComponentsInParent<TagList>();
-            SingleTag[] singleTags = component.GetComponentsInParent<SingleTag>();
+            return component.gameObject.GetTagsInParents();
+        }
+
+        public static List<TagAsset> GetTagsInParents(this GameObject gameObject)
+        {
+            TagList[] taglists = gameObject.GetComponentsInParent<TagList>();
+            SingleTag[] singleTags = gameObject.GetComponentsInParent<SingleTag>();
             List<TagAsset> _tagAssets = new List<TagAsset>();
             
             foreach (var taglist in taglists)

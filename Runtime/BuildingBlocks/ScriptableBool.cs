@@ -12,8 +12,6 @@ namespace JamKit
         public abstract void Load();
     }
     
-    [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU + "/Scriptable Bool")]
-
     public class ScriptableBool : ScriptablePrimitive
     {
         public ScriptableVariableScope _scriptableVariableScope;

@@ -53,7 +53,7 @@ namespace JamKitEditor
             Selection.activeObject = asset;
         }
 
-        [MenuItem(MenuPaths.QUICK_CREATE +"ScriptableObject from Script", true)]
+        [MenuItem(MenuPaths.QUICK_CREATE +"ScriptableObject from Script", true, priority = MenuPaths.QUICK_CREATE_PRIORITY)]
         public static bool ValidateCreateAsset()
         {
             var selected = Selection.activeObject;

@@ -204,10 +204,11 @@ namespace JamKit
             
         }
         [Button(enabledMode: EButtonEnableMode.Editor)]
-        private void OpenScene()
+        private void OpenAdditive()
         {
-            scene.Open();
-            scene.Load(LoadSceneMode.Additive);
+            #if UNITY_EDITOR
+            scene.Open( OpenSceneMode.Additive);
+            #endif
         }
         public void ReloadLevel()
         {

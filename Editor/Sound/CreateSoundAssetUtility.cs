@@ -10,7 +10,7 @@ namespace JamKit
         private List<SoundAsset> _soundBanks;
         private List<AudioClip> _audioClips;
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "Assign To Sound Bank")]
+        [MenuItem(MenuPaths.QUICK_CREATE + "Assign To Sound Bank", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void OpenWindow()
         {
             var window = GetWindow<DynamicContextMenuEditor>("Assign Audio Clip to Sound Bank", true);

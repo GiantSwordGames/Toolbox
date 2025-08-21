@@ -11,7 +11,7 @@ namespace JamKit
 {
     public static class ContextExtensions
     {
-        [MenuItem("CONTEXT/Transform/Set Y to Zero")]
+    [MenuItem("CONTEXT/Transform/Set To Zero/Set Y to Zero")]
         private static void SetYToZero(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -39,10 +39,8 @@ namespace JamKit
             }
         }
 
-
-
-        [MenuItem("CONTEXT/Transform/Zero Position")]
-        private static void ZeroPosition(MenuCommand command)
+        [MenuItem("CONTEXT/Transform/Set To Zero/Set X to Zero")]
+        private static void SetXToZero(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
             Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
@@ -54,23 +52,68 @@ namespace JamKit
                 return;
             }
 
-           
+
             RuntimeEditorHelper.RecordObjectUndo(parent);
-            
+
             Vector3 originalPosition = parent.position;
 
-            parent.localPosition = Vector3.zero;
-            
+            parent.localPosition = parent.localPosition.WithX(0);
+
             Vector3 delta = parent.position - originalPosition;
-            // parent.position -= delta;
             foreach (Transform child in children)
             {
                 RuntimeEditorHelper.RecordObjectUndo(child);
                 child.position -= delta;
             }
-
         }
+
         
+        
+        [MenuItem("CONTEXT/Transform/Set To Zero/Set Z to Zero")]
+        private static void SetZToZero(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            children = System.Array.FindAll(children, t => t != parent);
+
+            if (children.Length == 0)
+            {
+                Debug.LogWarning("No children found to center on.");
+                return;
+            }
+
+
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+
+            Vector3 originalPosition = parent.position;
+
+            parent.localPosition = parent.localPosition.WithZ(0);
+
+            Vector3 delta = parent.position - originalPosition;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position -= delta;
+            }
+        }
+
+        [MenuItem("CONTEXT/Transform/Set To Zero/Zero Position")]
+        private static void ZeroPosition(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            RuntimeEditorHelper.ZeroPositionWithoutMovingChildren(parent);
+        }
+
+
+        [MenuItem("CONTEXT/Transform/Move to Top of Siblings")]
+        private static void MoveToTopOfSiblings(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            parent.SetSiblingIndex(0);
+            RuntimeEditorHelper.Focus(parent);
+        }
+
         [MenuItem("CONTEXT/Transform/Center On Children")]
         private static void CenterOnChildren(MenuCommand command)
         {

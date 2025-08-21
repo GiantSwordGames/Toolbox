@@ -54,7 +54,6 @@ namespace JamKit
                 SceneFolder sceneFolder = SceneFolder.TryGetSceneFolder(_sceneFolderAsset);
                 if (sceneFolder == null)
                 {
-                    Debug.Log($"Scene Folder ({_sceneFolderAsset}) not found for {name}", this);
                     return;
                 }
 

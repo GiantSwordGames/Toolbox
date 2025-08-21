@@ -107,7 +107,7 @@ namespace JamKit
         }
 
         public float initialValue => _initialValue;
-        public float intValue => value.ToInt();
+        public int intValue => value.ToInt();
 
         public ScriptableVariableScope scriptableVariableScope => _scriptableVariableScope;
 
@@ -163,5 +163,6 @@ namespace JamKit
             // Ensure final increment in case of precision issues
             value += (1 - lerpPrev) * increment;
         }
+
+        }
     }
-}

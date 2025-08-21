@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace JamKit
 {
-    
-    [CreateAssetMenu( menuName =  MenuPaths.CREATE_ASSET_MENU +"/TextSanitizer", fileName = "TextSanitizer_")]
     public class TextSanitizer : ScriptableObject
     {
         [Space]

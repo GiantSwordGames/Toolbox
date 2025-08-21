@@ -6,7 +6,7 @@ namespace JamKit
     public static class CreateVariantInProjectButton
     {
         
-                [MenuItem(MenuPaths.QUICK_CREATE +"Create Duplicate In Project", false, 0)]
+                [MenuItem(MenuPaths.QUICK_CREATE +"Create Duplicate In Project", false, MenuPaths.QUICK_CREATE_PRIORITY)]
                public static void CreateVariantInProject()
                {
                    // 1. Get the selected prefab

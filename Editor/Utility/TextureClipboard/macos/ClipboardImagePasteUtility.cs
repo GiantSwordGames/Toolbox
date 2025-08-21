@@ -106,7 +106,8 @@ namespace JamKit.ClipboardImagePaste
             string folderPath = GetSelectedFolderPath();
             if (string.IsNullOrEmpty(folderPath))
             {
-                folderPath = "Assets/Project/Art/PastedTextures";
+                
+                folderPath = MenuPaths.DEFAULT_PROJECT_PATH+"Art/PastedTextures";
             }
 
             // Ensure the folder exists

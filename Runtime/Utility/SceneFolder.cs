@@ -38,16 +38,17 @@ namespace JamKit
             return null;
         }
 
-        
+        [Button]
+        public void MoveToTopOfChildren()
+        {
+            RuntimeEditorHelper.RecordObjectUndo(transform);
+            transform.SetSiblingIndex(0);
+        }
+
         [Button]
         public void ZeroTransform()
         {
-            Vector3 transformLocalPosition = transform.localPosition;
-            transform.localPosition = Vector3.zero;
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).localPosition += transformLocalPosition;
-            }
+            RuntimeEditorHelper.ZeroPositionWithoutMovingChildren(transform);
         }
 
 

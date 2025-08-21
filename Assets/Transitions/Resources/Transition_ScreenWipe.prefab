@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 6683903226927791155}
   - component: {fileID: 2813390616704268169}
   m_Layer: 5
-  m_Name: Transition_ShaderTransition
+  m_Name: Transition_ScreenWipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,6 +154,34 @@ MonoBehaviour:
   _autoDestroy: 1
   _startDelay: 0
   _hold: 1
+  _onTransitionInBegin:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 2604d9fcb00034715989f40ba1c2c4d6, type: 2}
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _onTransitionOutBegin:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 2604d9fcb00034715989f40ba1c2c4d6, type: 2}
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _durationIn: 0.2
   _durationOut: 0.2
   _holdBeforeAction: 0.2

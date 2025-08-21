@@ -20,11 +20,15 @@ public class ShaderTransition : TransitionBase
     {
         runtimeMaterial = Instantiate(_image.material);
         _image.material = runtimeMaterial;
+        StartCompletelyOffScreen();
+
     }
 
-    void SetLerp()
+
+    void StartCompletelyOffScreen()
     {
-      
+        runtimeMaterial.SetFloat("_MinCutoff",  1 );
+        runtimeMaterial.SetFloat("_MaxCutoff", 0);
     }
 
    
