@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using EatTheRich;
+using HotWings;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -549,6 +549,15 @@ namespace JamKit
             }   
             yield break;
         }
+        public static void SetProperty(this Renderer meshRenderer, string name, Texture texture)
+        {
+            MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+            meshRenderer.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetTexture(name,texture);
+            meshRenderer.SetPropertyBlock(propertyBlock);
+        }
+
+        
         public static void SetProperty(this Renderer meshRenderer, string name, float value)
         {
             MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
@@ -563,6 +572,14 @@ namespace JamKit
             meshRenderer.GetPropertyBlock(propertyBlock);
             propertyBlock.SetVector(name, value);
             meshRenderer.SetPropertyBlock(propertyBlock);
+        }
+        
+        public static void SetProperties(this MeshRenderer[] meshRenderer, string name, Vector4 value)
+        {
+            foreach (var renderer in meshRenderer)
+            {
+                renderer.SetProperty(name, value);
+            }
         }
 
         public static void DestroyChildren(this Transform transform)
@@ -834,6 +851,17 @@ namespace JamKit
                     parent = parent.parent;
                 }
             }
+        }
+        
+         
+        public static Vector3 GetMouseViewportPosition(this Camera camera)
+        {
+            return camera.ScreenToViewportPoint(Input.mousePosition);
+        }
+
+        public static Ray GetMouseRay(this Camera camera)
+        {
+            return camera.ScreenPointToRay(Input.mousePosition);
         }
 
         public static void Deactivate(this Transform transform)
@@ -1334,7 +1362,15 @@ namespace JamKit
             {
                 punch.Trigger();
             }
-            
+        }
+        
+        public static void TriggerShakeInChildren(this GameObject go)
+        {
+            DoShake[] doPunchScale = go.GetComponentsInChildren<DoShake>();
+            foreach (var punch in doPunchScale)
+            {
+                punch.Trigger();
+            }
         }
 
         public static void SortBySiblingIndex<T>(this List<T> list) where T : Component
@@ -1369,7 +1405,19 @@ namespace JamKit
         {
             return (float)Math.Round(value, digits);
         }
-        
+
+        public static void CopyValues(this Transform thisTransform, Transform transformToCopy)
+        {
+            thisTransform.position = transformToCopy.position;
+            thisTransform.rotation = transformToCopy.rotation;
+            thisTransform.localScale = transformToCopy.localScale;
+        }
+        public static void CopyRotationAndPosition(this Transform thisTransform, Transform transformToCopy)
+        {
+            thisTransform.position = transformToCopy.position;
+            thisTransform.rotation = transformToCopy.rotation;
+        }
+
         public static int RoundUp(this float value)
         {
             return (int)Mathf.Ceil(value);
@@ -1786,9 +1834,47 @@ namespace JamKit
             onComplete?.Invoke();
         }
 
-        public static void TweenPosition(this Transform transform, Vector3 destination, float duration, Action onComplete = null)
+
+        public static void KillAsyncRoutine(this Coroutine coroutine)
         {
-            AsyncHelper.StartCoroutine(IETweenPosition(transform, destination, duration, onComplete));
+            if(coroutine != null)
+                AsyncHelper.StopRoutine(coroutine);
+        }
+        public static Coroutine TweenToMatch(this Transform transform,Transform target, float duration, Action onComplete = null)
+        {
+            return AsyncHelper.StartCoroutine(IETweenToMatch(transform, target, duration, onComplete));
+        }
+        private static IEnumerator IETweenToMatch(Transform transform, Transform target, float duration, Action onComplete)
+        {
+            Vector3 startPosition = transform.position;
+            Quaternion startRotation = transform.rotation;
+            Vector3 startScale = transform.localScale;
+            
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / duration);
+                if (transform == null) yield break;
+                transform.position = Vector3.Lerp(startPosition, target.position, t);
+                transform.rotation = Quaternion.Slerp(startRotation, target.rotation, t);
+                transform.localScale = Vector3.Lerp(startScale, target.localScale, t);
+                
+                yield return null;
+            }
+
+            if (transform == null) yield break;
+            transform.position = target.position; // Ensure final position is set
+            transform.rotation = target.rotation; // Ensure final rotation is set
+            transform.localScale = target.localScale; // Ensure final scale is set 
+            
+            onComplete?.Invoke();
+        }
+
+        public static Coroutine TweenPosition(this Transform transform, Vector3 destination, float duration, Action onComplete = null)
+        {
+            return AsyncHelper.StartCoroutine(IETweenPosition(transform, destination, duration, onComplete));
         }
 
         private static IEnumerator IETweenPosition(Transform transform, Vector3 destination, float duration, Action onComplete)

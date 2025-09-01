@@ -31,7 +31,6 @@ namespace JamKit
                         folderPath = MenuPaths.CONFIGURATIONS_PATH;
                     }
 
-
                     string prefix = typeof(T).Name;
                     if(customPrefix != "")
                     {
@@ -41,7 +40,7 @@ namespace JamKit
                     RuntimeEditorHelper.CreateFoldersIfNeeded(folderPath);
 
                     string assetName = prefix + "_" + label.text.ToUpperCamelCase();
-                    string newPath = folderPath + "/" + assetName + ".asset";
+                    string newPath = Path.Combine( folderPath, assetName + ".asset");
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);
                     Debug.Log(newPath, loadAssetAtPath);

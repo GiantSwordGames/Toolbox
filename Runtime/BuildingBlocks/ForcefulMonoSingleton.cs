@@ -9,7 +9,7 @@ namespace JamKit
         public static T instance;
         private void OnEnable()
         {
-            T[] findObjectsOfType = FindObjectsOfType<T>();
+            T[] findObjectsOfType =CompaitibilityHelper.FindObjectsByType<T>();
             if (findObjectsOfType.Length > 1)
             {
                 Destroy(gameObject);

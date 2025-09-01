@@ -29,6 +29,7 @@ namespace JamKit
                     if (Application.isPlaying)
                     {
                         _instance = new GameObject("ScriptableFloatManager").AddComponent<ScriptableFloatManager>();
+                        
                         DontDestroyOnLoad(_instance.gameObject);
                     }
                 }

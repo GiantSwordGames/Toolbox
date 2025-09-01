@@ -11,7 +11,7 @@ namespace JamKit
 {
     public static class ContextExtensions
     {
-    [MenuItem("CONTEXT/Transform/Set To Zero/Set Y to Zero")]
+    [MenuItem("CONTEXT/Transform/Freeze/Local Y Position")]
         private static void SetYToZero(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -39,7 +39,7 @@ namespace JamKit
             }
         }
 
-        [MenuItem("CONTEXT/Transform/Set To Zero/Set X to Zero")]
+        [MenuItem("CONTEXT/Transform/Freeze/Local X Position")]
         private static void SetXToZero(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -69,7 +69,7 @@ namespace JamKit
 
         
         
-        [MenuItem("CONTEXT/Transform/Set To Zero/Set Z to Zero")]
+        [MenuItem("CONTEXT/Transform/Freeze/Local Z Position")]
         private static void SetZToZero(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -97,7 +97,7 @@ namespace JamKit
             }
         }
 
-        [MenuItem("CONTEXT/Transform/Set To Zero/Zero Position")]
+        [MenuItem("CONTEXT/Transform/Freeze/Position")]
         private static void ZeroPosition(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -105,7 +105,7 @@ namespace JamKit
         }
 
 
-        [MenuItem("CONTEXT/Transform/Move to Top of Siblings")]
+        [MenuItem("CONTEXT/Transform/Parenting/Move to Top of Siblings")]
         private static void MoveToTopOfSiblings(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -145,7 +145,7 @@ namespace JamKit
 
             Debug.Log($"Centered '{parent.name}' on its children.");
         }
-        [MenuItem("CONTEXT/Transform/Normalize/Normalize Scale")]
+        [MenuItem("CONTEXT/Transform/Freeze/Scale")]
         private static void NormalizeScale(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -187,8 +187,16 @@ namespace JamKit
                 children[i].localScale = scale;
             }
         }
+        
+        [MenuItem("CONTEXT/Transform/Freeze/Transform")]
+        private static void FreezeTransform(MenuCommand command)
+        {
+            NormalizeScale(command);
+            NormalizeRotation(command);
+            ZeroPosition(command);
+        }
 
-        [MenuItem("CONTEXT/Transform/Normalize/Normalize Rotation")]
+        [MenuItem("CONTEXT/Transform/Freeze/Rotation")]
         private static void NormalizeRotation(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -232,7 +240,7 @@ namespace JamKit
         }
             
         
-        [MenuItem("CONTEXT/Transform/Reverse Child Order")]
+        [MenuItem("CONTEXT/Transform/Parenting/Reverse Child Order")]
         private static void ReverseChildOrder(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -274,11 +282,11 @@ namespace JamKit
                 string originalPath = AssetDatabase.GetAssetPath(originalMaterial);
                 string directory = Path.GetDirectoryName(originalPath);
 
-                Debug.Log(directory);
                 string name = "M_" + meshRenderer.name + "2.mat";
                 if (directory.Contains("com.unity") || directory == "Resources")
                 {
-                    directory = "Assets/Project/Materials";
+                
+                    directory =     MenuPaths.DEFAULT_PROJECT_PATH +"/Materials";
                 }
                 
                 // create each directory if it does not exist 
@@ -423,21 +431,21 @@ namespace JamKit
             }
         } 
            
-        [MenuItem("GameObject/Set As First Sibling", false, 18)]
-        public static void SetAsFirstSibling(MenuCommand command)
-        {
-            Undo.RecordObject(Selection.activeGameObject.transform, "Set As First Sibling");
-            Selection.activeGameObject.transform.SetSiblingIndex(0);
-        }
-        
-        [MenuItem("CONTEXT/Transform/Deparent")]
+        // [MenuItem("GameObject/Set As First Sibling", false, 18)]
+        // public static void SetAsFirstSibling(MenuCommand command)
+        // {
+        //     Undo.RecordObject(Selection.activeGameObject.transform, "Set As First Sibling");
+        //     Selection.activeGameObject.transform.SetSiblingIndex(0);
+        // }
+        //
+        [MenuItem("CONTEXT/Transform/Parenting/Deparent")]
         public static void Deparent(MenuCommand command)
         {
             Transform transform = (Transform)command.context;
             Undo.SetTransformParent(transform, null, "Deparent");
         }
 
-        [MenuItem("CONTEXT/Transform/Move To Scene")]
+        [MenuItem("CONTEXT/Transform/Parenting/Move To Scene")]
         public static void MoveToScene(MenuCommand command)
         {
             // create dropdown of open scenes

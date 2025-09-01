@@ -140,7 +140,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!225 &6683903226927791155
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -155,7 +155,7 @@ CanvasGroup:
   m_IgnoreParentGroups: 0
 --- !u!95 &9041175968431595894
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -165,10 +165,11 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 22100000, guid: c26eb24b9e4864a2a88adf0f80e731d3, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -186,6 +187,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46551780868ee41ca87913ed46d50c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  __dontDestroyOnLoad: 1
+  _autoDestroy: 1
+  _startDelay: 0
+  _hold: 0
+  _onTransitionInBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  _onTransitionOutBegin:
+    m_PersistentCalls:
+      m_Calls: []
   _animator: {fileID: 9041175968431595894}
   _inDuration: {fileID: 2714416339353544499, guid: 868baabd668c74a42aa0e3408997e87b, type: 2}
   _outDuration: {fileID: 141086824163783131, guid: 868baabd668c74a42aa0e3408997e87b, type: 2}

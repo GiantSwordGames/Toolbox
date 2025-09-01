@@ -45,7 +45,7 @@ namespace JamKit
     public static class CreateSoundAssetUtility
     {
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        // [MenuItem(MenuPaths.QUICK_CREATE + "Create Sound Bank From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateSoundAsset()
         {
             var clips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();
@@ -61,7 +61,7 @@ namespace JamKit
             RuntimeEditorHelper.SelectAndFocus(newAsset);
         }
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "Create Sound Banks From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        // [MenuItem(MenuPaths.QUICK_CREATE + "Create Sound Banks From Clips", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateSoundAssets()
         {
             var clips = Selection.objects.ExtractElementsOfType<AudioClip, Object>();

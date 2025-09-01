@@ -11,6 +11,7 @@ namespace JamKit
         {
             Self, 
             Other, 
+            Camera, 
         }
 
         [SerializeField] private Mode _mode;
@@ -34,8 +35,9 @@ namespace JamKit
                         return _self;
                     case Mode.Other:
                         return _otherTransform;
-                  
-                        return null;
+                    case Mode.Camera:
+                        return CameraReference.mainCamera.transform;
+                        // return null;
                 }
 
                 return null;

@@ -12,7 +12,7 @@ namespace JamKit
             {
                 if (_instance == null)
                 {
-                    _instance = GameObject.FindObjectOfType<T>();
+                    _instance = CompaitibilityHelper.FindObjectOfType<T>();
                     if (_instance == null)
                     {
                         Debug.LogError("An instance of " + typeof(T) + " is needed in the scene, but there is none.");

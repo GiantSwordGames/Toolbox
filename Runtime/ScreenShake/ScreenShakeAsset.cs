@@ -73,7 +73,6 @@ namespace JamKit
             result += oscillator.Evaluate(time*_frequency);
             result *= _amplitude;
             result *= _decay.Evaluate(Mathf.Clamp01(time / _duration));
-            Debug.Log($"Evaluating Oscillator at time {time}: {result} with frequency {_frequency} and amplitude {_amplitude}");
             return result;
         }
 

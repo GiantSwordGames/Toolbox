@@ -189,8 +189,8 @@ namespace JamKit
             joint.SetAngularLimitY(_angularLimitY);
             joint.SetAngularLimitZ(_angularLimitZ);
 
-            rigidbody.drag = _drag;
-            rigidbody.angularDrag = _angularDrag;
+            rigidbody.SetLinearDamping( _drag);
+            rigidbody.SetAngularDamping( _angularDrag);
         }
 
         private void OnDrawGizmosSelected()

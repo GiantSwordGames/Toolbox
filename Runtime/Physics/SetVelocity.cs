@@ -10,7 +10,7 @@ namespace JamKit
         // Update is called once per frame
         void FixedUpdate()
         {
-            _rigidbody.velocity = transform.forward * _speed;
+            _rigidbody.SetLinearVelocity( transform.forward * _speed);
         }
     }
 }

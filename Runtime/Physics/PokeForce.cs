@@ -14,8 +14,6 @@
 
             [SerializeField] private LayerMask _raycastMask;
 
-            [Space] [SerializeField] private bool _drawArrow = true;
-            [SerializeField] private float _intendedForceRange = 1;
             [SerializeField] private Vector3 _arrowOffset;
             private float _lerp = 1;
 

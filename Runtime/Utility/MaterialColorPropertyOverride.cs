@@ -52,11 +52,6 @@ public class MaterialColorPropertyOverride : MonoBehaviour
     { 
         
         return;
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
-        meshRenderer.GetPropertyBlock(propertyBlock, materialIndex);
-        propertyBlock.Clear();
-        meshRenderer.SetPropertyBlock(propertyBlock, materialIndex);
     
     }
 }

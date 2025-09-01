@@ -9,7 +9,6 @@ namespace JamKit
     {
         [SerializeField] private bool _debugDraw;
         [SerializeField] private bool _debugAlwayEvaluate;
-        [SerializeField] private bool _triggerOnEnable = true;
         [FormerlySerializedAs("_layermaskAsset")] [SerializeField] private LayermaskAsset _layermask;
         [SerializeField] List<Collider2D> _colliders = new List<Collider2D>();
         private List<Collider2D> _results = new List<Collider2D>();

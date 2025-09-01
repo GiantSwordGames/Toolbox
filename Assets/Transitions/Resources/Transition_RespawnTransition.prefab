@@ -140,7 +140,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!225 &6683903226927791155
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -187,13 +187,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46551780868ee41ca87913ed46d50c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 9041175968431595894}
-  _inDuration: {fileID: 2714416339353544499, guid: 868baabd668c74a42aa0e3408997e87b,
-    type: 2}
-  _outDuration: {fileID: 141086824163783131, guid: 868baabd668c74a42aa0e3408997e87b,
-    type: 2}
+  __dontDestroyOnLoad: 1
+  _autoDestroy: 1
   _startDelay: 0
-  _holdAtApex: 1
+  _hold: 1
+  _onTransitionInBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  _onTransitionOutBegin:
+    m_PersistentCalls:
+      m_Calls: []
+  _animator: {fileID: 9041175968431595894}
+  _inDuration: {fileID: 2714416339353544499, guid: 868baabd668c74a42aa0e3408997e87b, type: 2}
+  _outDuration: {fileID: 141086824163783131, guid: 868baabd668c74a42aa0e3408997e87b, type: 2}
 --- !u!1 &6347871938962877052
 GameObject:
   m_ObjectHideFlags: 0

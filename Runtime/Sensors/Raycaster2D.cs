@@ -21,7 +21,6 @@ namespace JamKit
         [Min(0)]
         [SerializeField] private float _thickness = 0;
         [SerializeField] private LayermaskAsset _layermask;
-        [SerializeField] private bool _raycastTriggers = false;
 
         [SerializeField] private UnityEvent<Collider2D> _onEnter;
         [SerializeField] private UnityEvent<Collider2D> _onExit;
@@ -90,12 +89,12 @@ namespace JamKit
 
         public RaycastHit2D Raycast(bool suppressEvents = false)
         {
-            QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.Ignore;
-
-            if (_raycastTriggers)
-            {
-                queryTriggerInteraction = QueryTriggerInteraction.Collide;
-            }
+            // QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.Ignore;
+            //
+            // if (_raycastTriggers)
+            // {
+            //     queryTriggerInteraction = QueryTriggerInteraction.Collide;
+            // }
 
        
             if (_thickness == 0)

@@ -96,7 +96,7 @@
 
                 }
 
-                name = name = "STAT_" + _prefix.StripNonAlphabetCharacters();
+                name = name = "Stat_" + _prefix.StripNonAlphabetCharacters();
 
             }
 

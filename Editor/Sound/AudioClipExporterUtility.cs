@@ -131,7 +131,7 @@ namespace JamKit
             {
                 Undo.DestroyObjectImmediate(playableDirector.gameObject);
                 RuntimeEditorHelper.EditorApplicationDelayCall(() =>
-                    Selection.activeObject = GameObject.FindObjectOfType<Transform>());
+                    Selection.activeObject = CompaitibilityHelper.FindObjectOfType<Transform>());
                 Debug.Log("Selection.activeObject " + Selection.activeObject, Selection.activeObject);
             }
 

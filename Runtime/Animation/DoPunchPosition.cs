@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 namespace JamKit
 {
-    public class DoPunchPosition : MonoBehaviour
+    public class DoPunchPosition : DoPunch
     {
         [SerializeField] private TargetTransform _target;
         [FormerlySerializedAs("_punchScaleAsset")] [SerializeField] private PunchAsset _punchAsset;

@@ -3,9 +3,9 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace EatTheRich
+namespace JamKit
 {
-    public class DoPunchScale : MonoBehaviour
+    public class DoPunchScale : DoPunch
     {
         [SerializeField] private bool _triggerOnEnable = false;
         [SerializeField] private Transform _target;
@@ -26,7 +26,10 @@ namespace EatTheRich
         
         void OnDisable()
         {
-            _punchAsset.ListenForButtonTest -= Trigger;
+            // if (gameObject)
+            // {
+                // _punchAsset.ListenForButtonTest -= Trigger;
+            // }            
         }
         
         [Button]

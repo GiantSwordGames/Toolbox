@@ -6,16 +6,11 @@ namespace JamKit
 {
     public class ProgressBar : MonoBehaviour
     {
-        [SerializeField] private Transform _primaryBar;
-        [SerializeField] private Transform _secondaryBar;
-        [SerializeField] private SmartFloat _value;
-        public virtual Color primaryColor { get; set; }
-        public virtual Color secondary { get; set; }
-
+        [SerializeField] protected SmartFloat _value;
 
         private void OnValidate()
         {
-            Refresh();
+            // Refresh();
         }
 
         [Button]
@@ -41,17 +36,17 @@ namespace JamKit
         {
         }
 
-        private void UpdateBar(float value)
+        protected virtual void UpdateBar(float value)
         {
-            if (_primaryBar)
-            {
-                _primaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
-            }
-            
-            if (_secondaryBar)
-            {
-                _secondaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
-            }
+            // if (_primaryBar)
+            // {
+            //     _primaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
+            // }
+            //
+            // if (_secondaryBar)
+            // {
+            //     _secondaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
+            // }
         }
 
         public void SetValue(float newValue)

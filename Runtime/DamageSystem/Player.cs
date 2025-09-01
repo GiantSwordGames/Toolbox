@@ -16,7 +16,7 @@ namespace JamKit
             {
                 if(_instance == null)
                 {
-                    _instance = FindObjectOfType<Player>();
+                    _instance = CompaitibilityHelper.FindObjectOfType<Player>();
                 }
                 return _instance;
             }

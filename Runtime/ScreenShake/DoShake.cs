@@ -1,14 +1,15 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace JamKit
 {
     public class DoShake : MonoBehaviour
     {
         [SerializeField] private TargetTransform _targetTransform;
-        [SerializeField] private bool _targetCamera = true;
+        [FormerlySerializedAs("_targetCamera")] [SerializeField] private bool _targetCameraReference = false;
         [SerializeField] private bool _triggerOnEnable = false;
-        [CreateAssetButton][SerializeField] private ScreenShakeAsset _screenShakeAsset;
+        [SerializeField] private ScreenShakeAsset _screenShakeAsset;
         private float _time = 0f;
         private bool _running = false;
         private Vector3 _positionOffset = Vector3.zero;
@@ -23,9 +24,9 @@ namespace JamKit
             }
             
             _targetTransform.Initialize(transform);
-            if (_targetCamera)
+            if (_targetCameraReference)
             {
-                _targetTransform.target =  FindObjectOfType<ScreenShakeCameraReference>().transform;
+                _targetTransform.target =  CompaitibilityHelper.FindObjectOfType<ScreenShakeCameraReference>().transform;
             }
             ResetState();
             _screenShakeAsset.listenForButtonTest += Trigger;
@@ -47,7 +48,7 @@ namespace JamKit
             if (_targetTransform)
             {
                 _targetTransform.localPosition -= _positionOffset;
-                _targetTransform.localRotation = Quaternion.Inverse(_rotationOffset);
+                _targetTransform.localRotation *= Quaternion.Inverse(_rotationOffset);
                 _targetTransform.localScale -= _scaleOffset;
             }
             _positionOffset = Vector3.zero;

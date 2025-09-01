@@ -8,7 +8,7 @@ using UnityEngine;
 namespace JamKit.EditorTools
 {
     [CustomEditor(typeof(JamKit.Level))]
-    public class LevelEditor_MissingScenes : Editor
+    public class LevelEditor_MissingScenes : CustomEditorBase<Level>
     {
         private void OnEnable()
         {
@@ -20,6 +20,11 @@ namespace JamKit.EditorTools
             serializedObject.Update();
             DrawDefaultInspector();
             serializedObject.ApplyModifiedProperties();
+
+            if (GUILayout.Button("Reload Level"))
+            {
+                targetObject.ReloadLevel();
+            }
 
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Build Settings", EditorStyles.boldLabel);

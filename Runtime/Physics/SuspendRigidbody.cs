@@ -36,13 +36,13 @@ namespace JamKit
     
             if (hitGround)
             {
-                Vector3 velocity = _rigidbody.velocity;
+                Vector3 velocity = _rigidbody.GetLinearVelocity();
                 Vector3 rayDirection = _downDirection;
                 Vector3 otherVelocity = Vector3.zero;
                 Rigidbody hitBody = _rayHit.rigidbody;
                 
                 if (hitBody != null)
-                    otherVelocity = hitBody.velocity;
+                    otherVelocity = hitBody.GetLinearVelocity();
                 
                 float rayDirectionVelocity = Vector3.Dot(rayDirection, velocity);
                 float otherVelocityDirection = Vector3.Dot(rayDirection, otherVelocity);

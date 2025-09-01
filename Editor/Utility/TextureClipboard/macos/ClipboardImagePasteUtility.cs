@@ -129,6 +129,7 @@ namespace JamKit.ClipboardImagePaste
             if (importer != null)
             {
                 importer.textureType = TextureImporterType.Sprite;
+                importer.spriteImportMode = SpriteImportMode.Single;
                 AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
                 result = AssetDatabase.LoadAssetAtPath<Sprite>(texturePath);
                 Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
@@ -192,7 +193,7 @@ namespace JamKit.ClipboardImagePaste
             IntPtr pathPtr = GetClipboardImagePath();
             if (pathPtr == IntPtr.Zero)
             {
-                Debug.LogWarning("No image found in clipboard.");
+                // Debug.LogWarning("No image found in clipboard.");
                 return null;
             }
 

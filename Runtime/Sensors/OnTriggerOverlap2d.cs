@@ -60,8 +60,9 @@ namespace JamKit
             onColliderEnter?.Invoke();
 
             Rigidbody2D rigidbody = other.GetComponentInParent<Rigidbody2D>();
-            if (rigidbody && rigidbody.isKinematic == false)
+            if (rigidbody && rigidbody.bodyType == RigidbodyType2D.Kinematic)
             {
+                
                 if (_rigidbodies.Contains(rigidbody) == false)
                 {
                     _rigidbodies.Add(rigidbody);

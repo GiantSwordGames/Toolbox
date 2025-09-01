@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace EatTheRich
+namespace HotWings
 {
     public class DoPunchRotation : MonoBehaviour
     {

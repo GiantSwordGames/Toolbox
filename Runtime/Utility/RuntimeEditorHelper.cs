@@ -5,7 +5,6 @@ using Object = UnityEngine.Object;
 using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
 #endif
 
 using System.Collections;
@@ -36,8 +35,6 @@ namespace JamKit
                 {
                 }
         }
-
-      
 
 
         public static class RuntimeEditorHelper
@@ -338,9 +335,11 @@ namespace JamKit
                         var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<T>(newPath);
                         Debug.Log(newPath, loadAssetAtPath);
                         return newAsset;
-#endif
+#else
 
                         return null;
+#endif
+
                 }
 #if UNITY_EDITOR
 
@@ -480,12 +479,6 @@ namespace JamKit
         {
                 Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
                 children = System.Array.FindAll(children, t => t != parent);
-
-                if (children.Length == 0)
-                {
-                        Debug.LogWarning("No children found to center on.");
-                        return;
-                }
 
            
                 RuntimeEditorHelper.RecordObjectUndo(parent);

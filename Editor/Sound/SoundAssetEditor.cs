@@ -226,7 +226,7 @@ namespace JamKit
                 return;
             }
 
-            AudioListener audioListener = FindObjectOfType<AudioListener>();
+            AudioListener audioListener = CompaitibilityHelper.FindObjectOfType<AudioListener>();
             if (audioListener == null)
             {
                 Debug.LogWarning("No AudioListener found in the scene.");

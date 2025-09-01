@@ -19,11 +19,17 @@ namespace JamKit
         protected override void OnValidate()
         {
             base.OnValidate();
-            _image.color = _color;
+            if (Application.isPlaying)
+            {
+                _image.color = _color;
+                
+            }
         }
 
         protected override IEnumerator IETransitionIn(Action onComplete)
         {
+            _canvasGroup. alpha =  _curveIn.Evaluate(0);
+
             if (_startDelay > 0)
             {
                 yield return new WaitForSecondsRealtime(_startDelay);

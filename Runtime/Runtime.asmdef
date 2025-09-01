@@ -6,7 +6,8 @@
         "Unity.Timeline",
         "Unity.TextMeshPro",
         "Unity.InputSystem",
-        "EasySave3"
+        "EasySave3",
+        "Framework"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

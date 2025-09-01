@@ -10,6 +10,7 @@ namespace JamKit
         
         public class State
         {
+            public int lastFrameFired;
             public Action listeners;
 
             public State()

@@ -71,11 +71,11 @@ namespace JamKit
         {
             
         }
-
+        
         [Button(enabledMode:EButtonEnableMode.Editor)]
         public void GenerateInScene()
         {
-            MenuGenerator[] menuGenerators = FindObjectsOfType<MenuGenerator>();
+            MenuGenerator[] menuGenerators = CompaitibilityHelper.FindObjectsByType<MenuGenerator>();
             MenuGenerator menuGenerator =null;
             foreach (MenuGenerator generator in menuGenerators)
             {

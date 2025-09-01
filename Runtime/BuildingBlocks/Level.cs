@@ -18,6 +18,7 @@ namespace JamKit
         [SerializeField]  private SceneReference[] _additionalScene;
         [SerializeField]  private SceneReference[] _persistentScene;
         [SerializeField]  private TransitionBase _defaultTransition;
+        [SerializeField]  private bool _hardLoad = false;
 
         public SceneReference scene => _scene;
 
@@ -25,8 +26,15 @@ namespace JamKit
         {
             List<SceneReference> allScenes = new List<SceneReference>();
             allScenes.Add(_scene);
-            allScenes.AddRange(_additionalScene);
-            allScenes.AddRange(_persistentScene);
+            if (_additionalScene != null)
+            {
+                allScenes.AddRange(_additionalScene);
+            }
+
+            if (_persistentScene != null)
+            {
+                allScenes.AddRange(_persistentScene);
+            }
             return allScenes;
         }
 
@@ -48,6 +56,7 @@ namespace JamKit
             {
                 if (scene.isLoaded == false)
                 {
+                    Debug.Log("Laoding additional scene: " + scene);
                     scene.Load(LoadSceneMode.Additive);
                 }
             }
@@ -87,13 +96,13 @@ namespace JamKit
             #endif
         }
         
-        [Button(enabledMode: EButtonEnableMode.Playmode)]
+        [NaughtyAttributes.Button(enabledMode: EButtonEnableMode.Playmode)]
         private void LoadLevelAdditive()
         {
             scene.Load(LoadSceneMode.Additive);
         }
 
-        [Button(enabledMode: EButtonEnableMode.Playmode)]
+        [NaughtyAttributes.Button(enabledMode: EButtonEnableMode.Playmode)]
         public void LoadLevel(bool skipTransition = false)
         {
             if (skipTransition || _defaultTransition == null)
@@ -110,6 +119,13 @@ namespace JamKit
 
             if (Application.isPlaying)
             {
+
+                if (_hardLoad)
+                {
+                    HardLoad();
+                    yield break;
+                }
+                
                 List<SceneReference> allScenes = GetAllSceneReferences();
 
                 List<AsyncOperation> _unloadCommands = new List<AsyncOperation>();
@@ -203,13 +219,26 @@ namespace JamKit
             yield break;
             
         }
-        [Button(enabledMode: EButtonEnableMode.Editor)]
+
+        private void HardLoad()
+        {
+            scene.Load();
+            foreach (SceneReference reference in _additionalScene)
+            {
+                reference.Load(LoadSceneMode.Additive);
+            }
+        }
+
+        [NaughtyAttributes.Button(enabledMode: EButtonEnableMode.Editor)]
         private void OpenAdditive()
         {
             #if UNITY_EDITOR
             scene.Open( OpenSceneMode.Additive);
             #endif
         }
+        
+        [NaughtyAttributes.Button(enabledMode: EButtonEnableMode.Playmode)]
+
         public void ReloadLevel()
         {
             LoadLevel();

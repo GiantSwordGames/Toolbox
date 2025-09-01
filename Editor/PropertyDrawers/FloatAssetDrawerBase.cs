@@ -8,7 +8,6 @@ namespace JamKit
     {
         protected virtual string customPrefix => "";
 
-        private string fallbackPath => "Assets/Project/Configurations";
 
         protected abstract float GetValue(SerializedProperty property);
 
@@ -61,7 +60,7 @@ namespace JamKit
                     string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<T>();
                     if (folderPath == "")
                     {
-                        folderPath = fallbackPath;
+                        folderPath = MenuPaths.CONFIGURATIONS_PATH;
                     }
                     
                     //create folder if it doesn't exist

@@ -7,7 +7,6 @@ namespace JamKit
     public class JointGizmo : MonoBehaviour
     {
          private Joint _joint;
-        [SerializeField] private float _gizmoScale = 1f;
         [SerializeField] private Vector3 _offset;
     
         private void Awake()

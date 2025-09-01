@@ -24,7 +24,7 @@ namespace JamKit
                    string selectedPrefabName = selectedPrefab.name;
        
                    // 4. Get the path to the project folder
-                   string projectFolderPath = "Assets/Project";
+                   string projectFolderPath = MenuPaths.DEFAULT_PROJECT_PATH;
        
                    // 5. Get the path to the project prefabs folder
                    string projectPrefabsFolderPath = System.IO.Path.Combine(projectFolderPath, "Prefabs");

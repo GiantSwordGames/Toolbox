@@ -16,6 +16,8 @@ namespace JamKit
         [SerializeField] private UnityEvent _mouseUp = new UnityEvent();
         [SerializeField] private UnityEvent _mouseUpAnyWhere = new UnityEvent();
         [SerializeField] private bool _isMouseOver = false;
+        [SerializeField] private bool _log = false;
+        [SerializeField] private bool _checkBoxColliders = false;
 
         public UnityEvent mouseEnter => _mouseEnter;
 
@@ -39,27 +41,40 @@ namespace JamKit
         {
             _isMouseOver = true;
             _mouseEnter?.Invoke();
+            if (_log)
+            {
+                Debug.Log($"Mouse Enter {name}");
+            }
         }
         
         private void OnMouseExit()
         {
             _isMouseOver = false;
             _mouseExit?.Invoke();
+            if (_log)
+            {
+                Debug.Log($"Mouse Exit {name}");
+            }
         }
         
         private void OnMouseDown()
         {
             _mouseDown?.Invoke();
+            if (_log)
+            {
+                Debug.Log($"Mouse Down {name}");
+            }
         }
 
         private void OnMouseUp()
         {
             _mouseUp?.Invoke();
+            if (_log)
+            {
+                Debug.Log($"Mouse Up {name}");
+            }
         }
 
-        private void Start()
-        {
-        }
 
 
         private void Update()
@@ -67,6 +82,34 @@ namespace JamKit
             if (Input.GetKeyUp(KeyCode.Mouse0))
             {
                 _mouseUpAnyWhere?.Invoke();
+            }
+
+            if (_checkBoxColliders)
+            {
+
+                Physics.Raycast(CameraReference.mainCamera.GetMouseRay(), out RaycastHit hitInfo);
+                if (hitInfo.collider == GetComponent<Collider>())
+                {
+                    if (_isMouseOver == false)
+                    {
+                        _isMouseOver = true;
+                        OnMouseEnter();
+                    }
+                    
+                    if (Input.GetKeyUp(KeyCode.Mouse0))
+                    {
+                        OnMouseDown();
+                    }
+                }
+                else
+                {
+                    if (_isMouseOver == true)
+                    {
+                        _isMouseOver = false;
+                        OnMouseExit();
+                    }
+
+                }
             }
         }
 

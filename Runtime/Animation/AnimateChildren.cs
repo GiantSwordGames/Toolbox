@@ -15,6 +15,7 @@ public class AnimateChildren : MonoBehaviour {
     public bool loop = true;
     public bool randomOffset = false;
     private bool _isComplete = false;
+   [SerializeField] private bool _enableAllFramesUpToCurrent = false;
 
     [SerializeField] private UnityEvent _onLoopComplete;
     float timer = 0;
@@ -91,8 +92,24 @@ public class AnimateChildren : MonoBehaviour {
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            gameObject.transform.GetChild(i).gameObject.SetActive(i == _frame);
+            
+            bool enable = i == _frame;
+            if (_enableAllFramesUpToCurrent)
+            {
+                enable = i <= _frame;
+            }
+            gameObject.transform.GetChild(i).gameObject.SetActive(enable);
         }
+    }
+    
+    public void IncrementFrame()
+    {
+        if (transform.childCount == 0)
+            return;
+
+        _frame++;
+
+        SetFrame();
     }
 
     public Coroutine WaitForAnimation()

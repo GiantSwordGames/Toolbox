@@ -35,7 +35,7 @@ namespace JamKit
         public static SoundInstance PlaySound(SoundAsset soundAsset)
         {
             if(_audioListener == null)
-                _audioListener = GameObject.FindObjectOfType<AudioListener>();
+                _audioListener = CompaitibilityHelper.FindObjectOfType<AudioListener>();
             
             Transform t = _audioListener.transform;
             // SoundInstance soundInstance = SoundInstance.Create(soundAsset, t, t.position);

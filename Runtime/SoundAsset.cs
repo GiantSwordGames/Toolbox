@@ -114,7 +114,6 @@ namespace JamKit
                 default:
                     return _clips[Random.Range(0, _clips.Length)];;
             }
-            return null;
         }
 
 

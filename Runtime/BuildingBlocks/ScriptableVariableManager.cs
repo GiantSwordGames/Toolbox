@@ -9,8 +9,8 @@ namespace JamKit
         public static void Initialize()
         {
             SceneManager.sceneUnloaded += OnSceneUnloaded;
-            ScriptableBoolManager boolManager = ScriptableBoolManager.instance;
-            ScriptableFloatManager floatManager = ScriptableFloatManager.instance;
+            // ScriptableBoolManager boolManager = ScriptableBoolManager.instance;
+            // ScriptableFloatManager floatManager = ScriptableFloatManager.instance;
         }
 
         // reset on unload so that value are correct on Awake

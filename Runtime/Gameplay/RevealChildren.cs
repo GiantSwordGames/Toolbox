@@ -1,63 +1,42 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace JamKit
 {
     public class RevealChildren : MonoBehaviour
     {
-        [SerializeField] private float _interval = 0.2f;
-        private Coroutine _coroutine;
+        [Range(0,1)]
+        [SerializeField] private float _lerp;
 
+        public float lerp => _lerp;
+
+        private void OnValidate()
+        {
+            SetFrame();
+        }
         private void Awake()
         {
-            Reset();
+            SetFrame();
         }
 
-        [Button]
-        public void Trigger()
+        void SetFrame()
         {
-            IETrigger();
-        }
-
-        public void Reset()
-        {
-            if (_coroutine != null)
+            int frame = Mathf.FloorToInt(_lerp * (transform.childCount - 1));
+            for (int i = 0; i < transform.childCount; i++)
             {
-                StopCoroutine(_coroutine);
-                _coroutine = null;
+                transform.GetChild(i).gameObject.SetActive(i <= frame);
             }
-            
-            List<Transform> children = transform.GetDirectChildren();
-            for (int j = 0; j < children.Count; j++)
-            {
-                children[j].gameObject.SetActive(false);
-            }
-
-        }
-
-        public Coroutine IETrigger()
-        {
-            _coroutine = StartCoroutine(IEReveal());
-            return _coroutine;
         }
         
-        private IEnumerator IEReveal()
+        public void Decrement()
         {
-            
-            List<Transform> children = transform.GetDirectChildren();
-            
-
-            for (int i = 0; i < children.Count; i++)
-            {
-                for (int j = 0; j < children.Count; j++)
-                {
-                    children[j].gameObject.SetActive(i >= j);
-                }
-                yield return new WaitForSeconds(_interval);
-            }
+            int frame = Mathf.FloorToInt(_lerp * (transform.childCount - 1));
+            frame--;
+            frame = Mathf.Clamp(frame, 0, transform.childCount - 1);
+            _lerp = frame / (float)(transform.childCount - 1);
+            _lerp = Mathf.Clamp01(_lerp);
+            SetFrame();
         }
+        
+
     }
 }

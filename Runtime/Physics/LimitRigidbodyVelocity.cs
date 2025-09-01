@@ -12,9 +12,9 @@ namespace JamKit
 
         void Update()
         {
-            if ( _rigidbody.velocity.magnitude > _maxVelocity)
+            if ( _rigidbody.GetLinearVelocity().magnitude > _maxVelocity)
             {
-                _rigidbody.velocity = _rigidbody.velocity.normalized * _maxVelocity;
+                _rigidbody.SetLinearVelocity( _rigidbody.GetLinearVelocity().normalized * _maxVelocity);
             }
         }
     }

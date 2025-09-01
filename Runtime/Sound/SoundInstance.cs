@@ -16,7 +16,6 @@ namespace JamKit
 
         private float _randomizedPitch;
         private float _time;
-        private float _fade = 1;
         private float _randomizedVolume;
         private float _pitchIncrement;
         private float _velocityAttenuation =1f;

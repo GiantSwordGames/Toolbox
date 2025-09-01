@@ -12,7 +12,6 @@ namespace JamKit
         [SerializeField] private float _fadeIntime = 1;
         [SerializeField] private float _fadeOutTime = 1;
         [SerializeField] private bool _persistAcrossScenes = true;
-        private bool _hasTriggered = false;
 
         private void OnTriggerEnter2D(Collider2D other)
         {

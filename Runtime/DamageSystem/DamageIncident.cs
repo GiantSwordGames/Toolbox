@@ -16,7 +16,7 @@ namespace JamKit
             {
                 if (_instance == null)
                 {
-                    _instance = FindObjectOfType<DamageIncidentManager>();
+                    _instance = CompaitibilityHelper.FindObjectOfType<DamageIncidentManager>();
                 }
 
                 if (_instance == null)

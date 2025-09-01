@@ -470,9 +470,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: a84d7b01130dd4f79a2ffed75661fb2f, type: 2}
-        m_TargetAssemblyTypeName: GiantSword.ScriptableUtilities, Runtime
-        m_MethodName: ReloadScene
+      - m_Target: {fileID: 11400000, guid: 9981ea24e015d43d2b168b39e76afd1c, type: 2}
+        m_TargetAssemblyTypeName: JamKit.Level, Runtime
+        m_MethodName: ReloadLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

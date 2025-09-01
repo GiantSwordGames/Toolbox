@@ -17,11 +17,11 @@ namespace JamKit
         private static void OnSceneSaved(Scene scene)
         {
             return;
-            List<SoundAsset> soundAssets = RuntimeEditorHelper.FindAssets<SoundAsset>();
-            foreach (var soundAsset in soundAssets)
-            {
-                soundAsset.ImportAudioClips();
-            }
+            // List<SoundAsset> soundAssets = RuntimeEditorHelper.FindAssets<SoundAsset>();
+            // foreach (var soundAsset in soundAssets)
+            // {
+            //     soundAsset.ImportAudioClips();
+            // }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace JamKit
                 }
             }
 
-            SceneFolder[] findObjectsOfType = FindObjectsOfType<SceneFolder>();
+            SceneFolder[] findObjectsOfType = CompaitibilityHelper.FindObjectsByType<SceneFolder>();
             foreach (SceneFolder sceneFolder in findObjectsOfType)
             {
                 if (sceneFolder._folderAsset == folderAsset)

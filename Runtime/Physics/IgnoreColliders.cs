@@ -8,7 +8,7 @@ namespace JamKit
         // Start is called before the first frame update
         void Start()
         {
-            Collider[] colliders = FindObjectsOfType<Collider>();
+            Collider[] colliders = CompaitibilityHelper.FindObjectsByType<Collider>();
             foreach (var colliderA in colliders)
             {
                 foreach (var colliderB in colliders)
