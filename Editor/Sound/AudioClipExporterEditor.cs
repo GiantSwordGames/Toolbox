@@ -82,10 +82,9 @@ namespace JamKitEditor
         
         public class ConfirmationWindow : EditorWindow
         {
-            public static Preference<bool> deleteOriginalClips = new Preference<bool>("DeleteOriginalClips", false);
-            public static Preference<bool> deleteTimelineSession = new Preference<bool>("DeleteTimelineSession", true);
-            // New preference for overwriting the original clip:
-            public static Preference<bool> overwriteOriginal = new Preference<bool>("OverwriteOriginal", false);
+            public static Preference<bool> deleteOriginalClips = new Preference<bool>("DeleteOriginalClips", false, PreferenceMode.Global);
+            public static Preference<bool> deleteTimelineSession = new Preference<bool>("DeleteTimelineSession", true, PreferenceMode.Global);
+            public static Preference<bool> overwriteOriginal = new Preference<bool>("OverwriteOriginal", false, PreferenceMode.Global);
 
             private AudioClipExporter _audioClipExporter;
             private string clipNames;

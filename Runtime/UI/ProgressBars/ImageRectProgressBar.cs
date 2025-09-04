@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +10,10 @@ namespace JamKit
     {
         [SerializeField] private Image _primaryBar;
         [SerializeField] private float _filledWidth = 100f;
+        [SerializeField] private float _incrementOverTime = 0;
         [SerializeField] private SmartFloat _value;
+        private float _previousValue;
+        private Coroutine _tween;
         public virtual Color primaryColor { get; set; }
         public virtual Color secondary { get; set; }
 
@@ -29,19 +34,48 @@ namespace JamKit
             set => SetValue(value);
         }
 
+
+        private void OnEnable()
+        {
+            _value.onValueChanged += OnValueChanged;
+        }
+        
+        private void OnDisable()
+        {
+            _value.onValueChanged -= OnValueChanged;
+            this.KilLCoroutineIfNeeded(_tween);
+        }
+
         private void Start()
         {
-            _value.onValueChanged += UpdateBar;
+            _previousValue = _value.normalizedValue;
             Refresh();
 
         }
 
-        private void UpdateBar(float v)
+        private void OnValueChanged(float obj)
+        {
+
+            if (_incrementOverTime > 0)
+            {
+                this.KilLCoroutineIfNeeded(_tween);
+                _tween = StartCoroutine(IEIncrementTowardsNewValue(_previousValue));
+            }
+            else
+            {
+                UpdateBar( _value.value);
+            }
+            
+            _previousValue = _value.normalizedValue;
+        }
+        
+     
+
+        private void UpdateBar(float lerp)
         {
             
             if (_primaryBar)
             {
-                float lerp = value.normalizedValue;
                 lerp = Mathf.Clamp01(lerp);
                 _primaryBar.rectTransform.sizeDelta = _primaryBar.rectTransform.sizeDelta .WithX( _filledWidth*lerp);
             }
@@ -56,7 +90,28 @@ namespace JamKit
         {
             newValue = Mathf.Clamp01(newValue);
             _value.value = newValue;
-            // UpdateBar(newValue);
+        }
+        
+          
+
+        private IEnumerator IEIncrementTowardsNewValue(float oldValue)
+        {
+
+            float duration = _incrementOverTime;
+            float startValue = oldValue;
+            float endValue = value.normalizedValue;
+            float elapsed = 0f;
+                
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / duration);
+                float newValue = Mathf.Lerp(startValue, endValue, t);
+                UpdateBar(newValue);
+                yield return null;
+            }
+            UpdateBar(value.normalizedValue);
+
         }
     }
 }

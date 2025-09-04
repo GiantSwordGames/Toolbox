@@ -270,7 +270,7 @@ namespace JamKit
         [MenuItem("CONTEXT/LineRenderer/Assign Duplicate Material")]
         static void DuplicateAndAssignMaterial(MenuCommand command)
         {
-            Renderer meshRenderer = (Renderer)command.context;
+            Renderer meshRenderer = command.context as Renderer;
 
             if (meshRenderer != null && meshRenderer.sharedMaterial != null)
             {

@@ -14,6 +14,7 @@
         Cull Off
         Lighting Off
         ZWrite Off
+        ZTest Always
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
@@ -21,21 +22,25 @@
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+
+            // Ensure derivative functions (fwidth/ddy/ddx) are available
+            #pragma target 3.0
+            // or: #pragma require derivatives
+
             #include "UnityCG.cginc"
 
             struct appdata_t
             {
                 float4 vertex : POSITION;
                 float2 texcoord : TEXCOORD0;
-                fixed4 color : COLOR;
+                fixed4 color   : COLOR;
             };
 
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-                float2 uv : TEXCOORD0;
-                fixed4 color : COLOR;
-                float2 screenPos : TEXCOORD1;
+                float2 uv     : TEXCOORD0;
+                half4  color  : COLOR0;
             };
 
             float _MinCutoff;
@@ -46,38 +51,37 @@
             {
                 v2f OUT;
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
-                OUT.uv = IN.texcoord * 2.0 - 1.0; // UV range from -1 to 1
-                OUT.color = IN.color ;
-
-                OUT.screenPos = ComputeScreenPos(OUT.vertex).xy;
+                OUT.uv = IN.texcoord * 2.0 - 1.0; // [-1, 1]
+                OUT.color = IN.color;
                 return OUT;
             }
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                float rad = radians(_Angle);
-                float2 dir = float2(cos(rad), sin(rad));
+                // Use half/float for math to avoid precision loss on mobile
+                half rad = radians(_Angle);
+                half2 dir = half2(cos(rad), sin(rad));
 
                 // Project UV onto direction vector
-                float projected = dot(IN.uv, dir);
+                half projected = dot(IN.uv, dir);
 
-                // Normalize projection range
-                float2 absDir = abs(dir);
-                float maxProjection = absDir.x + absDir.y;
-                projected = projected / maxProjection * 0.5 + 0.5;
+                // Normalize projection range so projected∈[0,1] at extremes
+                half2 absDir = abs(dir);
+                half maxProjection = absDir.x + absDir.y + 1e-5h; // avoid div-by-zero if angle is odd
+                projected = projected / maxProjection * 0.5h + 0.5h;
 
-                // Auto Feather Width (approx 1 screen pixel in UV space)
-                float feather = fwidth(projected) * 1.5; // 1.5 pixels wide edge
+                // Feather ≈ 1 pixel in UV space
+                half feather = fwidth(projected) * 1.5h;
 
-                // Smoothstep anti-alias edges
-                float edgeStart = smoothstep(_MinCutoff, _MinCutoff + feather, projected);
-                float edgeEnd = 1.0 - smoothstep(_MaxCutoff - feather, _MaxCutoff, projected);
+                // Smooth edge
+                half edgeStart = smoothstep(_MinCutoff, _MinCutoff + feather, projected);
+                half edgeEnd   = 1.0h - smoothstep(_MaxCutoff - feather, _MaxCutoff, projected);
+                half mask = saturate(edgeStart * edgeEnd);
 
-                float mask = edgeStart * edgeEnd;
-
-                return fixed4(IN.color.rgb, IN.color.a * mask);
+                return half4(IN.color.rgb, IN.color.a * mask);
             }
             ENDCG
         }
     }
+    Fallback "UI/Default"
 }

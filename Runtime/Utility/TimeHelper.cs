@@ -41,6 +41,14 @@ namespace JamKit
             return seconds / 3600;
         }
         
+        public static string GetMinutesAndSecondsString(float seconds)
+        {
+            int minutes = (int)(seconds / 60);
+            int secs = (int)(seconds % 60);
+            return $"{minutes}:{secs:D2}";
+           
+        }
+        
         public static float HoursToSeconds(float hours)
         {
             return hours * 3600;

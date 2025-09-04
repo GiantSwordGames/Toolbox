@@ -66,7 +66,7 @@ namespace JamKit
 
         public IEnumerator GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            return _shuffledElements.GetEnumerator();
         }
     }
 }

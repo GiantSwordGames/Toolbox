@@ -46,6 +46,7 @@
 
             private void OnValueValueChanged(float obj)
             {
+                Debug.Log("OnValueValueChanged " + obj + " previous: " + _previousValue  + " incrementOverDuration: " + _incrementOverDuration);
                 if (_incrementOverDuration > 0)
                 {
                  
@@ -92,9 +93,11 @@
                 if (newText != previousText)
                 {
                     _text.text = newText;
+                    Debug.Log("Text changed to: " + newText);
                     _onDisplayValueChanged?.Invoke();
 
                 }
+                
 
                 name = name = "Stat_" + _prefix.StripNonAlphabetCharacters();
 
@@ -115,7 +118,7 @@
                 float startValue = oldValue;
                 float endValue = value.value;
                 float elapsed = 0f;
-
+                
                 while (elapsed < duration)
                 {
                     elapsed += Time.deltaTime;

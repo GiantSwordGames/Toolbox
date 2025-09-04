@@ -786,6 +786,34 @@ namespace JamKit
             return null;
         }
 
+
+        public static Vector3 RandomizeXZ(this Vector3 vector, float range)
+        {
+            return new Vector3(
+                vector.x + Random.Range(-range, range),
+                vector.y,
+                vector.z + Random.Range(-range, range)
+            );
+        }
+        
+        public static Vector3 Randomize(this Vector3 vector, float x, float y, float z)
+        {
+            return new Vector3(
+                vector.x + Random.Range(-x, x),
+                vector.y + Random.Range(-y, y),
+                vector.z + Random.Range(-z, z)
+            );
+        }
+        
+        public static Vector3 Randomize(this Vector3 vector, Vector3 range)
+        {
+            return new Vector3(
+                vector.x + Random.Range(-range.x, range.x),
+                vector.y + Random.Range(-range.y, range.y),
+                vector.z + Random.Range(-range.z, range.z)
+            );
+        } 
+
         public static void SnapLocalPosition(this Transform transform)
         {
             Vector3 localPosition = transform.localPosition;
@@ -991,6 +1019,13 @@ namespace JamKit
             }
         }
 
+        public static void SoloSpecificChild(this Transform parent, int childIndex)
+        {
+            for (int i = 0; i < parent.childCount; i++)
+            {
+                parent.GetChild(i).gameObject.SetActive(i == childIndex);
+            }
+        }
         public static void SoloNextChild(this Transform transform)
         {
             int current = -1;
@@ -1472,7 +1507,7 @@ namespace JamKit
         }
         
         
-        public static bool HasParent<T>(this GameObject gameObject) where T : Component
+        public static bool HasParentComponent<T>(this GameObject gameObject) where T : Component
         {
             return gameObject.GetComponentInParent<T>() != null;
         }
@@ -1832,6 +1867,13 @@ namespace JamKit
 
             transform.localScale = finalScale; // Ensure final scale is set
             onComplete?.Invoke();
+        }
+
+        public static void KilLCoroutineIfNeeded(this MonoBehaviour monoBehaviour, Coroutine tween)
+        {
+            if(tween != null)
+                monoBehaviour.StopCoroutine(tween);
+            tween = null;
         }
 
 

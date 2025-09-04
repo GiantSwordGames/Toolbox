@@ -67,8 +67,8 @@ namespace JamKit
 
                 if (previous != _value || _fireEventsOnNoChange)
                 {
-                    onValueChanged.Invoke();
-                    _onValueChangedAction?.Invoke(_value);
+                    // onValueChanged.Invoke();
+                    // _onValueChangedAction?.Invoke(_value);
                     
                     if (_value < previous)
                     {
