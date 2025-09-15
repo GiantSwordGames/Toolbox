@@ -26,9 +26,9 @@ MonoBehaviour:
   _capitalize: 1
   _replaceSpacesWithUnderscores: 1
   _removeHyphens: 1
-  _removeParenthesis: 1
+  _removeNonAlphaNumericCharacters: 1
   _includeGrandparentInName: 0
-  _parentFolder: Materials
+  _parentFolder: 
   _absolutePath: 
   _regexReplaceFromName:
   - description: 

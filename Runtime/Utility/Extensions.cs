@@ -131,6 +131,7 @@ namespace JamKit
         {
             return new Vector3(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y), Mathf.RoundToInt(vector.z));
         }
+        
 
         public static Vector3 To(this Vector3 from, Vector3 to)
         {
@@ -212,7 +213,7 @@ namespace JamKit
         }
         public static Vector3 Round(this Vector3 from)
         {
-            return new Vector3(Mathf.Round(from.x), Mathf.Round(from.y));
+            return new Vector3(Mathf.Round(from.x), Mathf.Round(from.y), Mathf.Round(from.z));
         }
         public static Vector2 Rotate(this Vector2 from, float degrees)
         {
@@ -1044,6 +1045,7 @@ namespace JamKit
             
             for (int i = 0; i < transform.childCount; i++)
             {
+                RuntimeEditorHelper.SetDirty(transform.GetChild(i).gameObject);
                 transform.GetChild(i).gameObject.SetActive(i == current);
             }
         }

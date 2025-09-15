@@ -13,8 +13,9 @@
             [SerializeField] private UnityEvent _onValueChanged;
             [SerializeField] private SmartFloat _value;
             [SerializeField] private TMPro.TMP_Text _text;
-            [SerializeField] private string _prefix;
-            [SerializeField] private string _postFix;
+            [SerializeField] [TextArea(1,5)] private string _prefix;
+             [SerializeField] [TextArea(1,5)] private string _postFix;
+            [SerializeField] private float _multiplier = 1;
             [SerializeField] private string _format = "F1";
             [SerializeField] private SmartFloat[] _additionalValues = {};
             [SerializeField] private float _incrementOverDuration = 0;
@@ -46,7 +47,6 @@
 
             private void OnValueValueChanged(float obj)
             {
-                Debug.Log("OnValueValueChanged " + obj + " previous: " + _previousValue  + " incrementOverDuration: " + _incrementOverDuration);
                 if (_incrementOverDuration > 0)
                 {
                  
@@ -83,7 +83,7 @@
             {
                 string previousText = _text.text;
 
-                string newText = _prefix + value.ToString(_format) + _postFix;
+                string newText = _prefix + (value*_multiplier).ToString(_format) + _postFix;
                 for (int i = 0; i < _additionalValues.Length; i++)
                 {
                     string oldValue = $"{{{i}}}";
@@ -93,11 +93,8 @@
                 if (newText != previousText)
                 {
                     _text.text = newText;
-                    Debug.Log("Text changed to: " + newText);
                     _onDisplayValueChanged?.Invoke();
-
                 }
-                
 
                 name = name = "Stat_" + _prefix.StripNonAlphabetCharacters();
 

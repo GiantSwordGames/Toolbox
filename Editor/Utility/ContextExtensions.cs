@@ -114,7 +114,7 @@ namespace JamKit
             RuntimeEditorHelper.Focus(parent);
         }
 
-        [MenuItem("CONTEXT/Transform/Center On Children")]
+        [MenuItem("CONTEXT/Transform/Position/Center On Children")]
         private static void CenterOnChildren(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -145,6 +145,31 @@ namespace JamKit
 
             Debug.Log($"Centered '{parent.name}' on its children.");
         }
+        
+        [MenuItem("CONTEXT/Transform/Position/Round")]
+        private static void Round(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+        
+
+            Vector3 newPosition = parent.localPosition.Round();
+       
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            Vector3 delta = parent.position - newPosition;
+            parent.position -= delta;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position += delta;
+            }
+
+            Debug.Log($"Centered '{parent.name}' on its children.");
+        }
+
+
+        
+        
         [MenuItem("CONTEXT/Transform/Freeze/Scale")]
         private static void NormalizeScale(MenuCommand command)
         {

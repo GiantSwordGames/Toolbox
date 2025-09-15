@@ -49,6 +49,12 @@ public class Cooldown
         _initialized = true;
     }
 
+    public void Reset(float duration)
+    {
+        _duration = duration;
+        Reset();
+    }
+
     public bool HasElapsed()
     {
         CheckInitialization();

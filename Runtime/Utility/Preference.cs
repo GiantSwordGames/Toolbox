@@ -247,7 +247,7 @@ namespace JamKit
             if (this is Preference<int> intPref)
             {
                 EditorGUI.BeginChangeCheck();
-                var newValue =  EditorGUILayout.IntField(intPref.value, label);
+                var newValue =  EditorGUILayout.IntField(label, intPref.value);
                 if (EditorGUI.EndChangeCheck())
                 {
                     intPref.value = newValue;

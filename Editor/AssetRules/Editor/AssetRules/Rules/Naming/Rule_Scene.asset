@@ -18,9 +18,10 @@ MonoBehaviour:
   _pathTest: 
   _exceptions:
   - Game
-  _pathRequirements: []
+  _pathRequirements:
+  - Scenes/
   order: 6
-  _customPrefix: 
+  _customPrefix: Scene_
   _customPostfix: 
   _regexValidation: 
   _removeSpaces: 0

@@ -19,6 +19,13 @@ namespace JamKit.Utility
         [SerializeField] private float _lastSampleTime = 0.0f;
         [SerializeField] private float _lastResult = 0.0f;
 
+        public SmartCurve()
+        {
+            _curve = AnimationCurve.Constant(0f, 1f, 1f);
+            _amplitudeM = 1f;
+            _frequencyM = 1f;
+            _phaseShift = 0f;
+        }
         public SmartCurve(AnimationCurve curve)
         {
             _curve = curve;

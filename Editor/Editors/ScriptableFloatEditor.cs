@@ -9,12 +9,24 @@ namespace JamKit
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            // base.OnInspectorGUI();
 
-            GUI.enabled = false;
-            EditorGUILayout.FloatField("Current Value", targetObject.value);
+            var scopeProperty = serializedObject.FindProperty("_scriptableVariableScope");
+            var initialValueProperty = serializedObject.FindProperty("_initialValue");
+            var constraintsProperty = serializedObject.FindProperty("_constraints");
             
+            
+            EditorGUILayout.PropertyField(scopeProperty);
+            EditorGUILayout.PropertyField(initialValueProperty);
+            
+            GUI.enabled = Application.isPlaying;
+            targetObject.value = EditorGUILayout.FloatField("Current Value", targetObject.value);
             GUI.enabled = true;
+            
+            EditorGUILayout.PropertyField(constraintsProperty);
+
+
+            serializedObject.ApplyModifiedProperties();
             if (GUILayout.Button("Increment by 0.1"))
             {
                 targetObject.value += 0.1f;    

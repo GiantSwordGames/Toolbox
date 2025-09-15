@@ -14,7 +14,7 @@ namespace JamKit
     
     public class ScriptableBool : ScriptablePrimitive
     {
-        public ScriptableVariableScope _scriptableVariableScope;
+        public ScriptableVariableScope _scriptableVariableScope = ScriptableVariableScope.Application;
         public ScriptableVariableScope scriptableVariableScope => _scriptableVariableScope;
 
         [SerializeField] private bool _initialValue;

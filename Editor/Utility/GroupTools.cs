@@ -152,13 +152,13 @@ namespace JamKit
                 Vector3 totalPosition = Vector3.zero;
 
                 RectTransform childRectTransform = null;
-                for (int i = 0; i < transforms.Count; i++)
-                {
-                    if (transforms[i].parent != commonParent)
-                    {
-                        commonParent = null;
-                    }
-                }
+                // for (int i = 0; i < transforms.Count; i++)
+                // {
+                //     if (transforms[i].parent != commonParent)
+                //     {
+                //         commonParent = null;
+                //     }
+                // }
                 
                 for (int i = 0; i < transforms.Count; i++)
                 {
@@ -193,10 +193,10 @@ namespace JamKit
                     // group.transform.localScale = transforms[0].localScale;
                 }
 
-                for (int i = 0; i < transforms.Count; i++)
-                    totalPosition += transforms[i].position;
-
-                group.transform.position = totalPosition / transforms.Count;
+                // for (int i = 0; i < transforms.Count; i++)
+                //     totalPosition += transforms[i].position;
+                //
+                // group.transform.position = totalPosition / transforms.Count;
 
                 for (int i = 0; i < transforms.Count; i++)
                     Undo.SetTransformParent(transforms[i], group.transform, "Group");

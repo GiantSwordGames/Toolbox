@@ -95,6 +95,12 @@ public class SmartFloat
     }
 
 
+    public int intValue
+    {
+        get => (int)value;
+        set => this.value = (int)value;
+    }
+    
     public float value
     {
         get

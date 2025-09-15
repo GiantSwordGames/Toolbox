@@ -19,7 +19,10 @@ namespace JamKit
 
         private void OnValidate()
         {
-            Refresh();
+            if (Application.isPlaying == false)
+            {
+                Refresh();
+            }
         }
 
         [Button]

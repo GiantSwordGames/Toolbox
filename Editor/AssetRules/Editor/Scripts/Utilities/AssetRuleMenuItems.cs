@@ -10,10 +10,9 @@ namespace JamKit.AssetRules
 {
     public static class AssetRuleMenuItems
     {
-        public const string ASSET_MENU_PATH = MenuPaths.CREATE_ASSET_MENU + "/Rules/Asset Rules";
-        public const string ASSETS_MENU_PATH = "Assets";
+        public const string ASSET_MENU_PATH = MenuPaths.CREATE_ASSET_MENU + "Rules/Asset Rules";
 
-        [MenuItem(MenuPaths.QUICK_CREATE + "Check Naming Conventions", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem( "Assets/Check Naming Conventions", false, MenuPaths.QUICK_CREATE_PRIORITY+10)]
         private static void SearchForCrimes()
         {
             List<RuleResult> results = new List<RuleResult>();

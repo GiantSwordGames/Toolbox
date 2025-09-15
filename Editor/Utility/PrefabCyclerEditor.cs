@@ -128,7 +128,6 @@ namespace JamKit
         {
             if (candidates.Count == 0) return;
 
-            Debug.Log(currentIndex + " "+ delta);
             int nextIndex = candidates.WrapIndex(currentIndex + delta);
 
             var nextPrefab = candidates[nextIndex].asset;

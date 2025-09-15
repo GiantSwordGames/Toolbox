@@ -45,23 +45,26 @@ namespace JamKit
         
         public static void ResetAll(ScriptableVariableScope scriptableVariableScope)
         {
-            
-            var keysToReset = new List<ScriptableEvent>();
-
-            foreach (var variable in instance._scriptableEvents)
+            if (_instance)
             {
-                if (variable.Key.scriptableVariableScope == scriptableVariableScope || scriptableVariableScope == ScriptableVariableScope.Application)
+                var keysToReset = new List<ScriptableEvent>();
+
+                foreach (var variable in instance._scriptableEvents)
                 {
-                    keysToReset.Add(variable.Key);
+                    if (variable.Key.scriptableVariableScope == scriptableVariableScope ||
+                        scriptableVariableScope == ScriptableVariableScope.Application)
+                    {
+                        keysToReset.Add(variable.Key);
+                    }
                 }
-            }
 
-            foreach (var key in keysToReset)
-            {
-                Debug.Log("Reset Key " + key, key);
+                foreach (var key in keysToReset)
+                {
+                    Debug.Log("Reset Key " + key, key);
 
-                instance._scriptableEvents[key] = new State();
-            }
+                    instance._scriptableEvents[key] = new State();
+                }
+            }   
         }
 
         public static void GetState(ScriptableEvent scriptableEvent, out State b)

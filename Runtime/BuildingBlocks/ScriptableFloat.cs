@@ -13,8 +13,8 @@ namespace JamKit
             CannotGoBelowZero,
             ZeroToOne
         }
-        
-        public ScriptableVariableScope _scriptableVariableScope;
+
+        public ScriptableVariableScope _scriptableVariableScope = ScriptableVariableScope.Application;
         [SerializeField] private float _initialValue;
         [SerializeField] private Constraints _constraints;
 
@@ -34,7 +34,7 @@ namespace JamKit
             {
                 if (Application.isPlaying == false)
                 {
-                     _initialValue = value;
+                    _initialValue = value;
                 }
                 else
                 {
@@ -42,7 +42,7 @@ namespace JamKit
                 }
             }
         }
-        
+
         public event Action<float> onValueChanged
         {
             add
@@ -68,7 +68,7 @@ namespace JamKit
         }
 
 
-        [ShowNativeProperty]
+        // [ShowNativeProperty]
         public float value
         {
             get
@@ -92,8 +92,9 @@ namespace JamKit
                 else if (_constraints == Constraints.CannotGoBelowZero)
                 {
                     newValue = Mathf.Max(0, newValue);
-                    
+
                 }
+
                 if (Math.Abs(newValue - trackedValue) > Mathf.Epsilon)
                 {
                     trackedValue = newValue;
@@ -107,7 +108,12 @@ namespace JamKit
         }
 
         public float initialValue => _initialValue;
-        public int intValue => value.ToInt();
+
+        public int intValue
+        {
+            get => value.ToInt();
+            set => this.value = value;
+        }
 
         public ScriptableVariableScope scriptableVariableScope => _scriptableVariableScope;
 
@@ -116,17 +122,18 @@ namespace JamKit
         {
             value += 0.1f;
         }
-        
+
         [Button("Increment by 1")]
         public void IncrementByOne()
         {
             value += 1f;
         }
+
         public void Increment(float amount)
         {
             value += amount;
         }
-        
+
         // implicit
         public static implicit operator float(ScriptableFloat scriptableFloat)
         {
@@ -137,12 +144,12 @@ namespace JamKit
         {
             return value + "";
         }
-        
-        public Coroutine IncrementValueOverTime( float increment, float duration)
+
+        public Coroutine IncrementValueOverTime(float increment, float duration)
         {
             return AsyncHelper.StartCoroutine(IEIncrementValueOverTime(increment, duration));
         }
-    
+
         private IEnumerator IEIncrementValueOverTime(float increment, float duration)
         {
             float startTime = Time.time;
@@ -163,6 +170,12 @@ namespace JamKit
             // Ensure final increment in case of precision issues
             value += (1 - lerpPrev) * increment;
         }
-
+        
+        public void ResetToDefaultValue()
+        {
+            value = _initialValue;
         }
+        
     }
+    
+}

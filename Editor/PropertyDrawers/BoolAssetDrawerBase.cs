@@ -28,7 +28,15 @@ namespace JamKit
             var targetObject = property.objectReferenceValue as ScriptableBool;
             if (targetObject != null)
             {
-                targetObject.value = newValue;
+                if (Application.isPlaying)
+                {
+                    targetObject.value = newValue;
+                }
+                else
+                {
+                    Undo.RecordObject(targetObject, "Changed Initial Value");
+                    targetObject.initialValue = newValue;
+                }
             }
         }
         

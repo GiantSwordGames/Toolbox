@@ -36,11 +36,11 @@ public class TileDrawingTool
 {
     static TileDrawingTool()
     {
-        #if UnITY_2021_2_OR_NEWER
+        // #if UNITY_2021_2_OR_NEWER
                 SceneView.duringSceneGui += OnSceneGUI;
-        else
-                SceneView.onSceneGUIDelegate += OnSceneGUI;
-        #endif
+        // else
+                // SceneView.onSceneGUIDelegate += OnSceneGUI;
+        // #endif
 
     }
     public static Preference<bool> disableTileDrawingTool = new Preference<bool>("DisableTileDrawingTool", false);

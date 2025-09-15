@@ -243,5 +243,23 @@ namespace JamKit
         {
             LoadLevel();
         }
+
+        public bool Contains(Scene scene)
+        {
+            if (_scene.SceneName == scene.name)
+            {
+                return true;
+            }
+
+            foreach (var additional in _additionalScene)
+            {
+                if (additional.SceneName == scene.name)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace JamKit.AssetRules
         {
             if (_enabled == false)
                 return true;
-
+            
             string name = assetName;
 
             if (_exceptions != null)
@@ -80,6 +80,7 @@ namespace JamKit.AssetRules
         public virtual bool DoesRuleApply(Object asset, string assetPath)
         {
             bool shouldIgnore = ShouldIgnore(assetPath);
+            Debug.Log("Rule Applies: " + (shouldIgnore == false), this);
             return shouldIgnore == false;
         }
     }

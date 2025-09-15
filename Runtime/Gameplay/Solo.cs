@@ -5,7 +5,7 @@ namespace JamKit
 {
     public class Solo : MonoBehaviour
     {
-        
+
         [Button("Solo Chain")]
         public void Trigger()
         {
@@ -33,5 +33,12 @@ namespace JamKit
                 }
             }
         }
+        
+        [Button]
+        private void Iterate()
+        {
+            transform.parent.SoloNextChild();
+        }
     }
+    
 }

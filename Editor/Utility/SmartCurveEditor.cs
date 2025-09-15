@@ -67,25 +67,25 @@ namespace JamKit.Utility
 
             EditorGUI.EndProperty();
 
-            Event e = Event.current;
-
-            if (e.type == EventType.MouseDown && e.button == 1 && totalRect.Contains(e.mousePosition))
-            {
-                GenericMenu context = new GenericMenu();
-                SmartCurve smartCurve = GetSerializedValue<SmartCurve>(this, property);
-                context.AddItem(new GUIContent("Freeze", "Apply constants to curve"), false, () =>
-                {
-                    UnityEditor.Undo.RecordObject(property.serializedObject.targetObject, "Freeze");
-                    smartCurve.Freeze();
-                });
-                context.AddItem(new GUIContent("Normalize", "Remap curve between [0,1]"), false, () =>
-                {
-                    UnityEditor.Undo.RecordObject(property.serializedObject.targetObject, "Normalize");
-                    smartCurve.Normalize();
-                });
-
-                context.ShowAsContext();
-            }
+            // Event e = Event.current;
+            //
+            // if (e.type == EventType.MouseDown && e.button == 1 && totalRect.Contains(e.mousePosition))
+            // {
+            //     GenericMenu context = new GenericMenu();
+            //     SmartCurve smartCurve = GetSerializedValue<SmartCurve>(this, property);
+            //     context.AddItem(new GUIContent("Freeze", "Apply constants to curve"), false, () =>
+            //     {
+            //         UnityEditor.Undo.RecordObject(property.serializedObject.targetObject, "Freeze");
+            //         smartCurve.Freeze();
+            //     });
+            //     context.AddItem(new GUIContent("Normalize", "Remap curve between [0,1]"), false, () =>
+            //     {
+            //         UnityEditor.Undo.RecordObject(property.serializedObject.targetObject, "Normalize");
+            //         smartCurve.Normalize();
+            //     });
+            //
+            //     context.ShowAsContext();
+            // }
         }
         
 #if UNITY_EDITOR
