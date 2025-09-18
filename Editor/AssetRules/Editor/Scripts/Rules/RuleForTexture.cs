@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace JamKit.AssetRules
 {
-    [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH )]
+    // [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH )]
     public class RuleForTexture: RuleBase
     {
         public TextureImporterType textureType;

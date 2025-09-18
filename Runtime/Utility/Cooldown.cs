@@ -30,13 +30,13 @@ public class Cooldown
         return Mathf.Max(0, _timeStamp + _duration - Time.time);
     }
     
-    public Cooldown(float duration, bool isReady)
+    public Cooldown(float duration, bool startElapsed)
     {
         _duration = duration;
         _timeStamp =0;
         _initialized = false;
 
-        if (isReady)
+        if (startElapsed)
         {
             _initialized = true;
             _timeStamp = -duration;

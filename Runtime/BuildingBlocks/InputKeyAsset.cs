@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 
 namespace JamKit
 {
-    
     public class InputKeyAsset : ScriptableObject
     {
         [SerializeField] private KeyCode _keyCode;

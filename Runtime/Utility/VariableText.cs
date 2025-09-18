@@ -32,14 +32,15 @@
                 }
             }
 
-            void Start()
+            void OnEnable()
             {
                 _previousValue = _value.value;
                 _value.onValueChanged += OnValueValueChanged;
                 Refresh();
             }
 
-            private void OnDestroy()
+
+            private void OnDisable()
             {
 
                 _value.onValueChanged -= OnValueValueChanged;

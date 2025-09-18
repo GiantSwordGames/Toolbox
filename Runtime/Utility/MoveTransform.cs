@@ -11,6 +11,7 @@ public class MoveTransform : MonoBehaviour
 	    [FormerlySerializedAs("_offset")] [SerializeField] private  Vector3 _positionOffset = Vector3.right*10; 
 	    [SerializeField] private  Vector3 _rotationOffset = Vector3.zero; 
 		[DisableSerializedField]	[SerializeField] private  float _lerp; 
+		[SerializeField] private  float _duration =0; 
 	    
 	    [Range(0,1)]
 	    [SerializeField] private  float _control;
@@ -48,13 +49,19 @@ public class MoveTransform : MonoBehaviour
 		    SetLerp(0);
 	    }
 	    
-	    public void TweenOn(float duration)
+	    public void TweenOn()
 	    {
-		    AsyncHelper.LerpRoutine(duration, (l) => SetLerp(l));
+		    AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(l));
 	    }
-	    public void TweenOff(float duration)
+	    public void TweenOff()
 	    {
-		    AsyncHelper.LerpRoutine(duration, (l) => SetLerp(1-l));
+		    AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(1-l));
+	    }
+	    
+	    [Button]
+	    public void Trigger()
+	    {
+		    TweenOn();
 	    }
 
 

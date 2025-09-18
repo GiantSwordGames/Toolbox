@@ -114,6 +114,7 @@ namespace JamKit
             RuntimeEditorHelper.Focus(parent);
         }
 
+      
         [MenuItem("CONTEXT/Transform/Position/Center On Children")]
         private static void CenterOnChildren(MenuCommand command)
         {
@@ -142,8 +143,6 @@ namespace JamKit
                 RuntimeEditorHelper.RecordObjectUndo(child);
                 child.position += delta;
             }
-
-            Debug.Log($"Centered '{parent.name}' on its children.");
         }
         
         [MenuItem("CONTEXT/Transform/Position/Round")]
@@ -164,7 +163,26 @@ namespace JamKit
                 child.position += delta;
             }
 
-            Debug.Log($"Centered '{parent.name}' on its children.");
+        }
+
+        [MenuItem("CONTEXT/Transform/Position/Align With First Child")]
+        private static void AlignWithFirstChild(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            if(children.Length ==0) 
+                return;       
+
+            Vector3 newPosition =children[0].position;
+       
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            Vector3 delta = parent.position - newPosition;
+            parent.position -= delta;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position += delta;
+            }
         }
 
 

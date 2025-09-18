@@ -15,63 +15,46 @@ namespace JamKitEditor
         [MenuItem("Assets/Trim AudioClip", true)]
         public static bool TrimAudioClipAssetMenuItemValidation(MenuCommand command)
         {
-            AudioClip clip = Selection.activeObject as AudioClip;
-            return clip != null;
+            return Selection.activeObject is AudioClip;
         }
-        
+
         [MenuItem("Assets/Trim Audio Clip")]
         public static void TrimAudioClipAssetMenuItem(MenuCommand command)
         {
             AudioClip clip = Selection.activeObject as AudioClip;
-            
-            if(clip == null)
-            {
-                return;
-            }
-            
+            if (clip == null) return;
+
             GameObject gameObject = new GameObject("TrimAudioClip " + clip.name + " (Not Saved)");
             gameObject.hideFlags |= HideFlags.DontSave;
+
             PlayableDirector playableDirector = gameObject.AddComponent<PlayableDirector>();
             playableDirector.playableAsset = ScriptableObject.CreateInstance<TimelineAsset>();
-            
+
             TimelineAsset timelineAsset = playableDirector.playableAsset as TimelineAsset;
-            
             var audioTrack = timelineAsset.CreateTrack<AudioTrack>(null, "Audio Track");
             var audioPlayableClip = audioTrack.CreateClip(clip);
             audioPlayableClip.displayName = " ";
-            
+
             AudioClipExporter audioClipExporter = gameObject.AddComponent<AudioClipExporter>();
             RuntimeEditorHelper.SelectAndFocus(audioClipExporter);
-            // RuntimeEditorHelper.EditorApplicationDelayCall(() => LockInspector());
             OpenTimelineWindow();
         }
-        
+
         private static void OpenTimelineWindow()
         {
             EditorWindow.GetWindow(Type.GetType("UnityEditor.Timeline.TimelineWindow,Unity.Timeline.Editor"));
         }
-        
-        private static void LockInspector()
-        {
-            ActiveEditorTracker.sharedTracker.isLocked = true;
-            Debug.Log("Inspector is locked " + ActiveEditorTracker.sharedTracker);
-            ActiveEditorTracker.sharedTracker.ForceRebuild();
-        }
-        
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            // if (GUILayout.Button("Lock", GUILayout.Height(40)))
-            // {
-            //     LockInspector();
-            // }
-            
+
             if (GUILayout.Button("Export Clips", GUILayout.Height(40)))
             {
                 ShowConfirmationWindow();
             }
         }
-        
+
         public void ShowConfirmationWindow()
         {
             ConfirmationWindow window = (ConfirmationWindow)EditorWindow.GetWindow(typeof(ConfirmationWindow));
@@ -79,12 +62,17 @@ namespace JamKitEditor
             window.SetAudioClipExporter(targetObject);
             window.ShowModalUtility();
         }
-        
+
         public class ConfirmationWindow : EditorWindow
         {
-            public static Preference<bool> deleteOriginalClips = new Preference<bool>("DeleteOriginalClips", false, PreferenceMode.Global);
-            public static Preference<bool> deleteTimelineSession = new Preference<bool>("DeleteTimelineSession", true, PreferenceMode.Global);
-            public static Preference<bool> overwriteOriginal = new Preference<bool>("OverwriteOriginal", false, PreferenceMode.Global);
+            public static Preference<bool> deleteOriginalClips =
+                new Preference<bool>("DeleteOriginalClips", false, PreferenceMode.Global);
+
+            public static Preference<bool> deleteTimelineSession =
+                new Preference<bool>("DeleteTimelineSession", true, PreferenceMode.Global);
+
+            public static Preference<bool> overwriteOriginal =
+                new Preference<bool>("OverwriteOriginal", false, PreferenceMode.Global);
 
             private AudioClipExporter _audioClipExporter;
             private string clipNames;
@@ -93,11 +81,9 @@ namespace JamKitEditor
 
             private void OnGUI()
             {
-                // Text field for naming the clip(s)
                 clipNames = EditorGUILayout.TextField("Clip Names:", clipNames);
                 GUILayout.Space(15);
 
-                // List the new paths for the exported clip(s)
                 for (var index = 0; index < _audioPlayableAssets.Count; index++)
                 {
                     var audioPlayableAsset = _audioPlayableAssets[index];
@@ -107,27 +93,27 @@ namespace JamKitEditor
 
                 GUILayout.Space(15);
 
-                // Existing options:
-                deleteOriginalClips.value = GUILayout.Toggle(deleteOriginalClips.value, "Delete Original Clips");
-                deleteTimelineSession.value = GUILayout.Toggle(deleteTimelineSession.value, "Delete Timeline Session");
+                deleteOriginalClips.value =
+                    GUILayout.Toggle(deleteOriginalClips.value, "Delete Original Clips");
+                deleteTimelineSession.value =
+                    GUILayout.Toggle(deleteTimelineSession.value, "Delete Timeline Session");
                 GUILayout.Space(15);
 
-                // New option: Overwrite original clip is only available if we have exactly one clip
                 if (_audioPlayableAssets.Count == 1)
                 {
-                    overwriteOriginal.value = GUILayout.Toggle(overwriteOriginal.value, "Overwrite Original Clip");
+                    overwriteOriginal.value =
+                        GUILayout.Toggle(overwriteOriginal.value, "Overwrite Original Clip");
                 }
                 else
                 {
-                    EditorGUILayout.LabelField("Overwriting original clip is not available when the clip is split into multiple parts.");
+                    overwriteOriginal.value = false;
+                    EditorGUILayout.LabelField("Overwriting original clip is not available when multiple clips exist.");
                 }
-                
-                GUILayout.Space(15);
+
                 GUILayout.FlexibleSpace();
 
                 if (GUILayout.Button("Export", GUILayout.Height(40)))
                 {
-                    // Modified call: pass the overwrite flag along with other parameters.
                     AudioClipExporterUtility.ExportAudioClips(
                         _audioClipExporter.GetComponent<PlayableDirector>(),
                         folder,

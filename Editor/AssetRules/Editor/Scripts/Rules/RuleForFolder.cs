@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace JamKit.AssetRules
 {
-    [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Rule For Folder" )]
+    // [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Rule For Folder" )]
     public class RuleForFolder : RuleBase
     {
         public override bool DoesRuleApply(Object asset, string assetPath)

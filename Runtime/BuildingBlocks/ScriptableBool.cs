@@ -44,8 +44,17 @@ namespace JamKit
                 ScriptableBoolManager.GetState(this, out ScriptableBoolManager.State state);
                 if (value.Equals( state.value) == false)
                 {
+                        
                     state.value = value;
-                    state.onValueChanged?.Invoke(state.value);
+
+                    try
+                    {
+                        state.onValueChanged?.Invoke(state.value);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e, this);
+                    }
                 }
             }
         }

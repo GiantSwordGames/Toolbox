@@ -13,10 +13,20 @@ namespace JamKit
         
         void Awake()
         {
-            _scriptableBool.onValueChanged += (f) => Trigger();
+            _scriptableBool.onValueChanged += Trigger;
             Trigger();
         }
-        
+
+        private void Trigger(bool obj)
+        {
+            Trigger();
+        }
+
+        void OnDestroy()
+        {
+            _scriptableBool.onValueChanged -=Trigger;
+        }
+
         [Button]
         public void Trigger()
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace JamKit.AssetRules
 {
-    [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Rule For Unity Type" )]
+    // [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Rule For Unity Type" )]
     public class RuleForUnityType : RuleBase
     {
         public PrefabAssetType prefabType;
