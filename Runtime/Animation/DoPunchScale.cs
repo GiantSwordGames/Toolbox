@@ -32,8 +32,7 @@ namespace JamKit
             // }            
         }
         
-        [Button]
-        public void Trigger()
+        public override void Trigger()
         {
             if (_target == null)
             {

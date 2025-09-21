@@ -22,7 +22,7 @@ namespace JamKit
         }
         
         [Button]
-        public void Trigger()
+        public override void Trigger()
         {
             Stop();
             _instance = _punchAsset.ApplyToPosition(_target.target);

@@ -26,6 +26,14 @@ namespace JamKitEditor
             // Extract the class name from the script file
             var className = Path.GetFileNameWithoutExtension(scriptPath);
 
+            ScriptableObject asset = CreateAsset(className,className); 
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = asset;
+        }
+
+        public static ScriptableObject CreateAsset(string className, string assetName)
+        {
+            ScriptableObject asset;
             // Find the type in the current assembly
             var type = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
@@ -34,23 +42,21 @@ namespace JamKitEditor
             if (type == null)
             {
                 Debug.LogError($"No ScriptableObject class found with the name {className}.");
-                return;
+                return null;
             }
 
             // Create an instance of the ScriptableObject
-            var asset = ScriptableObject.CreateInstance(type);
+            asset = ScriptableObject.CreateInstance(type);
 
             // Determine the path to save the asset
             var path = "Assets/Project/Configurations";
-            var assetPathAndName = AssetDatabase.GenerateUniqueAssetPath($"{path}/{className}.asset");
-
+            var assetPathAndName = AssetDatabase.GenerateUniqueAssetPath($"{path}/{assetName}.asset");
             Debug.Log(assetPathAndName);
             // Save the asset
             AssetDatabase.CreateAsset(asset, assetPathAndName);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            EditorUtility.FocusProjectWindow();
-            Selection.activeObject = asset;
+            return asset;
         }
 
         [MenuItem(MenuPaths.QUICK_CREATE +"ScriptableObject from Script", true, priority = MenuPaths.QUICK_CREATE_PRIORITY)]

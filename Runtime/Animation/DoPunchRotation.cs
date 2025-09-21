@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace HotWings
 {
-    public class DoPunchRotation : MonoBehaviour
+    public class DoPunchRotation : DoPunch
     {
         [SerializeField] private bool _triggerOnEnable = false;
         [SerializeField] private Transform _target;
@@ -26,8 +26,7 @@ namespace HotWings
             _punchAsset.ListenForButtonTest -= Trigger;
         }
         
-        [Button]
-        public void Trigger()
+        public  override void Trigger()
         {
             if (_target == null)
             {

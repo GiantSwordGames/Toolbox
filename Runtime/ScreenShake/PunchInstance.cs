@@ -33,6 +33,7 @@ namespace JamKit
         public event Action onUpdate;
         
         Vector3 _offset = Vector3.zero;
+        private Action<Vector3> _function;
 
         public PunchInstance(Transform transform, PunchAsset asset, Type type)
         {
@@ -72,8 +73,10 @@ namespace JamKit
 
             if (_transform)
             {
-            _transform.localScale -= _offset;
+                _transform.localScale -= _offset;
+                _function(-_offset);
             }
+
             _offset = Vector3.zero;
 
             _state = State.Killed;
@@ -103,6 +106,7 @@ namespace JamKit
        
         private  IEnumerator Apply( float delay,  Vector3 amplitude, int oscillations, float duration, Action<Vector3> function)
         {
+            _function = function;
             
             _state = State.Running;
 

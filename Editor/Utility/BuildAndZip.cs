@@ -30,7 +30,20 @@ namespace JamKit
             string buildPath = specifiedBuildPath;
             string applicationName = Application.productName;
             string formattedAppName = applicationName.ToUpperCamelCase();
-            string[] scenePaths = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray();
+
+            // ✅ Collect only enabled & existing scenes
+            string[] scenePaths = EditorBuildSettings.scenes
+                .Where(s => s.enabled)
+                .Select(s => s.path)
+                .Where(path => !string.IsNullOrEmpty(path) && File.Exists(path))
+                .ToArray();
+
+            if (scenePaths.Length == 0)
+            {
+                Debug.LogError("No valid scenes found in Build Settings. Aborting build.");
+                return;
+            }
+
             string timestamp = DateTime.Now.ToString("yyMMdd_HHmm");
 
             if (buildForMac.value)
@@ -45,7 +58,11 @@ namespace JamKit
                 {
                     scenes = scenePaths,
                     locationPathName = macBuildPath,
+#if UNITY_2019_1
+                    target = BuildTarget.StandaloneOSXUniversal,
+#else
                     target = BuildTarget.StandaloneOSX,
+#endif
                     options = BuildOptions.None
                 };
 
@@ -57,6 +74,7 @@ namespace JamKit
                 string zipPath = macBuildFolder + ".zip";
                 if (File.Exists(zipPath)) File.Delete(zipPath);
 
+#if UNITY_EDITOR_OSX
                 // Use macOS 'ditto' for preserving .app bundles properly
                 string dittoArgs = $"-c -k --sequesterRsrc --keepParent \"{macBuildFolder}\" \"{zipPath}\"";
                 var dittoProcess = new System.Diagnostics.Process
@@ -72,8 +90,11 @@ namespace JamKit
                 };
                 dittoProcess.Start();
                 dittoProcess.WaitForExit();
-
                 Debug.Log("Mac build zipped using ditto: " + zipPath);
+#else
+                ZipUtil.CreateFromDirectory(macBuildFolder, zipPath);
+                Debug.Log("Mac build zipped to: " + zipPath);
+#endif
 
                 Directory.Delete(macBuildFolder, true);
                 Debug.Log("Deleted unzipped Mac build folder: " + macBuildFolder);
@@ -188,7 +209,6 @@ namespace JamKit
         {
             if (!Directory.Exists(buildRoot)) return;
 
-            // Use Directory.EnumerateFileSystemEntries for compatibility with older profiles
             foreach (var path in Directory.EnumerateFileSystemEntries(buildRoot, "*DoNotShip*", SearchOption.AllDirectories))
             {
                 try
@@ -218,7 +238,6 @@ namespace JamKit
         {
             public static void CreateFromDirectory(string sourceDirectory, string destinationZipPath)
             {
-                // Safety: ensure destination folder exists
                 var destDir = Path.GetDirectoryName(destinationZipPath);
                 if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
                     Directory.CreateDirectory(destDir);
@@ -230,7 +249,6 @@ namespace JamKit
 
                     foreach (var filePath in Directory.GetFiles(sourceDirectory, "*", SearchOption.AllDirectories))
                     {
-                        // Skip the zip itself if zipping a folder next to an existing zip
                         if (string.Equals(Path.GetFullPath(filePath), Path.GetFullPath(destinationZipPath), StringComparison.OrdinalIgnoreCase))
                             continue;
 

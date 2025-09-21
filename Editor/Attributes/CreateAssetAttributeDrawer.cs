@@ -69,7 +69,8 @@ namespace JamKit
                     }
                     string assetName = prefix + "_" + label.text.ToUpperCamelCase();
                     string newPath = $"{folderPath}/{assetName}.asset";
-                    
+                    newPath =  AssetDatabase.GenerateUniqueAssetPath(newPath);
+
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadedAsset = AssetDatabase.LoadAssetAtPath(newPath, type);
                     Debug.Log(newPath, loadedAsset);

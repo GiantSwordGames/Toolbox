@@ -1394,7 +1394,7 @@ namespace JamKit
         
         public static void TriggerPunch(this GameObject go)
         {
-            DoPunchScale[] doPunchScale = go.GetComponents<DoPunchScale>();
+            DoPunch[] doPunchScale = go.GetComponents<DoPunch>();
             foreach (var punch in doPunchScale)
             {
                 punch.Trigger();
@@ -1879,7 +1879,7 @@ namespace JamKit
         }
 
 
-        public static void KillAsyncRoutine(this Coroutine coroutine)
+        public static void KillAsyncRoutineAsNeeded(this Coroutine coroutine)
         {
             if(coroutine != null)
                 AsyncHelper.StopRoutine(coroutine);

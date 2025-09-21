@@ -726,7 +726,7 @@ namespace JamKit
                 }
 
 
-                // Instantiate prefab if possible otherwise do a regular gameobject instantiate
+        
                 public static T SmartInstantiate<T>(this T prefab, Transform transform = null) where T : Object
                 {
                         T instantiated = null;
@@ -845,5 +845,7 @@ namespace JamKit
                         }
 #endif
                 }
+
+               
         }
 }
