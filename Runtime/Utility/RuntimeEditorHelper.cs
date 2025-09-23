@@ -740,6 +740,8 @@ namespace JamKit
                         {
                                 instantiated = Object.Instantiate(prefab) as T;
                         }
+
+                                Undo.RegisterCreatedObjectUndo(instantiated, "instantiate");
 #else
                                                 instantiated = Object.Instantiate(prefab, transform) as T;
 

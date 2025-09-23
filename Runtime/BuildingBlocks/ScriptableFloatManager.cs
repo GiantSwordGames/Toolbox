@@ -10,6 +10,7 @@ namespace JamKit
         {
             public float value;
             public Action<float> onValueChanged;
+            public Action onPing;
 
             public State(float initialValue)
             {

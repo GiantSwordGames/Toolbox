@@ -41,6 +41,12 @@ namespace JamKit
             {
                 targetObject.value += 100f;    
             }
+            
+               
+            if (GUILayout.Button("Ping"))
+            {
+                targetObject.Ping();
+            }
         }
     }
 }

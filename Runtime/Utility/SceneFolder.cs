@@ -152,5 +152,16 @@ namespace JamKit
                 RuntimeEditorHelper.RecordSetTransformParent(gameObject.transform, transform);
             }
         }
+
+        [Button]
+        private void EjectChildren()
+        {
+            List<Transform> directChildren = transform.GetDirectChildren();
+            for (var i = directChildren.Count - 1; i >= 0; i--)
+            {
+                var child = directChildren[i];
+                RuntimeEditorHelper.RecordSetTransformParent(child, null);
+            }
+        }
     }
 }

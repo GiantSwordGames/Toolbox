@@ -151,17 +151,17 @@ namespace JamKit
             Transform parent = (Transform)command.context;
             Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
         
-
             Vector3 newPosition = parent.localPosition.Round();
+            Vector3 oldPosition = parent.position;
+            parent.localPosition = newPosition;
+            Vector3 delta = parent.position - oldPosition;
        
             RuntimeEditorHelper.RecordObjectUndo(parent);
-            Vector3 delta = parent.position - newPosition;
-            parent.position -= delta;
-            foreach (Transform child in children)
-            {
-                RuntimeEditorHelper.RecordObjectUndo(child);
-                child.position += delta;
-            }
+            // foreach (Transform child in children)
+            // {
+            //     RuntimeEditorHelper.RecordObjectUndo(child);
+            //     child.position += delta;
+            // }
 
         }
 

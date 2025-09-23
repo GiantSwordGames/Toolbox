@@ -73,7 +73,6 @@ namespace JamKit
 
             if (_transform)
             {
-                _transform.localScale -= _offset;
                 _function(-_offset);
             }
 

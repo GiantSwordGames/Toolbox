@@ -58,8 +58,23 @@ namespace JamKit
                 state.onValueChanged -= value;
             }
         }
+        
+        public event Action onPing
+        {
+            add
+            {
+                if (RuntimeEditorHelper.IsQuitting) return;
+                ScriptableFloatManager.GetState(this, out var state);
+                state.onPing += value;
+            }
+            remove
+            {
+                if (RuntimeEditorHelper.IsQuitting) return;
+                ScriptableFloatManager.GetState(this, out var state);
+                state.onPing -= value;
+            }
+        }
 
-// Helper to fire it
         public void RaiseOnValueChanged(float v)
         {
             if (RuntimeEditorHelper.IsQuitting) return;
@@ -133,8 +148,15 @@ namespace JamKit
         {
             value += amount;
         }
+        
+        
+        public void Ping()
+        {
+            if (RuntimeEditorHelper.IsQuitting) return;
+            ScriptableFloatManager.GetState(this, out var state);
+            state.onPing?.Invoke();
+        }
 
-        // implicit
         public static implicit operator float(ScriptableFloat scriptableFloat)
         {
             return scriptableFloat.value;

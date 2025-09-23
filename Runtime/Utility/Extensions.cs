@@ -194,9 +194,32 @@ namespace JamKit
             float degrees = Random.Range(min, max);
             return from.Rotate(degrees);
         }
-       
+
         
-        
+        /// Sets the active state of a GameObject only if it's different from the current state.
+        public static void SetActiveStateIfChanged(this GameObject gameObject, bool state)
+        {
+            if (gameObject.activeSelf != state)
+            {
+                gameObject.SetActive(state);
+            }
+        }
+        public static float GetSiblingIndexAsLerp(this Transform transform)
+        {
+            if (transform.parent == null)
+            {
+                return 0;
+            }
+            int index = transform.GetSiblingIndex();
+            int count = transform.parent.childCount;
+            if (count <= 1)
+            {
+                return 0;
+            }
+            return (float)index / (count - 1);
+        }
+
+
         public static Vector3 Rotate(this Vector3 from, float min, float max)
         {
             return Quaternion.Euler( Random.Range(min, max), Random.Range(min, max), Random.Range(min, max))*from;
@@ -1392,9 +1415,9 @@ namespace JamKit
             return Mathf.Abs(value);
         }
         
-        public static void TriggerPunch(this GameObject go)
+        public static void TriggerPunches(this GameObject go)
         {
-            DoPunch[] doPunchScale = go.GetComponents<DoPunch>();
+            DoPunch[] doPunchScale = go.GetComponentsInChildren<DoPunch>();
             foreach (var punch in doPunchScale)
             {
                 punch.Trigger();

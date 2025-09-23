@@ -9,17 +9,19 @@
     {
         public class VariableText : MonoBehaviour
         {
+            [SerializeField] private TMPro.TMP_Text _text;
             [FormerlySerializedAs("_onRefresh")] [SerializeField] private UnityEvent _onDisplayValueChanged;
             [SerializeField] private UnityEvent _onValueChanged;
             [SerializeField] private SmartFloat _value;
-            [SerializeField] private TMPro.TMP_Text _text;
+            [SerializeField] private float _multiplier = 1;
+            [SerializeField] private bool _abbreviate = false;
+            [SerializeField] private string _format = "F1";
             [SerializeField] [TextArea(1,5)] private string _prefix;
              [SerializeField] [TextArea(1,5)] private string _postFix;
-            [SerializeField] private float _multiplier = 1;
-            [SerializeField] private string _format = "F1";
+          
             [SerializeField] private SmartFloat[] _additionalValues = {};
             [SerializeField] private float _incrementOverDuration = 0;
-            private float _previousValue ;
+            private float _previousValue;
 
             public SmartFloat value => _value;
 
@@ -83,8 +85,18 @@
             private void SetText(float value)
             {
                 string previousText = _text.text;
+                string formattedNumber = default;
+                
+                if (_abbreviate )
+                {
+                    formattedNumber = Abbreviate(value * _multiplier);
+                }
+                else
+                {
+                    formattedNumber = (value * _multiplier).ToString(_format);
+                }
 
-                string newText = _prefix + (value*_multiplier).ToString(_format) + _postFix;
+                string newText = _prefix + formattedNumber + _postFix;
                 for (int i = 0; i < _additionalValues.Length; i++)
                 {
                     string oldValue = $"{{{i}}}";
@@ -126,6 +138,36 @@
                     yield return null;
                 }
                 Refresh();
+            }
+            
+            /// <summary>
+            /// Abbreviates a number using K (thousand), M (million), B (billion).
+            /// Examples:
+            /// 1000 -> 1K
+            /// 1500 -> 1.5K
+            /// 2500000 -> 2.5M
+            /// </summary>
+            public static string Abbreviate(float number)
+            {
+                if (number < 1000)
+                    return number.ToString("0"); // no abbreviation under 1K
+
+                if (number < 10000)
+                    return (number / 1000d).ToString("0.#") + "K"; // 1 decimal place up to 9.9K
+
+                if (number < 1000000)
+                    return (number / 1000d).ToString("0") + "K"; // no decimals above 10K
+
+                if (number < 10000000)
+                    return (number / 1000000d).ToString("0.#") + "M"; // 1 decimal place up to 9.9M
+
+                if (number < 1000000000)
+                    return (number / 1000000d).ToString("0") + "M"; // no decimals above 10M
+
+                if (number < 10000000000)
+                    return (number / 1000000000d).ToString("0.#") + "B"; // 1 decimal place up to 9.9B
+
+                return (number / 1000000000d).ToString("0") + "B"; // no decimals above 10B
             }
             
         }
