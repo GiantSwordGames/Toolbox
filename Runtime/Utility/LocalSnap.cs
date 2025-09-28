@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 
 
+
 [ExecuteInEditMode]
 public class LocalSnap : MonoBehaviour
 {
@@ -16,8 +17,7 @@ public class LocalSnap : MonoBehaviour
         }
     }
 
-    [Button]
-    private void Apply()
+    public void Apply()
     {
         Vector3 snap = transform.localPosition.Snap(_interval);
         if (transform.localPosition != snap)

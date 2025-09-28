@@ -169,8 +169,6 @@ public class SmartFloat
         {
             switch (_mode)
             {
-                case Mode.Constant:
-                    return "SmartFloat Constant";
                 case Mode.Variable:
                     return _variable != null ? _variable.name : "";
                 case Mode.MonoFloat:
@@ -196,6 +194,7 @@ public class SmartFloat
             return value;
         }
     }
+    
 
     // // implicit operator to convert float to SmartFloat
     // public static implicit operator SmartFloat(float value)
@@ -258,4 +257,5 @@ public class SmartFloat
     {
         onPing?.Invoke();
     }
+
 }

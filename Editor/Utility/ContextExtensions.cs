@@ -154,15 +154,8 @@ namespace JamKit
             Vector3 newPosition = parent.localPosition.Round();
             Vector3 oldPosition = parent.position;
             parent.localPosition = newPosition;
-            Vector3 delta = parent.position - oldPosition;
        
             RuntimeEditorHelper.RecordObjectUndo(parent);
-            // foreach (Transform child in children)
-            // {
-            //     RuntimeEditorHelper.RecordObjectUndo(child);
-            //     child.position += delta;
-            // }
-
         }
 
         [MenuItem("CONTEXT/Transform/Position/Align With First Child")]
@@ -184,9 +177,72 @@ namespace JamKit
                 child.position += delta;
             }
         }
-
-
         
+        [MenuItem("CONTEXT/RectTransform/Encapsulate First Child")]
+        private static void EncapsulateFirstChild(MenuCommand command)
+        {
+            RectTransform parent = (RectTransform)command.context;
+            if (parent.childCount == 0)
+            {
+                Debug.LogWarning("Parent has no children to encapsulate.", parent);
+                return;
+            }
+
+            RectTransform child = parent.GetChild(0) as RectTransform;
+            if (child == null)
+            {
+                Debug.LogWarning("First child is not a RectTransform.", parent);
+                return;
+            }
+
+            Undo.RegisterFullObjectHierarchyUndo(parent.gameObject, "Encapsulate First Child");
+
+            // Get child's world corners
+            Vector3[] worldCorners = new Vector3[4];
+            child.GetWorldCorners(worldCorners);
+
+            // Convert to parent local space
+            Vector3 localMin = parent.InverseTransformPoint(worldCorners[0]);
+            Vector3 localMax = localMin;
+            for (int i = 1; i < 4; i++)
+            {
+                Vector3 localCorner = parent.InverseTransformPoint(worldCorners[i]);
+                localMin = Vector3.Min(localMin, localCorner);
+                localMax = Vector3.Max(localMax, localCorner);
+            }
+
+            // Desired size and center (in parent local space)
+            Vector2 newSize = localMax - localMin;
+            Vector2 newCenter = (localMax + localMin) * 0.5f;
+
+            // Apply size and reposition relative to pivot
+            parent.sizeDelta = newSize;
+            parent.localPosition += (Vector3)(newCenter - Vector2.Scale(newSize, parent.pivot));
+
+            Debug.Log($"Encapsulated {parent.name} tightly around {child.name}. Size = {newSize}", parent);
+        }
+
+
+        [MenuItem("CONTEXT/Transform/Freeze/Round Position")]
+        private static void FreezeRound(MenuCommand command)
+        {
+            Transform parent = (Transform)command.context;
+            Transform[] children = parent.GetDirectChildren<Transform>(true).ToArray();
+            if(children.Length ==0) 
+                return;
+
+            Vector3 newPosition = parent.position.Round();
+       
+            RuntimeEditorHelper.RecordObjectUndo(parent);
+            Vector3 delta = parent.position - newPosition;
+            parent.position -= delta;
+            foreach (Transform child in children)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(child);
+                child.position += delta;
+            }
+        }
+
         
         [MenuItem("CONTEXT/Transform/Freeze/Scale")]
         private static void NormalizeScale(MenuCommand command)

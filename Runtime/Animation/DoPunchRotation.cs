@@ -28,6 +28,10 @@ namespace HotWings
         
         public  override void Trigger()
         {
+            if(enabled == false)
+            {
+                return;
+            }
             if (_target == null)
             {
                 _target = this.transform;

@@ -10,16 +10,19 @@
         public class VariableText : MonoBehaviour
         {
             [SerializeField] private TMPro.TMP_Text _text;
-            [FormerlySerializedAs("_onRefresh")] [SerializeField] private UnityEvent _onDisplayValueChanged;
+            
+            [SerializeField] private UnityEvent _onDisplayValueChanged;
             [SerializeField] private UnityEvent _onValueChanged;
+
             [SerializeField] private SmartFloat _value;
             [SerializeField] private float _multiplier = 1;
+            [Space]
             [SerializeField] private bool _abbreviate = false;
             [SerializeField] private string _format = "F1";
-            [SerializeField] [TextArea(1,5)] private string _prefix;
-             [SerializeField] [TextArea(1,5)] private string _postFix;
-          
-            [SerializeField] private SmartFloat[] _additionalValues = {};
+            [SerializeField] [TextArea(1, 5)] private string _prefix;
+            [SerializeField] [TextArea(1, 5)] private string _postFix;
+            [Space]
+            [SerializeField] private SmartFloat[] _additionalValues = { };
             [SerializeField] private float _incrementOverDuration = 0;
             private float _previousValue;
 
@@ -41,10 +44,8 @@
                 Refresh();
             }
 
-
             private void OnDisable()
             {
-
                 _value.onValueChanged -= OnValueValueChanged;
             }
 
@@ -52,15 +53,15 @@
             {
                 if (_incrementOverDuration > 0)
                 {
-                 
                     StartCoroutine(IEIncrementTowardsNewValue(_previousValue));
                 }
                 else
                 {
                     Refresh();
                 }
-               _onValueChanged?.Invoke();
-               _previousValue = _value.value;
+
+                _onValueChanged?.Invoke();
+                _previousValue = _value.value;
             }
 
 
@@ -71,14 +72,14 @@
                 {
                     return;
                 }
-                
-                if(_text == null)
+
+                if (_text == null)
                 {
                     return;
                 }
 
                 float value = _value.value;
-                
+
                 SetText(value);
             }
 
@@ -86,8 +87,8 @@
             {
                 string previousText = _text.text;
                 string formattedNumber = default;
-                
-                if (_abbreviate )
+
+                if (_abbreviate)
                 {
                     formattedNumber = Abbreviate(value * _multiplier);
                 }
@@ -109,7 +110,10 @@
                     _onDisplayValueChanged?.Invoke();
                 }
 
-                name = name = "Stat_" + _prefix.StripNonAlphabetCharacters();
+                string valueName = _value.name;
+                if(valueName == "")
+                    valueName = _text.text;
+                name = name = "Stat_" + valueName;
 
             }
 
@@ -118,8 +122,6 @@
                 _value.value = value;
                 Refresh();
             }
-            
-            
 
             private IEnumerator IEIncrementTowardsNewValue(float oldValue)
             {
@@ -128,7 +130,7 @@
                 float startValue = oldValue;
                 float endValue = value.value;
                 float elapsed = 0f;
-                
+
                 while (elapsed < duration)
                 {
                     elapsed += Time.deltaTime;
@@ -137,9 +139,10 @@
                     SetText(newValue);
                     yield return null;
                 }
+
                 Refresh();
             }
-            
+
             /// <summary>
             /// Abbreviates a number using K (thousand), M (million), B (billion).
             /// Examples:
@@ -169,6 +172,6 @@
 
                 return (number / 1000000000d).ToString("0") + "B"; // no decimals above 10B
             }
-            
+
         }
     }

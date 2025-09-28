@@ -1532,7 +1532,7 @@ namespace JamKit
         }
         
         
-        public static bool HasParentComponent<T>(this GameObject gameObject) where T : Component
+        public static bool HasComponentInParent<T>(this GameObject gameObject) where T : Component
         {
             return gameObject.GetComponentInParent<T>() != null;
         }

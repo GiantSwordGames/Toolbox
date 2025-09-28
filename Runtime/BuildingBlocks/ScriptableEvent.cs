@@ -54,8 +54,15 @@ namespace JamKit
             }
         }
 
-
+        
+[Obsolete("Use Invoke() instead")]
         public void Fire()
+        {
+            Invoke();
+        }
+        
+        [Button]
+        public void Invoke()
         {
             lastFrameFired = Time.frameCount;
             onFired?.Invoke();
