@@ -15,8 +15,8 @@ public class MoveTransform : MonoBehaviour
 
 	[DisableSerializedField] [SerializeField]
 	private float _lerp;
-	[DisableSerializedField] [SerializeField]
-	private float _previousLerp;
+	[FormerlySerializedAs("_previousLerp")] [DisableSerializedField] [SerializeField]
+	private float _previousEvaluation;
 
 	[SerializeField] private float _duration = 0;
 	bool _isOn;
@@ -24,8 +24,8 @@ public class MoveTransform : MonoBehaviour
 	[Range(0, 1)] [SerializeField] private float _control;
 	private Coroutine _lerpRoutine;
 
-	
-	bool initialized = false;
+
+	[SerializeField] EasingFunction.Ease _easing = EasingFunction.Ease.Linear;
 	
 	public float lerp
 	{
@@ -52,13 +52,14 @@ public class MoveTransform : MonoBehaviour
 	// Update is called once per frame
 	public void SetLerp(float newValue)
 	{
-		transform.localPosition -= _positionOffset * _previousLerp;
-		transform.localRotation *= Quaternion.Inverse(Quaternion.Euler(_rotationOffset * _previousLerp));
+		transform.localPosition -= _positionOffset * _previousEvaluation;
+		transform.localRotation *= Quaternion.Inverse(Quaternion.Euler(_rotationOffset * _previousEvaluation));
 		_lerp = newValue;
-		Vector3 newOffset = _positionOffset * _lerp;
+		float evaluatedLerp = EasingFunction.GetEasingFunction(_easing)(0, 1, _lerp);
+		Vector3 newOffset = _positionOffset * evaluatedLerp;
 		transform.localPosition += newOffset;
-		transform.localRotation *= (Quaternion.Euler(_rotationOffset * _lerp));
-		_previousLerp = _lerp;
+		transform.localRotation *= (Quaternion.Euler(_rotationOffset * evaluatedLerp));
+		_previousEvaluation = evaluatedLerp;
 	}
 
 	public void TriggerOn()

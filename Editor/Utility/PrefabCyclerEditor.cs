@@ -1,7 +1,6 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -25,7 +24,6 @@ namespace JamKit
             Event e = Event.current;
             if (e.type != EventType.ScrollWheel || !e.shift) return;
 
-            // macOS: Shift converts vertical scroll to horizontal → delta.y = 0, delta.x ≠ 0
             float axis = Mathf.Abs(e.delta.y) > 0.0001f ? e.delta.y : e.delta.x;
             if (Mathf.Abs(axis) < 0.0001f) return;
 
@@ -33,13 +31,14 @@ namespace JamKit
             if (EditorApplication.timeSinceStartup - _lastScrollTime < 0.1) { e.Use(); return; }
             _lastScrollTime = EditorApplication.timeSinceStartup;
 
-            var go = Selection.activeGameObject;
-            if (!go) return;
+            var selected = Selection.gameObjects;
+            if (selected == null || selected.Length == 0) return;
 
-            var comp = go.GetComponentInParent<PrefabCycler>();
-            if (!comp) return;
+            // Use first selection to determine candidates
+            var firstComp = selected[0].GetComponentInParent<PrefabCycler>();
+            if (!firstComp) return;
 
-            var instanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(comp.gameObject);
+            var instanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(firstComp.gameObject);
             if (!instanceRoot) return;
 
             var currentAssetPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(instanceRoot);
@@ -50,23 +49,37 @@ namespace JamKit
             if (candidates.Count == 0) return;
 
             int currentIndex = candidates.FindIndex(c => c.assetPath == currentAssetPath);
-
-            // Positive axis (scroll down/right) → previous, negative (up/left) → next
             int delta = axis > 0 ? -1 : 1;
-            Cycle(instanceRoot, candidates, currentIndex, delta);
+
+            List<GameObject> newSelections = new List<GameObject>();
+
+            // Cycle each selected object
+            foreach (var go in selected)
+            {
+                var comp = go.GetComponentInParent<PrefabCycler>();
+                if (!comp) continue;
+
+                var root = PrefabUtility.GetNearestPrefabInstanceRoot(comp.gameObject);
+                if (!root) continue;
+
+                var newRoot = Cycle(root, candidates, currentIndex, delta);
+                if (newRoot) newSelections.Add(newRoot);
+            }
+
+            if (newSelections.Count > 0)
+                Selection.objects = newSelections.ToArray();
 
             e.Use();
         }
 
         public override void OnInspectorGUI()
         {
-
             var comp = (PrefabCycler)target;
             var instanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(comp.gameObject);
 
             if (instanceRoot == null)
             {
-                EditorGUILayout.HelpBox("Select a prefab INSTANCE in the Scene to cycle.", MessageType.Info);
+                EditorGUILayout.HelpBox("Select prefab instances in the Scene to cycle.", MessageType.Info);
                 return;
             }
 
@@ -78,7 +91,7 @@ namespace JamKit
             EditorGUILayout.LabelField("Folder", folder);
             EditorGUILayout.LabelField("Index", $"{(currentIndex >= 0 ? currentIndex + 1 : 0)} / {candidates.Count}");
 
-            EditorGUILayout.HelpBox("Tip: Hold Shift and use the mouse wheel in the Scene View to cycle.", MessageType.None);
+            EditorGUILayout.HelpBox("Tip: Hold Shift and use the mouse wheel in the Scene View to cycle all selected objects.", MessageType.None);
         }
 
         private struct PrefabEntry
@@ -124,34 +137,26 @@ namespace JamKit
             return list;
         }
 
-        private static void Cycle(GameObject instanceRoot, List<PrefabEntry> candidates, int currentIndex, int delta)
+        private static GameObject Cycle(GameObject instanceRoot, List<PrefabEntry> candidates, int currentIndex, int delta)
         {
-            if (candidates.Count == 0) return;
-
+            if (candidates.Count == 0) return null;
             int nextIndex = candidates.WrapIndex(currentIndex + delta);
-
             var nextPrefab = candidates[nextIndex].asset;
-            ReplaceInstanceWith(instanceRoot, nextPrefab);
+            return ReplaceInstanceWith(instanceRoot, nextPrefab);
         }
 
-        private static void ReplaceInstanceWith(GameObject currentInstanceRoot, GameObject nextPrefabAsset)
+        private static GameObject ReplaceInstanceWith(GameObject currentInstanceRoot, GameObject nextPrefabAsset)
         {
-            if (currentInstanceRoot == null || nextPrefabAsset == null || currentInstanceRoot.activeSelf == false) return;
-            if (!PrefabUtility.IsPartOfPrefabInstance(currentInstanceRoot)) return;
+            if (currentInstanceRoot == null || nextPrefabAsset == null || !currentInstanceRoot.activeSelf) return null;
+            if (!PrefabUtility.IsPartOfPrefabInstance(currentInstanceRoot)) return null;
 
             var parent = currentInstanceRoot.transform.parent;
             int siblingIndex = currentInstanceRoot.transform.GetSiblingIndex();
 
             var localPos = currentInstanceRoot.transform.localPosition;
             var localRot = currentInstanceRoot.transform.localRotation;
-            // var localScale = currentInstanceRoot.transform.localScale;
 
-            bool wasActive = currentInstanceRoot.activeSelf;
-            string oldName = currentInstanceRoot.name;
-            int oldLayer = currentInstanceRoot.layer;
-            string oldTag = currentInstanceRoot.tag;
             var staticFlags = GameObjectUtility.GetStaticEditorFlags(currentInstanceRoot);
-
             var scene = currentInstanceRoot.scene;
 
             Undo.IncrementCurrentGroup();
@@ -166,22 +171,17 @@ namespace JamKit
             newRootObj.transform.SetSiblingIndex(siblingIndex);
             newRootObj.transform.localPosition = localPos;
             newRootObj.transform.localRotation = localRot;
-            // newRootObj.transform.localScale = localScale;
 
             Undo.RecordObject(newRootObj, "Set properties");
-            // newRootObj.name = oldName;
-            // newRootObj.tag = oldTag;
-            // newRootObj.layer = oldLayer;
             GameObjectUtility.SetStaticEditorFlags(newRootObj, staticFlags);
-            // newRootObj.SetActive(wasActive);
 
             Undo.DestroyObjectImmediate(currentInstanceRoot);
 
-            Selection.activeObject = newRootObj;
             if (scene.IsValid())
                 EditorSceneManager.MarkSceneDirty(scene);
 
             Undo.CollapseUndoOperations(group);
+            return newRootObj;
         }
     }
 }

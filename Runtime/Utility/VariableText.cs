@@ -15,9 +15,11 @@
             [SerializeField] private UnityEvent _onValueChanged;
 
             [SerializeField] private SmartFloat _value;
+            [SerializeField] private float _increment = 0;
             [SerializeField] private float _multiplier = 1;
+            [FormerlySerializedAs("_abbreviate")]
             [Space]
-            [SerializeField] private bool _abbreviate = false;
+            [SerializeField] private bool _abbreviatedMoney = false;
             [SerializeField] private string _format = "F1";
             [SerializeField] [TextArea(1, 5)] private string _prefix;
             [SerializeField] [TextArea(1, 5)] private string _postFix;
@@ -41,12 +43,21 @@
             {
                 _previousValue = _value.value;
                 _value.onValueChanged += OnValueValueChanged;
+                foreach (SmartFloat smartFloat in _additionalValues)
+                {
+                    smartFloat.onValueChanged += OnValueValueChanged;
+                }
                 Refresh();
             }
 
             private void OnDisable()
             {
                 _value.onValueChanged -= OnValueValueChanged;
+                
+                foreach (SmartFloat smartFloat in _additionalValues)
+                {
+                    smartFloat.onValueChanged -= OnValueValueChanged;
+                }
             }
 
             private void OnValueValueChanged(float obj)
@@ -88,13 +99,14 @@
                 string previousText = _text.text;
                 string formattedNumber = default;
 
-                if (_abbreviate)
+                var modifiedValue = (value + _increment)* _multiplier;
+                if (_abbreviatedMoney)
                 {
-                    formattedNumber = Abbreviate(value * _multiplier);
+                    formattedNumber = modifiedValue.ToAbbreviatedMoneyString();
                 }
                 else
                 {
-                    formattedNumber = (value * _multiplier).ToString(_format);
+                    formattedNumber = (modifiedValue).ToString(_format);
                 }
 
                 string newText = _prefix + formattedNumber + _postFix;
@@ -142,36 +154,5 @@
 
                 Refresh();
             }
-
-            /// <summary>
-            /// Abbreviates a number using K (thousand), M (million), B (billion).
-            /// Examples:
-            /// 1000 -> 1K
-            /// 1500 -> 1.5K
-            /// 2500000 -> 2.5M
-            /// </summary>
-            public static string Abbreviate(float number)
-            {
-                if (number < 1000)
-                    return number.ToString("0"); // no abbreviation under 1K
-
-                if (number < 10000)
-                    return (number / 1000d).ToString("0.#") + "K"; // 1 decimal place up to 9.9K
-
-                if (number < 1000000)
-                    return (number / 1000d).ToString("0") + "K"; // no decimals above 10K
-
-                if (number < 10000000)
-                    return (number / 1000000d).ToString("0.#") + "M"; // 1 decimal place up to 9.9M
-
-                if (number < 1000000000)
-                    return (number / 1000000d).ToString("0") + "M"; // no decimals above 10M
-
-                if (number < 10000000000)
-                    return (number / 1000000000d).ToString("0.#") + "B"; // 1 decimal place up to 9.9B
-
-                return (number / 1000000000d).ToString("0") + "B"; // no decimals above 10B
-            }
-
         }
     }

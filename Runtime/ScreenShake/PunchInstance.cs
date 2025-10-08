@@ -6,6 +6,7 @@ namespace JamKit
 {
     public class PunchInstance
     {
+        
         public enum Type
         {
             Scale,
@@ -27,6 +28,8 @@ namespace JamKit
         private PunchAsset _asset;
         private Coroutine _routine;
         private State _state;
+        
+        public TimeScale timeScale= TimeScale.Scaled;
         
         public event Action onKill;
         public event Action onComplete;
@@ -117,7 +120,7 @@ namespace JamKit
             float time = 0;
             while (time < duration)
             {
-                time += Time.deltaTime;
+                time += TimeHelper.GetDeltaTime(timeScale);
                 float lerp = time / duration;
                 float decay = 1 - lerp;
                 float t = Mathf.Sin(lerp * Mathf.PI * oscillations);

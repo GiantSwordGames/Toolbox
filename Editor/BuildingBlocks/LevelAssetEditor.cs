@@ -8,7 +8,7 @@ using UnityEngine;
 namespace JamKit.EditorTools
 {
     [CustomEditor(typeof(JamKit.Level))]
-    public class LevelEditor_MissingScenes : CustomEditorBase<Level>
+    public class LevelAssetEditor : CustomEditorBase<Level>
     {
         private void OnEnable()
         {
@@ -21,9 +21,9 @@ namespace JamKit.EditorTools
             DrawDefaultInspector();
             serializedObject.ApplyModifiedProperties();
 
-            if (GUILayout.Button("Reload Level"))
+            if (GUILayout.Button("Load Level"))
             {
-                targetObject.ReloadLevel();
+                targetObject.LoadLevel();
             }
 
             EditorGUILayout.Space(10);

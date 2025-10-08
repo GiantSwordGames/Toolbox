@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -67,7 +68,6 @@ namespace JamKit
 
             Undo.RecordObject(drawer, "Auto-calculate Tile Size");
 
-            // Set private _tileSize via reflection
             drawer.GetType()
                 .GetField("_tileSize", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
                 ?.SetValue(drawer, rounded);
@@ -102,10 +102,12 @@ namespace JamKit
             if (!(Selection.activeGameObject && Selection.activeGameObject.TryGetComponent<TileDrawer>(out var drawer)))
                 return;
 
-            if (!e.command)
+            // Require Control (⌃ on Mac, Ctrl on Windows) to activate tool
+            if (!e.control)
                 return;
 
-            eraseMode = e.shift; // Cmd+Shift = erase
+// Erase if Shift is ALSO held
+            eraseMode = e.shift;
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
@@ -182,7 +184,7 @@ namespace JamKit
             Vector3 size = drawer.TileSize;
             Bounds bounds = GetBounds(start, end);
 
-            GameObject lastInstance = null;
+            List<GameObject> instances = new List<GameObject>();
             for (float x = bounds.min.x; x <= bounds.max.x; x += size.x)
             {
                 for (float y = bounds.min.y; y <= bounds.max.y; y += size.y)
@@ -190,13 +192,14 @@ namespace JamKit
                     for (float z = bounds.min.z; z <= bounds.max.z; z += size.z)
                     {
                         Vector3 pos = new Vector3(x, y, z);
-                        lastInstance = CreateTile(pos, drawer);
+                        var instance = CreateTile(pos, drawer);
+                        instances.Add(instance);
                     }
                 }
             }
 
-            if (lastInstance)
-                RuntimeEditorHelper.Select(lastInstance);
+            if (instances.Count > 0)
+                RuntimeEditorHelper.Select(instances);
         }
 
         private static void EraseTiles(Vector3 start, Vector3 end, TileDrawer drawer)
@@ -246,7 +249,7 @@ namespace JamKit
         {
             Vector3 min = Vector3.Min(a, b);
             Vector3 max = Vector3.Max(a, b);
-            return new Bounds((min + max) * 0.5f, max - min + Vector3.one * 0.01f);
+            return new Bounds((min + max) * 0.5f, max - min);
         }
 
         private static GameObject CreateTile(Vector3 position, TileDrawer drawer)

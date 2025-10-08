@@ -103,7 +103,7 @@ namespace JamKit
         }
 
         [NaughtyAttributes.Button(enabledMode: EButtonEnableMode.Playmode)]
-        public void LoadLevel(bool skipTransition = false)
+        public void LoadLevel( bool skipTransition = false)
         {
             if (skipTransition || _defaultTransition == null)
             {
@@ -114,6 +114,12 @@ namespace JamKit
                 TransitionBase transition = _defaultTransition.InstantiateAndDoLevelTransition(this);
             }
         }
+
+        public void LoadLevel(TransitionBase _overrideTranstion)
+        {
+            TransitionBase transition = _overrideTranstion.InstantiateAndDoLevelTransition(this);
+        }
+
         private IEnumerator IELoadLevel()
         {
 
@@ -239,9 +245,9 @@ namespace JamKit
         
         [NaughtyAttributes.Button(enabledMode: EButtonEnableMode.Playmode)]
 
-        public void ReloadLevel()
+        public void LoadLevel()
         {
-            LoadLevel();
+            LoadLevel(false);
         }
 
         public bool Contains(Scene scene)

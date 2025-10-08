@@ -25,7 +25,7 @@ namespace JamKit
         {
             if (_coroutine != null)
             {
-                StopCoroutine(_coroutine);
+                AsyncHelper.StopRoutine(_coroutine);
                 _coroutine = null;
             }
             
@@ -39,7 +39,7 @@ namespace JamKit
 
         public Coroutine IETrigger()
         {
-            _coroutine = StartCoroutine(IEReveal());
+            _coroutine = AsyncHelper.StartCoroutine(IEReveal());
             return _coroutine;
         }
         

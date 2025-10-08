@@ -49,7 +49,7 @@ namespace JamKit
         private void Awake()
         {
             name = "Group";
-            _groupName = Selection.activeObject.name + " group";
+            _groupName = Selection.activeObject.name + "";
         }
         
         private void OnGUI()
@@ -181,7 +181,8 @@ namespace JamKit
                 }
 
                 Undo.SetTransformParent( group.transform, commonParent,  "Group");
-
+                group.transform.transform.localScale = Vector3.one;
+                
                 if (alt)
                 {
                     group.transform.localPosition = transforms[0].localPosition;
@@ -192,11 +193,6 @@ namespace JamKit
                     group.transform.localRotation = transforms[0].localRotation;
                     // group.transform.localScale = transforms[0].localScale;
                 }
-
-                // for (int i = 0; i < transforms.Count; i++)
-                //     totalPosition += transforms[i].position;
-                //
-                // group.transform.position = totalPosition / transforms.Count;
 
                 for (int i = 0; i < transforms.Count; i++)
                     Undo.SetTransformParent(transforms[i], group.transform, "Group");

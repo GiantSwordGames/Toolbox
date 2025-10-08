@@ -12,11 +12,23 @@ namespace JamKit
     {
         [SerializeField] protected bool __dontDestroyOnLoad = true;
         [SerializeField] protected bool _autoDestroy = true;
+        [SerializeField] protected bool _playOnStart = false;
         [SerializeField] protected float _startDelay = 0f;
         [FormerlySerializedAs("_holdAtApex")] [SerializeField] protected float _hold = 0f;
 
         [SerializeField] protected UnityEvent _onTransitionInBegin = default;
+        [SerializeField] protected UnityEvent _onTransitionInComplete = default;
         [SerializeField] protected UnityEvent _onTransitionOutBegin = default;
+        [SerializeField] protected UnityEvent _onTransitionOutComplete = default;
+
+
+        private void Start()
+        {
+            if (_playOnStart)
+            {
+                DoFullTransition(null, null);
+            }
+        }
 
         protected virtual void OnValidate()
         {

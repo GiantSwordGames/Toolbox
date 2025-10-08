@@ -9,8 +9,9 @@ namespace JamKit
     {
         [SerializeField] private bool _triggerOnEnable = false;
         [SerializeField] private Transform _target;
-        [SerializeField] private PunchAsset _punchAsset;
+        [SerializeField] [InlineScriptableObject] private PunchAsset _punchAsset;
         private PunchInstance _instance;
+        [SerializeField] private TimeScale _timeScale = TimeScale.Scaled;
         
         void OnEnable()
         {
@@ -34,12 +35,14 @@ namespace JamKit
         
         public override void Trigger()
         {
+            if(enabled==false) return;
             if (_target == null)
             {
                 _target = this.transform;
             }
             Stop();
             _instance = _punchAsset.ApplyToScale(_target);
+            _instance.timeScale = _timeScale;
         }
         public Coroutine GetCoroutine()
         {

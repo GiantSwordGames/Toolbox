@@ -27,6 +27,14 @@ namespace JamKit
         {
             return _instance != null;
         }
+        
+        public void ForceInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = (T)this;
+            }
+        }
 
         protected virtual void OnEnable()
         {

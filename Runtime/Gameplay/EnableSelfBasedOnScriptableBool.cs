@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,21 +12,8 @@ namespace JamKit
             IfFalse
         }
         [SerializeField] private ScriptableBool _scriptableBool;
-        [SerializeField] private bool _isFalse;
-        [FormerlySerializedAs("_comaparison")] [SerializeField] private Comparison _comparison = Comparison.IfTrue;
+        [SerializeField] private Comparison _comparison = Comparison.IfTrue;
 
-        private void OnValidate()
-        {
-            if (_isFalse)
-            {
-                _comparison = Comparison.IfFalse;
-            }
-            else
-            {
-                _comparison = Comparison.IfTrue;
-            }
-            
-        }
 
         void Awake()
         {
@@ -46,7 +34,8 @@ namespace JamKit
 
         private void Evaluate()
         {
-            if (_isFalse)
+            if(enabled == false) return;
+            if (_comparison == Comparison.IfFalse)
             {
                 gameObject.SetActive(_scriptableBool.value == false);
             }
@@ -59,6 +48,11 @@ namespace JamKit
         private void OnValueChanged(bool state)
         {
             Evaluate();
+        }
+
+        private void Start()
+        {
+            
         }
     }
 }

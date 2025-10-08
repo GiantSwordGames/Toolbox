@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine.SceneManagement;
 
 namespace JamKit
@@ -831,12 +832,21 @@ namespace JamKit
                         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 }
 
+                public static void  StripDuplicateNumberFromName(GameObject gameObject)
+                {
+                        RuntimeEditorHelper.RecordObjectUndo(gameObject);
+                        string pattern = @"\s\(\d+\)$";
+                        gameObject.name = Regex.Replace(gameObject.name, pattern, "");
+                }
+                
                 public static void RenameToMatchPrefab(GameObject gameObject)
                 {
 #if UNITY_EDITOR
                         GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
                         if (prefab != null)
                         {
+                                RuntimeEditorHelper.RecordObjectUndo(gameObject);
+
                                 string newName = prefab.name;
                                 RuntimeEditorHelper.RecordObjectUndo(gameObject);
                                 gameObject.name = newName;
@@ -847,7 +857,45 @@ namespace JamKit
                         }
 #endif
                 }
+                public static void RenamePrefabToMatchGameObject(GameObject gameObject)
+                {
+#if UNITY_EDITOR
+                        GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(gameObject);
+                        if (prefab != null)
+                        {
+                                //rename asset
+                                string assetPath = AssetDatabase.GetAssetPath(prefab);
+                                string newName = gameObject.name.Trim();
+                                prefab.name = newName;
+                                AssetDatabase.SaveAssets();
+                                AssetDatabase.RenameAsset(assetPath, newName);
+                                
+                        }
+                        else
+                        {
+                                Debug.LogWarning("No corresponding prefab found for " + gameObject.name);
+                        }
+#endif
+                }
 
-               
+
+                public static void DisableScenePicking(GameObject gameObject, bool includeDescendants = false)
+                {
+#if UNITY_EDITOR
+
+                        UnityEditor.SceneVisibilityManager.instance.DisablePicking(gameObject, true);
+#endif
+
+                }
+
+                public static void ReplaceGameObject(GameObject gameObject, GameObject buzzosFridge)
+                {
+                        if (Application.isPlaying)
+                        {
+                                Debug.Log("Replacing " + gameObject.name + " with " + buzzosFridge.name);
+                                GameObject.Instantiate(buzzosFridge, gameObject.transform.position, gameObject.transform.rotation);
+                                GameObject.Destroy(gameObject);
+                        }
+                }
         }
 }

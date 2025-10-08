@@ -15,6 +15,9 @@ namespace JamKit
         private Vector3 _positionOffset = Vector3.zero;
         private Quaternion _rotationOffset = Quaternion.identity;
         private Vector3 _scaleOffset = Vector3.zero;
+        [SerializeField] private SmartFloat _lerp = new SmartFloat(1f);
+
+        public SmartFloat lerp => _lerp;
 
         private void OnEnable()
         {
@@ -42,6 +45,10 @@ namespace JamKit
             _screenShakeAsset.listenForButtonTest -= Trigger;
             ResetState();
         }
+        public void SetShakeAsset(ScreenShakeAsset newAsset)
+        {
+            _screenShakeAsset = newAsset;
+        }
 
         private void ResetState()
         {
@@ -67,9 +74,13 @@ namespace JamKit
                 _targetTransform.localRotation *= Quaternion.Inverse(_rotationOffset);
                 _targetTransform.localScale -= _scaleOffset;
 
-                _positionOffset = _screenShakeAsset.EvaluatePosition(_time);
+                _positionOffset = _screenShakeAsset.EvaluatePosition(_time)*_lerp;
                 _rotationOffset = Quaternion.Euler(_screenShakeAsset.EvaluateRotation(_time));
                 _scaleOffset = _screenShakeAsset.EvaluateScale(_time);
+                
+                _positionOffset *= _lerp;
+                _scaleOffset *= _lerp;
+                _rotationOffset = Quaternion.Slerp(Quaternion.identity, _rotationOffset, _lerp);
                 
                 _targetTransform.localPosition += _positionOffset;
                 _targetTransform.localRotation *= _rotationOffset;

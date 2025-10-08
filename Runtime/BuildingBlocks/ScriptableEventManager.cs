@@ -28,8 +28,11 @@ namespace JamKit
                 {
                     if (Application.isPlaying)
                     {
-                        _instance = new GameObject("ScriptableEventManager").AddComponent<ScriptableEventManager>();
-                        DontDestroyOnLoad(_instance.gameObject);
+                        if (RuntimeEditorHelper.IsQuitting == false)
+                        {
+                            _instance = new GameObject("ScriptableEventManager").AddComponent<ScriptableEventManager>();
+                            DontDestroyOnLoad(_instance.gameObject);
+                        }
                     }
                 }
 

@@ -6,7 +6,7 @@ namespace JamKit
 {
     public abstract class ScriptablePrimitive : ScriptableObject
     {
-        [SerializeField] protected bool _savable;
+        [DisableSerializedField] [SerializeField] protected bool _savable;
 
         public abstract void Save();
         public abstract void Load();
@@ -91,6 +91,24 @@ namespace JamKit
         public void Toggle()
         {
             value = !value;
+        }
+        
+        [Button]
+        public void ToggleTrue()
+        {
+            value = true;
+        }
+        
+        [Button]
+        public void ToggleFalse()
+        {
+            value = false;
+        }
+
+
+        public void ResetToDefaultValue()
+        {
+            value = initialValue;
         }
 
         public void RegisterListener(Action<bool> onPlayerIsAliveChanged)

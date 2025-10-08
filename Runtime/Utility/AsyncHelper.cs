@@ -57,7 +57,11 @@ namespace JamKit
         {
             return SafeCoroutineRunner.StartCoroutine(routine);
         }
-       
+        public static void StopCoroutine(Coroutine routine)
+        { 
+            SafeCoroutineRunner.StopCoroutine(routine);
+        }
+ 
         public static void StopRoutine(Coroutine routine)
         { 
             SafeCoroutineRunner.StopCoroutine(routine);

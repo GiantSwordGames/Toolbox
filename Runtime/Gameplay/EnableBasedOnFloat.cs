@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace JamKit
 {
-    public class EnableSelfBasedOnFloat : MonoBehaviour
+    public class EnableBasedOnFloat : MonoBehaviour
     {
         enum Comparison
         {
@@ -14,11 +12,13 @@ namespace JamKit
             GreaterThanOrEqualTo,
             LessThanOrEqualTo,
         }
+
+        [SerializeField] private Object _target;
         [SerializeField] private SmartFloat _value;
         [SerializeField] private SmartFloat _compareTo;
-        [FormerlySerializedAs("_comaparison")] [SerializeField] private Comparison _comparison = Comparison.GreaterThan;
+        [SerializeField] private Comparison _comparison = Comparison.GreaterThan;
 
-  
+
 
         void Awake()
         {
@@ -48,14 +48,14 @@ namespace JamKit
                 default:
                     return true;
             }
-            
+
         }
 
         private void Rrefresh()
         {
-            if(enabled == false) return;
+            if (enabled == false) return;
 
-            gameObject.SetActive(EvaluateComparison());
+            _target.SetEnabled(EvaluateComparison());
         }
 
         private void OnValueChanged(float f)

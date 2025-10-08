@@ -152,6 +152,29 @@ namespace JamKit
                 RuntimeEditorHelper.RecordSetTransformParent(gameObject.transform, transform);
             }
         }
+        
+        [Button]
+        private void EncapsulateAnyUnparentedItems()
+        {
+            GameObject[] rootObjects = gameObject.scene.GetRootGameObjects();
+            foreach (GameObject rootObject in rootObjects)
+            {
+                if (rootObject == gameObject) 
+                    continue;
+
+                if (rootObject.HasComponent<SceneFolder>())
+                {
+                    continue;
+                }
+                if (rootObject.transform.parent != null)
+                {
+                    continue;
+                }
+                Debug.Log(rootObject, rootObject);
+                RuntimeEditorHelper.RecordSetTransformParent(rootObject.transform, transform);
+            }
+        }
+
 
         [Button]
         private void EjectChildren()

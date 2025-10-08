@@ -59,6 +59,93 @@ namespace JamKit
 
             return localPoint;
         }
+        
+        /// <summary>
+        /// Abbreviates a number using K (thousand), M (million), B (billion).
+        /// Examples:
+        /// 1000 -> 1K
+        /// 1500 -> 1.5K
+        /// 2500000 -> 2.5M
+        /// </summary>
+        public static string ToAbbreviatedString(this float number)
+        {
+            if (number < 10)
+            {
+                return number.ToString("0.#"); // no abbreviation under 1K
+            }
+            if (number < 1000)
+                return number.ToString("0"); // no abbreviation under 1K
+
+            if (number < 10000)
+                return (number / 1000d).ToString("0.#") + "K"; // 1 decimal place up to 9.9K
+
+            if (number < 1000000)
+                return (number / 1000d).ToString("0") + "K"; // no decimals above 10K
+
+            if (number < 10000000)
+                return (number / 1000000d).ToString("0.#") + "M"; // 1 decimal place up to 9.9M
+
+            if (number < 1000000000)
+                return (number / 1000000d).ToString("0") + "M"; // no decimals above 10M
+
+            if (number < 10000000000)
+                return (number / 1000000000d).ToString("0.#") + "B"; // 1 decimal place up to 9.9B
+
+            return (number / 1000000000d).ToString("0") + "B"; // no decimals above 10B
+        }
+        
+        /// <summary>
+        /// Abbreviates a number using K (thousand), M (million), B (billion).
+        /// Examples:
+        /// 1000 -> 1K
+        /// 1500 -> 1.5K
+        /// 2500000 -> 2.5M
+        /// </summary>
+        public static string ToAbbreviatedMoneyString(this float number)
+        {
+            // helper for floor rounding to given decimal places
+            double FloorTo(double value, int decimals)
+            {
+                double factor = Math.Pow(10, decimals);
+                return Math.Floor(value * factor) / factor;
+            }
+
+            if (number < 100)
+                return FloorTo(number, 2).ToString("F2");
+
+            if (number < 1000)
+                return Math.Floor(number).ToString("0");
+
+            if (number < 10000)
+                return FloorTo(number / 1000d, 1).ToString("0.#") + "K";
+
+            if (number < 1000000)
+                return Math.Floor(number / 1000d).ToString("0") + "K";
+
+            if (number < 10000000)
+                return FloorTo(number / 1000000d, 1).ToString("0.#") + "M";
+
+            if (number < 1000000000)
+                return Math.Floor(number / 1000000d).ToString("0") + "M";
+
+            if (number < 10000000000)
+                return FloorTo(number / 1000000000d, 1).ToString("0.#") + "B";
+
+            return Math.Floor(number / 1000000000d).ToString("0") + "B";
+        }
+        
+        public static string ToAbbreviatedString(this int number)
+        {
+            return ToAbbreviatedString((float)number);
+        }
+        
+        public static float ToThePower(this float number, float power)
+        {
+            return Mathf.Pow(number, power);
+        }
+        
+        
+
 
         public static void AddForceAtLocalPosition(this Rigidbody rigidbody, Vector3 localPosition, Vector3 worldForce, bool debugDraw =false)
         {
@@ -137,6 +224,22 @@ namespace JamKit
         {
             return to - from;
         }
+
+        public static Vector2 To(this Vector2 from, Vector2 to)
+        {
+            return to - from;
+        }
+        
+        public static Vector3 To(this Vector2 from, Vector3 to)
+        {
+            return to - (Vector3)from;
+        }
+        
+        public static Vector3 To(this Vector3 from, Vector2 to)
+        {
+            return (Vector3)to - from;
+        }
+
 
         public static float GetLengthInSeconds(this AnimationCurve curve)
         {
@@ -731,11 +834,17 @@ namespace JamKit
             return bitmask;
         }
         
-        public static string GetFullPath(this Component component)
+        public static string GetFullHierachyPath(this Component component)
         {
             return component.transform.GetHierarchyPath() + "/" + component.GetType().Name;
         }
    
+        
+        public static string GetFullHierachyPathIncludingSceneName(this Component component)
+        {
+            return component.gameObject.scene.name+ "/"+ component.transform.GetHierarchyPath() + "/" + component.GetType().Name;
+        }
+
         public static bool IsOutOfFrame(this Camera camera, Vector3 point, float marginInViewSpace = 0)
         {
             return IsVisible(camera, point, false, 0, marginInViewSpace) == false;
@@ -767,7 +876,14 @@ namespace JamKit
             return true;
         }
 
-        
+
+        public static void SetEnabledIfNot(this MonoBehaviour obj, bool enabled)
+        {
+            if (obj.enabled != enabled)
+            {
+                obj.enabled = enabled;
+            }
+        }
         public static void SetEnabled(this Object obj, bool enabled)
         {
             if (obj is MonoBehaviour comp)
@@ -810,6 +926,26 @@ namespace JamKit
             return null;
         }
 
+        public static string Pluralize(this string singular, int count)
+        {
+            if (count == 1)
+            {
+                return singular;
+            }
+            
+            if (singular.EndsWith("y") && singular.Length > 1 && !"aeiou".Contains(char.ToLower(singular[singular.Length - 2]).ToString()))
+            {
+                return singular.Substring(0, singular.Length - 1) + "ies";
+            }
+            else if (singular.EndsWith("s") || singular.EndsWith("x") || singular.EndsWith("z") || singular.EndsWith("ch") || singular.EndsWith("sh"))
+            {
+                return singular + "es";
+            }
+            else
+            {
+                return singular + "s";
+            }
+        }
 
         public static Vector3 RandomizeXZ(this Vector3 vector, float range)
         {
@@ -1043,10 +1179,17 @@ namespace JamKit
             }
         }
 
+        public static int GetRecipricalSiblingIndex(this Transform transform)
+        {
+            int index = transform.GetSiblingIndex();
+            int count = transform.parent.childCount;
+            return count - 1 - index;
+        }
         public static void SoloSpecificChild(this Transform parent, int childIndex)
         {
             for (int i = 0; i < parent.childCount; i++)
             {
+                RuntimeEditorHelper.RecordObjectUndo(parent.GetChild(i).gameObject, "Solo Child");
                 parent.GetChild(i).gameObject.SetActive(i == childIndex);
             }
         }
@@ -1072,8 +1215,22 @@ namespace JamKit
                 transform.GetChild(i).gameObject.SetActive(i == current);
             }
         }
-        
-        
+
+        public static void ReverseChildren(this Transform transform)
+        {
+            int childCount = transform.childCount;
+            for (int i = 0; i < childCount / 2; i++)
+            {
+                Transform childA = transform.GetChild(i);
+                Transform childB = transform.GetChild(childCount - 1 - i);
+                
+                int indexA = childA.GetSiblingIndex();
+                int indexB = childB.GetSiblingIndex();
+                
+                childA.SetSiblingIndex(indexB);
+                childB.SetSiblingIndex(indexA);
+            }
+        }
         
         public static void SoloPreviousChild(this Transform transform)
         {
@@ -1620,6 +1777,12 @@ namespace JamKit
             input=input.Replace("_", " ").Trim();
             string result = Regex.Replace(input, @"(?:^|_|\s)(.)", match => match.Groups[1].Value.ToUpper());
             return result;
+        }
+
+        
+        public static string RemoveAllWhiteSpace(this string input)
+        {
+            return input.Replace("_", " ").Trim();
         }
 
         public static StringBuilder AppendNewline(this StringBuilder sb, string text)

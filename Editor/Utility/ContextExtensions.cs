@@ -67,6 +67,26 @@ namespace JamKit
             }
         }
 
+
+        [MenuItem("CONTEXT/Transform/Naming/Rename Prefab To Match Instance Name")]
+        private static void RenamePrefabToMatchInstanceName(MenuCommand command)
+        {
+            RuntimeEditorHelper.RenamePrefabToMatchGameObject(((Transform)command.context).gameObject);
+        }
+        
+        [MenuItem("CONTEXT/Transform/Naming/Rename Match Prefab Name")]
+        private static void RenameToMatchPrefabName (MenuCommand command)
+        {
+            RuntimeEditorHelper.RenameToMatchPrefab(((Transform)command.context).gameObject);
+        }
+
+        [MenuItem("CONTEXT/Transform/Naming/Strip Duplicate Suffix")]
+        private static void StripDuplicateSuffix(MenuCommand command)
+        {
+            RuntimeEditorHelper.StripDuplicateNumberFromName(((Transform)command.context).gameObject);
+        }
+        
+        
         
         
         [MenuItem("CONTEXT/Transform/Freeze/Local Z Position")]
@@ -488,7 +508,7 @@ namespace JamKit
             {
                 RuntimeEditorHelper.RecordObjectUndo(textMeshProUGUI.gameObject);
                 string newName = textMeshProUGUI.text;
-                textMeshProUGUI.gameObject.name = newName;
+                textMeshProUGUI.gameObject.name = newName.ToUpperCamelCase();
             }
         }
         
@@ -500,7 +520,7 @@ namespace JamKit
             {
                 RuntimeEditorHelper.RecordObjectUndo(textMeshProUGUI.gameObject);
                 string newName = textMeshProUGUI.text;
-                textMeshProUGUI.gameObject.name = newName;
+                textMeshProUGUI.gameObject.name = newName.ToUpperCamelCase();
             }
         }
 

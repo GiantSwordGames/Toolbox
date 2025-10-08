@@ -40,8 +40,11 @@ namespace JamKit
                 {
                     if (Application.isPlaying)
                     {
-                        _instance = new GameObject("ScriptableBoolManager").AddComponent<ScriptableBoolManager>();
-                        DontDestroyOnLoad(_instance.gameObject);
+                        if (RuntimeEditorHelper.IsQuitting == false)
+                        {
+                            _instance = new GameObject("ScriptableBoolManager").AddComponent<ScriptableBoolManager>();
+                            DontDestroyOnLoad(_instance.gameObject);
+                        }
                     }
                 }
 

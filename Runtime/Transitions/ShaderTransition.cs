@@ -55,8 +55,8 @@ public class ShaderTransition : TransitionBase
                 }
             }
 
-
             onComplete?.Invoke();
+            _onTransitionInComplete?.Invoke();
         }
 
         protected override IEnumerator IETransitionOut(Action onComplete)
@@ -77,6 +77,7 @@ public class ShaderTransition : TransitionBase
             }
 
             onComplete?.Invoke();
+            _onTransitionOutComplete?.Invoke();
         }
 
         protected override IEnumerator IEDoFullTransition(Action onTransitionInComplete,
