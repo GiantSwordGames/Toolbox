@@ -22,7 +22,11 @@ namespace JamKit
         public bool initialValue
         {
             get => _initialValue;
-            set => _initialValue = value;
+            set
+            {
+                _initialValue = value;
+                RuntimeEditorHelper.SetDirty(this);
+            }
         }
 
         [ShowNativeProperty]  public bool value

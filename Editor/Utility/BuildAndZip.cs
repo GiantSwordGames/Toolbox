@@ -27,6 +27,23 @@ namespace JamKit
         [MenuItem(MenuPaths.WINDOWS + "/Build All Platforms")]
         public static void BuildAllPlatforms()
         {
+            BuildSelectedPlatforms(buildForMac.value, buildForWindows.value, buildForLinux.value, buildForWebGL.value);
+        }
+
+        [MenuItem(MenuPaths.WINDOWS + "/Build Mac Only")]
+        public static void BuildMacOnly()
+        {
+            BuildSelectedPlatforms(true, false, false, false);
+        }
+
+        [MenuItem(MenuPaths.WINDOWS + "/Build Windows Only")]
+        public static void BuildWindowsOnly()
+        {
+            BuildSelectedPlatforms(false, true, false, false);
+        }
+
+        private static void BuildSelectedPlatforms(bool doMac, bool doWindows, bool doLinux, bool doWebGL)
+        {
             string buildPath = specifiedBuildPath;
             string applicationName = Application.productName;
             string formattedAppName = applicationName.ToUpperCamelCase();
@@ -46,7 +63,7 @@ namespace JamKit
 
             string timestamp = DateTime.Now.ToString("yyMMdd_HHmm");
 
-            if (buildForMac.value)
+            if (doMac)
             {
                 Debug.Log("Begin Mac Build:");
 
@@ -100,7 +117,7 @@ namespace JamKit
                 Debug.Log("Deleted unzipped Mac build folder: " + macBuildFolder);
             }
 
-            if (buildForWindows.value)
+            if (doWindows)
             {
                 Debug.Log("Begin Win Build:");
 
@@ -130,13 +147,13 @@ namespace JamKit
                 Debug.Log("Deleted unzipped Windows build folder: " + winBuildFolder);
             }
 
-            if (buildForLinux.value)
+            if (doLinux)
             {
                 Debug.Log("Begin Linux Build:");
 
                 string linuxBuildFolder = Path.Combine(buildPath, $"{formattedAppName}_{timestamp}_Linux");
                 Directory.CreateDirectory(linuxBuildFolder);
-                string linuxBuildPath = Path.Combine(linuxBuildFolder, applicationName); // No extension
+                string linuxBuildPath = Path.Combine(linuxBuildFolder, applicationName);
 
                 var linuxOptions = new BuildPlayerOptions
                 {
@@ -160,7 +177,7 @@ namespace JamKit
                 Debug.Log("Deleted unzipped Linux build folder: " + linuxBuildFolder);
             }
 
-            if (buildForWebGL.value)
+            if (doWebGL)
             {
                 Debug.Log("Begin Web Build:");
 
@@ -197,7 +214,8 @@ namespace JamKit
                 Debug.Log("Deleted unzipped WebGL build folder: " + webglBuildFolder);
             }
 
-            Debug.Log("All selected builds complete.");
+            Debug.Log("Selected builds complete.");
+
 #if UNITY_EDITOR_OSX
             System.Diagnostics.Process.Start("open", buildPath);
 #elif UNITY_EDITOR_WIN
@@ -231,9 +249,6 @@ namespace JamKit
             }
         }
 
-        /// <summary>
-        /// Minimal ZipFile.CreateFromDirectory replacement that works on .NET Standard 2.0.
-        /// </summary>
         private static class ZipUtil
         {
             public static void CreateFromDirectory(string sourceDirectory, string destinationZipPath)
@@ -245,21 +260,22 @@ namespace JamKit
                 using (var fs = new FileStream(destinationZipPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 using (var archive = new ZipArchive(fs, ZipArchiveMode.Create))
                 {
-                    var basePath = Path.GetFullPath(sourceDirectory).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+                    var basePath = Path.GetFullPath(sourceDirectory)
+                        .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
 
                     foreach (var filePath in Directory.GetFiles(sourceDirectory, "*", SearchOption.AllDirectories))
                     {
                         if (string.Equals(Path.GetFullPath(filePath), Path.GetFullPath(destinationZipPath), StringComparison.OrdinalIgnoreCase))
                             continue;
 
-                        var entryName = Path.GetFullPath(filePath).Substring(basePath.Length).Replace(Path.DirectorySeparatorChar, '/');
-                        var entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
+                        var entryName = Path.GetFullPath(filePath)
+                            .Substring(basePath.Length)
+                            .Replace(Path.DirectorySeparatorChar, '/');
 
+                        var entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
                         using (var entryStream = entry.Open())
                         using (var inputStream = File.OpenRead(filePath))
-                        {
                             inputStream.CopyTo(entryStream);
-                        }
                     }
                 }
             }

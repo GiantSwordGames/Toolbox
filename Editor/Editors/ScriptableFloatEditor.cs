@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace JamKit
 {
-    [CustomEditor(typeof(ScriptableFloat))]
+    using UnityEditor;
+    using UnityEngine;
+
+        [CustomEditor(typeof(ScriptableFloat))]
     public class ScriptableFloatEditor : CustomEditorBase<ScriptableFloat>
     {
         public override void OnInspectorGUI()

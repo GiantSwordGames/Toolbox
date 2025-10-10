@@ -21,14 +21,8 @@ public class GenericMouzeZoom : MonoBehaviour
         if (scroll.y != 0)
         {
             Vector2 localMousePosition;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _parentRectTransform,
-                    Input.mousePosition,
-                    _uiCamera,
-                    out localMousePosition))
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentRectTransform, Input.mousePosition, _uiCamera, out localMousePosition);
 
-            scroll *= -1;
-            
             Vector2 delta = localMousePosition.To(_rectTransform.anchoredPosition);
             float zoom = 1 + scroll.y;
             float newScale = transform.localScale.x * zoom;

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace JamKit
 {
-    public class CheatCodes : MonoBehaviour
+    public class DebugShortcuts : MonoBehaviour
     {
         
         [Serializable]
@@ -13,6 +13,7 @@ namespace JamKit
         {
             [SerializeField] string _title;
             [SerializeField] bool _editorOnly;
+            [SerializeField] bool _holdShift;
             [SerializeField] KeyCode[] _keyCodes;
             [SerializeField] private UnityEvent _event;
 
@@ -21,11 +22,25 @@ namespace JamKit
             public UnityEvent @event => _event;
 
             public bool editorOnly => _editorOnly;
+
+            public bool holdShift => _holdShift;
         }
         
         [SerializeField] private List<Entry> _entries = new List<Entry>();
    
-        
+        static DebugShortcuts _instance;
+
+        private void Awake()
+        {
+            if (_instance && _instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
         private void Update()
         {
             foreach (Entry entry in _entries)
@@ -42,6 +57,9 @@ namespace JamKit
                         break;
                     }
                 }
+                
+                if(entry.holdShift && !Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.RightShift))
+                    allKeysPressed = false;
 
                 if (allKeysPressed)
                 {

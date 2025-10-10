@@ -122,7 +122,15 @@ namespace JamKit
             }
         }
 
-        public float initialValue => _initialValue;
+        public float initialValue
+        {
+            get => _initialValue;
+            set
+            {
+                _initialValue = value;
+                RuntimeEditorHelper.SetDirty(this);
+            }
+        }
 
         public int intValue
         {

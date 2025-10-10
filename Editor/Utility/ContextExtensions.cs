@@ -357,6 +357,38 @@ namespace JamKit
                 children[i].localScale = scale;
             }
         }
+        
+        public static class RevertOverridesMenu
+        {
+            // The menu path shown when right-clicking a Transform or any component
+            [MenuItem("CONTEXT/Component/Revert Overrides")]
+            private static void RevertOverrides(MenuCommand command)
+            {
+                var component = command.context as Component;
+                if (component == null)
+                    return;
+
+                if (PrefabUtility.IsPartOfPrefabInstance(component))
+                {
+                    Undo.RecordObject(component, "Revert Component Overrides");
+                    PrefabUtility.RevertObjectOverride(component, InteractionMode.UserAction);
+                    EditorUtility.SetDirty(component);
+                    Debug.Log($"Reverted overrides on {component.GetType().Name} ({component.gameObject.name})");
+                }
+                else
+                {
+                    Debug.LogWarning($"'{component.name}' is not part of a prefab instance.");
+                }
+            }
+
+            // Optional: You can limit visibility to prefab instances only
+            [MenuItem("CONTEXT/Component/Revert Overrides", true)]
+            private static bool Validate(MenuCommand command)
+            {
+                var component = command.context as Component;
+                return component != null && PrefabUtility.IsPartOfPrefabInstance(component);
+            }
+        }
             
         
         [MenuItem("CONTEXT/Transform/Parenting/Reverse Child Order")]

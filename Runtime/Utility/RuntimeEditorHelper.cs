@@ -888,14 +888,18 @@ namespace JamKit
 
                 }
 
-                public static void ReplaceGameObject(GameObject gameObject, GameObject buzzosFridge)
+                public static GameObject ReplaceGameObject(GameObject gameObject, GameObject buzzosFridge)
                 {
                         if (Application.isPlaying)
                         {
                                 Debug.Log("Replacing " + gameObject.name + " with " + buzzosFridge.name);
-                                GameObject.Instantiate(buzzosFridge, gameObject.transform.position, gameObject.transform.rotation);
+                                GameObject instantiate = GameObject.Instantiate(buzzosFridge, gameObject.transform.position, gameObject.transform.rotation);
+                                instantiate.transform.SetParent(buzzosFridge.transform.parent);
                                 GameObject.Destroy(gameObject);
+                                return instantiate;
                         }
+
+                        return null;
                 }
         }
 }

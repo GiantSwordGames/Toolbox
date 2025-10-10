@@ -26,7 +26,7 @@ namespace JamKit
                 List<LocalSnap> siblings = targetObject.transform.parent.GetDirectChildren<LocalSnap>();
                 foreach (var target in siblings)
                 {
-                    targetObject.Apply();
+                    target.Apply();
                 }
             }
             // Add custom inspector code here

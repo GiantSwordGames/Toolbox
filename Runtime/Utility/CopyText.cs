@@ -10,6 +10,10 @@ public class CopyText : MonoBehaviour
 
     void Start()
     {
+        if (_to == null)
+        {
+            _to = GetComponent<TextMeshProUGUI>();
+        }
         
     }
 

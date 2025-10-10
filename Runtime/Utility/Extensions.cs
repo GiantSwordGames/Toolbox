@@ -240,6 +240,26 @@ namespace JamKit
             return (Vector3)to - from;
         }
 
+        public static void SetMaterial(this ParticleSystem ps, Material material, bool useShared = false)
+        {
+            if (ps == null)
+            {
+                Debug.LogWarning("Tried to set material on a null ParticleSystem.");
+                return;
+            }
+
+            var renderer = ps.GetComponent<ParticleSystemRenderer>();
+            if (renderer == null)
+            {
+                Debug.LogWarning($"No ParticleSystemRenderer found on {ps.name}.");
+                return;
+            }
+
+            if (useShared)
+                renderer.sharedMaterial = material;
+            else
+                renderer.material = material;
+        }
 
         public static float GetLengthInSeconds(this AnimationCurve curve)
         {
