@@ -63,8 +63,6 @@ namespace JamKit
 
                 foreach (var key in keysToReset)
                 {
-                    Debug.Log("Reset Key " + key, key);
-
                     instance._scriptableEvents[key] = new State();
                 }
             }   

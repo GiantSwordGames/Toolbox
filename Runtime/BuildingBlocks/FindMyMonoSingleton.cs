@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 namespace JamKit
 {
     public class FindMyMonoSingleton<T> : MonoBehaviour where T : FindMyMonoSingleton<T>

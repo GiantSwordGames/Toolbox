@@ -1,8 +1,10 @@
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace JamKit
 {
-    public class EnableBasedOnFloat : MonoBehaviour
+    public class TriggerBasedOnFloat : MonoBehaviour
     {
         enum Comparison
         {
@@ -13,10 +15,10 @@ namespace JamKit
             LessThanOrEqualTo,
         }
 
-        [SerializeField] private Object _target;
         [SerializeField] private SmartFloat _value;
         [SerializeField] private SmartFloat _compareTo;
         [SerializeField] private Comparison _comparison = Comparison.GreaterThan;
+        [SerializeField] private UnityEvent _onTrigger;
 
 
 
@@ -55,7 +57,16 @@ namespace JamKit
         {
             if (enabled == false) return;
 
-            _target.SetEnabled(EvaluateComparison());
+            if (EvaluateComparison())
+            {
+                Trigger();
+            }
+        }
+
+        [Button]
+        private void Trigger()
+        {
+            _onTrigger?.Invoke();
         }
 
         private void OnValueChanged(float f)
@@ -68,9 +79,4 @@ namespace JamKit
             
         }
     }
-}
-
-
-namespace JamKit
-{
 }

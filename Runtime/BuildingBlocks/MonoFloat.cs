@@ -40,9 +40,15 @@ namespace JamKit
             _max.onValueChanged += OnValueChanged;
         }
 
+        private void OnDestroy()
+        {
+            _value.onValueChanged -= OnValueChanged;
+            _max.onValueChanged -= OnValueChanged;
+        }
+
         private void OnValueChanged(float obj)
         {
-            _onValueChangedAction?.Invoke(obj);
+            _onValueChangedAction?.Invoke(value);
             onValueChanged.Invoke();
 
         }

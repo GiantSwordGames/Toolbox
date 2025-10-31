@@ -17,6 +17,7 @@ namespace JamKit
         enum ResetBehaviour
         {
             ResetOnEnable,
+            ResetOnDisable,
             None,
         }
 
@@ -32,15 +33,14 @@ namespace JamKit
             Absolute,
         }
         
-        [FormerlySerializedAs("_behavior")] [SerializeField] private TriggerBehavior _startBehavior = TriggerBehavior.RunOnStart;
-        [FormerlySerializedAs("_stopBehavior")] [SerializeField] private  ResetBehaviour _resetBehaviour = ResetBehaviour.ResetOnEnable;
+        [SerializeField] private TriggerBehavior _startBehavior = TriggerBehavior.RunOnEnable;
+        [SerializeField] private  ResetBehaviour _resetBehaviour = ResetBehaviour.ResetOnDisable;
         [SerializeField] private TimeMode _timeMode = TimeMode.Scaled;
         [SerializeField] private Mode _mode = Mode.Additive;
 
         [FormerlySerializedAs("lerp")]
         [Range(0,1)]
         [SerializeField] public float _lerp = 1f;
-        [HideInInspector] [SerializeField] protected bool _additive = true;
         [SerializeField] protected SmartTween _tweenSettings;
         [SerializeField] float _duration = Mathf.Infinity;
         [SerializeField] float _resultOffset =0;
@@ -66,6 +66,15 @@ namespace JamKit
             if (_startBehavior == TriggerBehavior.RunOnEnable)
             {
                 Trigger();
+            }
+            
+        }
+        
+        protected virtual void OnDisable()
+        {
+            if (_resetBehaviour == ResetBehaviour.ResetOnDisable)
+            {
+                Reset();
             }
         }
 

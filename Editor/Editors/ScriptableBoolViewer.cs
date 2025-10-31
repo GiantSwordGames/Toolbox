@@ -2,15 +2,25 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+  using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+
 namespace JamKit
 {
     public class ScriptableBoolViewer : EditorWindow
     {
+        [System.Serializable]
+        private class Wrapper : ScriptableObject
+        {
+            public ScriptableBool value;
+        }
+
         private Vector2 scroll;
         private List<ScriptableBool> foundAssets = new List<ScriptableBool>();
-        private readonly Dictionary<ScriptableBool, Editor> editors = new Dictionary<ScriptableBool, Editor>();
+        private readonly List<SerializedObject> wrappers = new List<SerializedObject>();
 
-        [MenuItem("Tools/Find All Scriptable Bools")]
+        [MenuItem("Tools/Find All ScriptableBools")]
         public static void ShowWindow()
         {
             GetWindow<ScriptableBoolViewer>("ScriptableBool Viewer");
@@ -21,38 +31,21 @@ namespace JamKit
             EditorGUILayout.LabelField("Find All ScriptableBools", EditorStyles.boldLabel);
 
             if (GUILayout.Button("Find All"))
-            {
                 RefreshList();
-            }
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField($"Found {foundAssets.Count} assets", EditorStyles.miniBoldLabel);
 
             scroll = EditorGUILayout.BeginScrollView(scroll);
 
-            foreach (var asset in foundAssets)
+            foreach (var so in wrappers)
             {
-                if (asset == null)
-                    continue;
+                so.Update();
 
-                // Draw foldout with default inspector
                 EditorGUILayout.BeginVertical("box");
-                EditorGUILayout.BeginHorizontal();
-                asset.name = EditorGUILayout.TextField("Name", asset.name);
-                if (GUILayout.Button("Ping", GUILayout.Width(50)))
-                    EditorGUIUtility.PingObject(asset);
-                EditorGUILayout.EndHorizontal();
-
-                if (!editors.TryGetValue(asset, out var editor) || editor == null)
-                {
-                    editor = Editor.CreateEditor(asset);
-                    editors[asset] = editor;
-                }
-
-                EditorGUI.BeginDisabledGroup(true); // make it read-only if desired
-                editor.OnInspectorGUI();
-                EditorGUI.EndDisabledGroup();
-
+                SerializedProperty prop = so.FindProperty("value");
+                EditorGUILayout.PropertyField(prop, new GUIContent(prop.objectReferenceValue != null ? prop.objectReferenceValue.name : "null"), true);
+                so.ApplyModifiedProperties();
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.Space();
             }
@@ -62,19 +55,26 @@ namespace JamKit
 
         private void RefreshList()
         {
-            foreach (var e in editors.Values)
-                DestroyImmediate(e);
-            editors.Clear();
-
             foundAssets = RuntimeEditorHelper.FindAssetsOfType<ScriptableBool>();
+            wrappers.Clear();
+
+            foreach (var asset in foundAssets)
+            {
+                var wrapper = ScriptableObject.CreateInstance<Wrapper>();
+                wrapper.value = asset;
+                wrappers.Add(new SerializedObject(wrapper));
+            }
+
             Repaint();
         }
 
         private void OnDisable()
         {
-            foreach (var e in editors.Values)
-                DestroyImmediate(e);
-            editors.Clear();
+            foreach (var so in wrappers)
+                if (so.targetObject != null)
+                    DestroyImmediate(so.targetObject);
+            wrappers.Clear();
         }
     }
 }
+

@@ -64,18 +64,27 @@ public class MoveTransform : MonoBehaviour
 
 	public void TriggerOn()
 	{
+		if(enabled== false)
+			return;
+
 		_isOn = true;
 		SetLerp(1);
 	}
 
 	public void TriggerOff()
 	{
+		if(enabled== false)
+			return;
+
 		_isOn = false;
 		SetLerp(0);
 	}
 
 	public void TweenOn()
 	{
+		if(enabled== false)
+			return;
+
 		_isOn = true;
 		_lerpRoutine.KillAsyncRoutineAsNeeded();
 		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(l));
@@ -83,6 +92,9 @@ public class MoveTransform : MonoBehaviour
 
 	public void TweenOff()
 	{
+		if(enabled== false)
+			return;
+
 		_isOn = false;
 		_lerpRoutine.KillAsyncRoutineAsNeeded();
 		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(1 - l));
@@ -91,11 +103,15 @@ public class MoveTransform : MonoBehaviour
 	[Button]
 	public void Trigger()
 	{
+		
 		TweenOn();
 	}
 
 	public void ToggleTween()
 	{
+		if(enabled== false)
+			return;
+		
 		if (_isOn)
 		{
 			TweenOff();

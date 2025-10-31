@@ -24,6 +24,10 @@ namespace JamKit
         [Button]
         public override void Trigger()
         {
+            if (enabled ==false)
+            {
+                return;
+            }
             Stop();
             _instance = _punchAsset.ApplyToPosition(_target.target);
         }

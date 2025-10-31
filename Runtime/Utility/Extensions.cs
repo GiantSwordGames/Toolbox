@@ -110,8 +110,8 @@ namespace JamKit
                 return Math.Floor(value * factor) / factor;
             }
 
-            if (number < 100)
-                return FloorTo(number, 2).ToString("F2");
+            if (number < 25)
+                return FloorTo(number, 2).ToString("F2").Replace(",", ".");
 
             if (number < 1000)
                 return Math.Floor(number).ToString("0");
@@ -858,7 +858,16 @@ namespace JamKit
         {
             return component.transform.GetHierarchyPath() + "/" + component.GetType().Name;
         }
+        
+        public static string ToBold(this string str)
+        {
+            return "<b>" + str + "</b>";
+        }
    
+        public static float TimeSince(this float timeStamp, float currentTime)
+        {
+            return currentTime - timeStamp;
+        }
         
         public static string GetFullHierachyPathIncludingSceneName(this Component component)
         {
@@ -1461,7 +1470,7 @@ namespace JamKit
         
         public static T GetElementClamped<T>(this IList<T> list, int index)
         {
-            return list[Mathf.Clamp(index, 0, list.Count - 1)];
+                return list[Mathf.Clamp(index, 0, list.Count - 1)];
         }       
         
         public static T GetElement<T>(this T[] list, float lerp)
@@ -1660,12 +1669,23 @@ namespace JamKit
             return (int)Mathf.Ceil(value);
         }
 
-        
+        public static int Floor(this float value)
+        {
+            return (int)Mathf.Floor(value);
+        }
+
         public static float RoundToNearest(this float value, float increment)
         {
             return Mathf.Round(value / increment) * increment;
         }
 
+        public static ParticleSystem InstantiateAndAutoDestroy(this ParticleSystem prefab, Vector3 position, Quaternion rotation)
+        {
+            ParticleSystem ps = GameObject.Instantiate(prefab, position, rotation);
+            ps.Play();
+            ps.AddComponent<AutoDestroyParticleEffect>();
+            return ps;
+        }
 
         public static void DoTween(this AnimationCurve curve, Action<float> tweenFunctions)
         {
@@ -1744,7 +1764,16 @@ namespace JamKit
             var percent = (int)(value * 100);
             return percent;
         }
+        public static float Min(this float value, float b)
+        {
+            return Mathf.Min(value, value, b);
+        }
         
+        public static float Max(this float value, float b)
+        {
+            return Mathf.Max(value, value, b);
+        }
+
         public static float Clamp(this float value, float min, float max)
         {
             return Mathf.Clamp(value, min, max);

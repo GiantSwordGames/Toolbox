@@ -10,13 +10,14 @@ namespace JamKit
     {
         [SerializeField] private float _delay = 0;
         [SerializeField] private float _duration = 0.5f;
+        [SerializeField] private float _offset =0f;
         [SerializeField] private float _amplitude =.2f;
         [SerializeField] private Vector3 _amplitudeVector = new Vector3(1,-1,1); 
         [SerializeField] private int _oscilations = 5;
 
         public event Action ListenForButtonTest;
 
-        public Vector3 amplitudeVector => _amplitudeVector*_amplitude;
+        public Vector3 amplitudeVector => _amplitudeVector;
 
         public int oscilations => _oscilations;
 
@@ -29,7 +30,9 @@ namespace JamKit
             set => _amplitude = value;
         }
 
-        
+        public float offset => _offset;
+
+
         public PunchInstance ApplyToRotation(Transform target)
         {
             return new PunchInstance(target, this, PunchInstance.Type.Rotation);

@@ -25,7 +25,7 @@ namespace JamKit
         [Button]
         public void Trigger()
         {
-            StartCoroutine(IETrigger());
+            AsyncHelper.StartCoroutine((IETrigger()));
         }
 
         private IEnumerator IETrigger()

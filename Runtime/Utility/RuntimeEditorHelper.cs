@@ -557,6 +557,32 @@ namespace JamKit
                         Undo.SetTransformParent(transform, newParent, name);
 #endif
                 }
+                
+                public static List<T> FindPrefabsOfType<T>() where T : Component
+                {
+
+                        List<T> results = new List<T>();
+#if UNITY_EDITOR
+
+                        // Find all prefab asset GUIDs in the project
+                        string[] prefabGuids = AssetDatabase.FindAssets("t:Prefab");
+
+                        for (int i = 0; i < prefabGuids.Length; i++)
+                        {
+                                string path = AssetDatabase.GUIDToAssetPath(prefabGuids[i]);
+                                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                                if (prefab == null)
+                                        continue;
+
+                                T component = prefab.GetComponentInChildren<T>(true);
+                                if (component != null)
+                                        results.Add(component);
+                        }
+#endif
+
+                        return results;
+                }
 
                 public static List<T> FindAssetsOfType<T>() where T : Object
                 {

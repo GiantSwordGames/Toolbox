@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -133,6 +134,15 @@ namespace JamKit
             var instance = Instantiate();
             instance.DoFullTransition(() => SceneManager.LoadScene(sceneName), null);  
             return instance;
+        }
+
+        public void SetText(string text)
+        {
+            TextMeshProUGUI textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
+            if (textMeshProUGUI != null)
+            {
+                textMeshProUGUI.text = text;
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ namespace JamKit
 {
     public static class ImportAudioFromDownloads
     {
+        [MenuItem(MenuPaths.WINDOWS + "/Import Audio Clips From Downloads")]
         public static void CopyAudioFilesFromDownloadsToAssets()
         {
             // Define the paths for the Downloads and Assets directories

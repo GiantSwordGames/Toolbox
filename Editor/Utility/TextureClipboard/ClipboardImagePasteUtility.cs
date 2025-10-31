@@ -12,6 +12,10 @@ namespace JamKit.ClipboardImagePaste
 {
     public class ClipboardImagePasteUtility : Editor
     {
+        public delegate bool PasteEventHandler(Sprite pastedSprite);
+        
+        public static PasteEventHandler onPaste;
+        
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
@@ -37,44 +41,57 @@ namespace JamKit.ClipboardImagePaste
                 Sprite clipboardSprite = PasteClipboardImage();
                 if (clipboardSprite)
                 {
-                    e.Use();
-                    
-                    // PRIORITY 1: Assign to Selected UI Image (UnityEngine.UI.Image)
-                    foreach (var obj in Selection.gameObjects)
+                    if (onPaste != null)
                     {
-                        Debug.Log(obj);
-                        Image uiImage = obj.GetComponent<Image>();
-                        if (uiImage != null)
+                        if (onPaste.Invoke(clipboardSprite))
                         {
-                            Undo.RecordObject(uiImage, "Paste Sprite to UI Image");
-                            uiImage.sprite = clipboardSprite;
-                            RuntimeEditorHelper.SetDirty(uiImage);
-                            Debug.Log("Pasted image assigned to UI Image: " + obj.name, obj);
-                            return; // Exit early, we're done
+                            e.Use();
+                            return;
                         }
-                    }
-
-                    // PRIORITY 2: Spawn a SpriteRenderer in Scene View
-                    GameObject go = new GameObject(clipboardSprite.name);
-                    SpriteRenderer spriteRenderer = go.AddComponent<SpriteRenderer>();
-                    spriteRenderer.sprite = clipboardSprite;
-                    spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition().WithZ(0);
-
-                    if (Selection.activeTransform)
-                    {
-                        spriteRenderer.transform.SetParent(Selection.activeTransform);
                     }
                     else
                     {
-                        Collider2D collider2D = Physics2D.OverlapCircle(spriteRenderer.transform.position, 10);
-                        if (collider2D)
-                        {
-                            EditorSceneManager.MoveGameObjectToScene(spriteRenderer.gameObject, collider2D.transform.root.gameObject.scene);
-                        }
-                    }
 
-                    Selection.activeObject = spriteRenderer;
-                    Debug.Log("Pasted image spawned in Scene View as SpriteRenderer", spriteRenderer);
+
+                        // PRIORITY 1: Assign to Selected UI Image (UnityEngine.UI.Image)
+                        foreach (var obj in Selection.gameObjects)
+                        {
+                            Debug.Log(obj);
+                            Image uiImage = obj.GetComponent<Image>();
+                            if (uiImage != null)
+                            {
+                                Undo.RecordObject(uiImage, "Paste Sprite to UI Image");
+                                uiImage.sprite = clipboardSprite;
+                                RuntimeEditorHelper.SetDirty(uiImage);
+                                Debug.Log("Pasted image assigned to UI Image: " + obj.name, obj);
+                                return; // Exit early, we're done
+                            }
+                        }
+
+                        // PRIORITY 2: Spawn a SpriteRenderer in Scene View
+                        GameObject go = new GameObject(clipboardSprite.name);
+                        SpriteRenderer spriteRenderer = go.AddComponent<SpriteRenderer>();
+                        spriteRenderer.sprite = clipboardSprite;
+                        spriteRenderer.transform.position = RuntimeEditorHelper.GetSceneCenterPosition().WithZ(0);
+
+                        if (Selection.activeTransform)
+                        {
+                            spriteRenderer.transform.SetParent(Selection.activeTransform);
+                        }
+                        else
+                        {
+                            Collider2D collider2D = Physics2D.OverlapCircle(spriteRenderer.transform.position, 10);
+                            if (collider2D)
+                            {
+                                EditorSceneManager.MoveGameObjectToScene(spriteRenderer.gameObject,
+                                    collider2D.transform.root.gameObject.scene);
+                            }
+                        }
+
+                        Selection.activeObject = spriteRenderer;
+                        e.Use();
+                        Debug.Log("Pasted image spawned in Scene View as SpriteRenderer", spriteRenderer);
+                    }
                 }
             }
         }
@@ -92,6 +109,14 @@ namespace JamKit.ClipboardImagePaste
                         Sprite sprite = PasteClipboardImage();
                         if (sprite)
                         {
+                            if (onPaste != null)
+                            {
+                                if (onPaste.Invoke(sprite))
+                                {
+                                    e.Use();
+                                    return;
+                                }
+                            }
                             e.Use();
                             RuntimeEditorHelper.SelectAndFocus(sprite.texture);
                         }

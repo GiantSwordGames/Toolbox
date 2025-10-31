@@ -17,6 +17,7 @@ namespace JamKit
             if (additive)
             {
                 _target.localScale -= _scaleOffset;
+                _scaleOffset = Vector3.zero;
             }
             base.Reset();
             if(additive== false)

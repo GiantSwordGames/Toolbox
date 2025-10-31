@@ -85,9 +85,88 @@ namespace JamKit
         {
             RuntimeEditorHelper.StripDuplicateNumberFromName(((Transform)command.context).gameObject);
         }
-        
-        
-        
+         public static class TrimTextMeshProRect
+    {
+        [MenuItem("CONTEXT/TextMeshProUGUI/Trim Rect To Text Content")]
+        private static void TrimRect(MenuCommand command)
+        {
+            var text = command.context as TextMeshProUGUI;
+            if (text == null) return;
+            var rect = text.rectTransform;
+            Undo.RecordObject(rect, "Trim Rect To Text Content");
+
+            // Force layout update and get preferred size
+            text.ForceMeshUpdate();
+            Vector2 preferred = text.GetPreferredValues(float.PositiveInfinity, float.PositiveInfinity);
+
+            // Determine alignment offset within rect (0 = left/bottom, 0.5 = center, 1 = right/top)
+            var align = text.alignment;
+            float hAlign = 0.5f;
+            float vAlign = 0.5f;
+
+            switch (align)
+            {
+                case TextAlignmentOptions.TopLeft:
+                case TextAlignmentOptions.Left:
+                case TextAlignmentOptions.BottomLeft:
+                case TextAlignmentOptions.BaselineLeft:
+                case TextAlignmentOptions.MidlineLeft:
+                case TextAlignmentOptions.CaplineLeft:
+                    hAlign = 0f; break;
+
+                case TextAlignmentOptions.TopRight:
+                case TextAlignmentOptions.Right:
+                case TextAlignmentOptions.BottomRight:
+                case TextAlignmentOptions.BaselineRight:
+                case TextAlignmentOptions.MidlineRight:
+                case TextAlignmentOptions.CaplineRight:
+                    hAlign = 1f; break;
+            }
+
+            switch (align)
+            {
+                case TextAlignmentOptions.TopLeft:
+                case TextAlignmentOptions.Top:
+                case TextAlignmentOptions.TopRight:
+                    vAlign = 1f; break;
+
+                case TextAlignmentOptions.BottomLeft:
+                case TextAlignmentOptions.Bottom:
+                case TextAlignmentOptions.BottomRight:
+                case TextAlignmentOptions.BaselineLeft:
+                case TextAlignmentOptions.Baseline:
+                case TextAlignmentOptions.BaselineRight:
+                    vAlign = 0f; break;
+            }
+
+            // Store world position of the rendered text origin (based on alignment)
+            Vector2 oldSize = rect.rect.size;
+            Vector2 oldOffset = new Vector2((hAlign - rect.pivot.x) * oldSize.x,
+                                            (vAlign - rect.pivot.y) * oldSize.y);
+            Vector3 oldWorldOrigin = rect.TransformPoint(oldOffset);
+
+            // Resize rect
+            rect.sizeDelta += preferred - oldSize;
+
+            // Compute new world position of the same alignment point
+            Vector2 newSize = rect.rect.size;
+            Vector2 newOffset = new Vector2((hAlign - rect.pivot.x) * newSize.x,
+                                            (vAlign - rect.pivot.y) * newSize.y);
+            Vector3 newWorldOrigin = rect.TransformPoint(newOffset);
+
+            // Offset to keep that alignment point fixed on screen
+            Vector3 worldDelta = oldWorldOrigin - newWorldOrigin;
+            rect.position += worldDelta;
+
+            EditorUtility.SetDirty(rect);
+        }
+
+        [MenuItem("CONTEXT/TextMeshProUGUI/Trim Rect To Text Content", true)]
+        private static bool ValidateTrimRect(MenuCommand command)
+        {
+            return command.context is TextMeshProUGUI;
+        }
+    }
         
         [MenuItem("CONTEXT/Transform/Freeze/Local Z Position")]
         private static void SetZToZero(MenuCommand command)

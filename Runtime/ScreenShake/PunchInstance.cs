@@ -54,7 +54,7 @@ namespace JamKit
             }
             
             
-            _routine = AsyncHelper.StartCoroutine(Apply(asset.delay, asset.amplitudeVector, asset.oscilations, asset.duration, function));
+            _routine = AsyncHelper.StartCoroutine(Apply(asset, function));
         }
 
         public State state => _state;
@@ -106,27 +106,27 @@ namespace JamKit
         }
 
        
-        private  IEnumerator Apply( float delay,  Vector3 amplitude, int oscillations, float duration, Action<Vector3> function)
+        private  IEnumerator Apply( PunchAsset asset, Action<Vector3> function)
         {
             _function = function;
             
             _state = State.Running;
 
-            if (delay > 0)
+            if (asset.delay > 0)
             {
-                yield return new WaitForSeconds(delay);
+                yield return new WaitForSeconds(asset.delay);
             }
 
             float time = 0;
-            while (time < duration)
+            while (time < asset.duration)
             {
                 time += TimeHelper.GetDeltaTime(timeScale);
-                float lerp = time / duration;
+                float lerp = time / asset.duration;
                 float decay = 1 - lerp;
-                float t = Mathf.Sin(lerp * Mathf.PI * oscillations);
+                float t = Mathf.Sin(lerp * Mathf.PI * asset.oscilations);
 
                 function(-_offset);
-                _offset = amplitude * t*decay;
+                _offset = asset.amplitudeVector * (asset.amplitude * t * decay + asset.offset);
                 _offset.Scale(instanceScale);
                 function(_offset);
                 onUpdate?.Invoke();

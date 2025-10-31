@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace JamKit
 {
     public class RevealChildrenOverTime : MonoBehaviour
     {
         [SerializeField] private float _interval = 0.2f;
+        [SerializeField] private UnityEvent _onChildReveal;
         private Coroutine _coroutine;
 
         private void Awake()
@@ -54,6 +56,7 @@ namespace JamKit
                 for (int j = 0; j < children.Count; j++)
                 {
                     children[j].gameObject.SetActive(i >= j);
+                    _onChildReveal?.Invoke();
                 }
                 yield return new WaitForSeconds(_interval);
             }

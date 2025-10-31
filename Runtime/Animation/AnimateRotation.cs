@@ -13,7 +13,8 @@ namespace JamKit
              {
                  _target.localRotation *= Quaternion.Inverse(_offset);
              }
-             
+             _offset = Quaternion.identity;
+
              base.Reset();
              if (additive==false)
              {

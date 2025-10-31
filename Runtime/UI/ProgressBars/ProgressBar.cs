@@ -16,7 +16,7 @@ namespace JamKit
         [Button]
         private void Refresh()
         {
-            UpdateBar(_value.value);
+            UpdateBar(_value.normalizedValue);
         }
 
         public SmartFloat value
@@ -32,11 +32,16 @@ namespace JamKit
 
         }
 
+        private void OnDestroy()
+        {
+            _value.onValueChanged -= UpdateBar;
+        }
+
         private void OnEnable()
         {
         }
 
-        protected virtual void UpdateBar(float value)
+        protected virtual void UpdateBar(float v)
         {
             // if (_primaryBar)
             // {
@@ -47,6 +52,8 @@ namespace JamKit
             // {
             //     _secondaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
             // }
+
+            transform.SetLocalScaleX(value.normalizedValue);
         }
 
         public void SetValue(float newValue)
