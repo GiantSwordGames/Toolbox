@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace JamKit.AssetRules
 {
-    [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Warning" )]
+    // [CreateAssetMenu(menuName = AssetRuleMenuItems.ASSET_MENU_PATH +"/Warning" )]
     public class WarningRule : ScriptableObject
     {
         [SerializeField] private bool size = false;

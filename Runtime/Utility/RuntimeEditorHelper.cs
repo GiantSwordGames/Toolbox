@@ -229,6 +229,7 @@ namespace JamKit
                                 }
                         }
 
+
                         return mostPopularDirectory;
                 }
                 
@@ -344,8 +345,9 @@ namespace JamKit
                 }
 #if UNITY_EDITOR
 
-                public static void CreateFoldersIfNeeded(string directory)
+                public static void CreateFoldersIfNeeded(string path)
                 {
+                        string directory = Path.GetDirectoryName(path);
                         string[] directories = directory.Split('/');
                         string currentDirectory = "Assets";
                         foreach (string dir in directories)

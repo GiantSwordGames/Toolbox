@@ -12,6 +12,7 @@ namespace JamKit
         public abstract void Load();
     }
     
+    
     public class ScriptableBool : ScriptablePrimitive
     {
         public ScriptableVariableScope _scriptableVariableScope = ScriptableVariableScope.Application;
@@ -45,6 +46,10 @@ namespace JamKit
             }
             set
             {
+                if(!Application.isPlaying)
+                {
+                    return;
+                }
                 ScriptableBoolManager.GetState(this, out ScriptableBoolManager.State state);
                 if (value.Equals( state.value) == false)
                 {
@@ -53,7 +58,7 @@ namespace JamKit
 
                     try
                     {
-                        state.onValueChanged?.Invoke(state.value);
+                        state.onValueChanged?.Invoke();
                     }
                     catch (Exception e)
                     {
@@ -63,7 +68,7 @@ namespace JamKit
             }
         }
        
-        [ShowNativeProperty]  public Action<bool> onValueChanged
+        [ShowNativeProperty]  public Action onValueChanged
         {
             get
             {
@@ -108,6 +113,12 @@ namespace JamKit
         {
             value = false;
         }
+        
+        [Button]
+        public void SeeAllBools()
+        {
+            // ScriptableBoolViewer.ShowWindow();
+        }
 
 
         public void ResetToDefaultValue()
@@ -115,13 +126,13 @@ namespace JamKit
             value = initialValue;
         }
 
-        public void RegisterListener(Action<bool> onPlayerIsAliveChanged)
+        public void RegisterListener(Action onPlayerIsAliveChanged)
         {
             ScriptableBoolManager.GetState(this, out ScriptableBoolManager.State state);
             state.onValueChanged += onPlayerIsAliveChanged;
         }
         
-        public void DeregisterListener(Action<bool> onPlayerIsAliveChanged)
+        public void DeregisterListener(Action onPlayerIsAliveChanged)
         {
             ScriptableBoolManager.GetState(this, out ScriptableBoolManager.State state);
             state.onValueChanged -= onPlayerIsAliveChanged;

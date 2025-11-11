@@ -81,8 +81,8 @@ namespace GiantSword
         {
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
 
-            snapIcon = EditorGUIUtility.IconContent("SceneViewSnap-Off");
-            snapIcon.tooltip = "This object is not snapped to its interval";
+            // snapIcon = EditorGUIUtility.IconContent("SceneViewSnap-Off");
+            // snapIcon.tooltip = "This object is not snapped to its interval";
         }
 
         private static void OnHierarchyGUI(int instanceID, Rect selectionRect)

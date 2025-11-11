@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 
 public class MoveTransform : MonoBehaviour
 {
+	[SerializeField] private TimeScale _timeScale = TimeScale.Scaled;
 	[FormerlySerializedAs("_offset")] [SerializeField]
 	private Vector3 _positionOffset = Vector3.right * 10;
 
@@ -18,7 +19,7 @@ public class MoveTransform : MonoBehaviour
 	[FormerlySerializedAs("_previousLerp")] [DisableSerializedField] [SerializeField]
 	private float _previousEvaluation;
 
-	[SerializeField] private float _duration = 0;
+	[SerializeField] private float _duration = 1;
 	bool _isOn;
 
 	[Range(0, 1)] [SerializeField] private float _control;
@@ -87,7 +88,7 @@ public class MoveTransform : MonoBehaviour
 
 		_isOn = true;
 		_lerpRoutine.KillAsyncRoutineAsNeeded();
-		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(l));
+		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(l), null, _timeScale);
 	}
 
 	public void TweenOff()
@@ -97,7 +98,7 @@ public class MoveTransform : MonoBehaviour
 
 		_isOn = false;
 		_lerpRoutine.KillAsyncRoutineAsNeeded();
-		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(1 - l));
+		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(1 - l), null, _timeScale);
 	}
 
 	[Button]

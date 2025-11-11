@@ -52,7 +52,7 @@ GameObject:
   - component: {fileID: 6683903226927791155}
   - component: {fileID: 2813390616704268169}
   m_Layer: 5
-  m_Name: Transition_ScreenWipe 1
+  m_Name: Transition_ScreenWipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

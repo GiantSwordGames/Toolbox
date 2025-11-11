@@ -17,6 +17,7 @@ namespace JamKit
         private List<Collider> _overlappingColliders = new List<Collider>();
         private List<Rigidbody> _rigidbodies = new List<Rigidbody>();
 
+        [ShowNativeProperty] public List<Collider>  overlappingColliders => _overlappingColliders;
         [ShowNativeProperty] public int overlappingColliderCount => _overlappingColliders.Count;
         [ShowNativeProperty]  private int overlappingRigidBodies => _rigidbodies.Count;
         

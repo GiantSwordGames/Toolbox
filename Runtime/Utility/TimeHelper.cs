@@ -106,9 +106,13 @@ namespace JamKit
             }
         }
 
-        public static float GetDeltaTime(TimeScale scale)
+        public static float GetDeltaTime(this TimeScale scale)
         {
             return scale == TimeScale.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+        }
+        public static float GetTime(this TimeScale scale)
+        {
+            return scale == TimeScale.Scaled ? Time.time : Time.unscaledTime;
         }
 
         public static float GetNormalizedValue(float _hours)
@@ -121,5 +125,6 @@ namespace JamKit
         {
             Time.timeScale = 1;
         }
+        
     }
 }

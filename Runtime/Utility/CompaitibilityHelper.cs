@@ -7,12 +7,27 @@ namespace JamKit
     {
         public static T FindObjectOfType<T>() where T : Object
         {
+#if UNITY_6000
+            return GameObject.FindAnyObjectByType<T>(FindObjectsInactive.Include);
+#else            
             return GameObject.FindObjectOfType<T>();
+#endif
+        }      
+        
+        
+        public static T[] FindObjectsOfType<T>() where T : Object
+        {
+            return FindObjectsByType<T>();
         }
 
         public static T[] FindObjectsByType<T>() where T : Object
         {
+#if UNITY_6000
+            return GameObject.FindObjectsByType<T>(FindObjectsSortMode.InstanceID);
+#else
             return GameObject.FindObjectsOfType<T>();
+#endif
+
         }
 
 #if UNITY_2022
@@ -38,23 +53,23 @@ namespace JamKit
         public static void SetLinearDamping(this Rigidbody rigidbody, float value)
         {
             var drag = value;
-            rigidbody.drag = drag;
+            rigidbody.linearDamping = drag;
         }
         
         public static void SetAngularDamping(this Rigidbody rigidbody, float value)
         {
             var angularDrag = value;
-            rigidbody.angularDrag = angularDrag;
+            rigidbody.angularDamping = angularDrag;
         }
         
         public  static void SetLinearVelocity(this Rigidbody rigidbody, Vector3 velocity)
         {
-            rigidbody.velocity = velocity;
+            rigidbody.linearVelocity = velocity;
         }
         
         public  static Vector3 GetLinearVelocity(this Rigidbody rigidbody)
         {
-            return rigidbody.velocity;
+            return rigidbody.linearVelocity;
         }
        
     }

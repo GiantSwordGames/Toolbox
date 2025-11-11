@@ -209,7 +209,7 @@ namespace JamKit
             GameObject prefab = Selection.activeGameObject;
             var prefabSource = PrefabUtility.GetCorrespondingObjectFromSource(prefab) ?? prefab;
 
-            foreach (var go in Object.FindObjectsOfType<GameObject>())
+            foreach (var go in CompaitibilityHelper.FindObjectsByType<GameObject>())
             {
                 if (go == drawer.gameObject) continue;
 

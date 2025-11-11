@@ -147,7 +147,7 @@ namespace JamKit
         }
 
         [Button("Increment by 1")]
-        public void IncrementByOne()
+        public void Increment()
         {
             value += 1f;
         }

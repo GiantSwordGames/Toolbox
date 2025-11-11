@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,14 +22,15 @@ namespace JamKit
         [SerializeField] private SmartFloat _value;
         [SerializeField] private SmartFloat _max = new SmartFloat(100); 
         [SerializeField] private Action<float> _onValueChangedAction;
-        [SerializeField] private UnityEvent _onValueChanged;
-        [SerializeField] private UnityEvent _onValueDecreasedUnclamped;
-        [SerializeField] private UnityEvent _onValueDecreased;
-        [SerializeField] private UnityEvent _onValueIncreased;
-        [SerializeField] private UnityEvent _onEmpty;
-        [SerializeField] private UnityEvent _onFull;
-        [SerializeField] private UnityEvent _onOverKill;
-        [SerializeField] private bool _fireEventsOnNoChange;
+       
+        [Foldout("Events")] [SerializeField] private UnityEvent _onValueChanged;
+        [Foldout("Events")]  [SerializeField] private UnityEvent _onValueDecreasedUnclamped;
+        [Foldout("Events")]  [SerializeField] private UnityEvent _onValueDecreased;
+        [Foldout("Events")]  [SerializeField] private UnityEvent _onValueIncreased;
+        [Foldout("Events")]  [SerializeField] private UnityEvent _onEmpty;
+        [Foldout("Events")]  [SerializeField] private UnityEvent _onFull;
+        [Foldout("Events")]  [SerializeField] private UnityEvent _onOverKill;
+        [Foldout("Events")]  [SerializeField] private bool _fireEventsOnNoChange;
 
         private void OnValidate()
         {

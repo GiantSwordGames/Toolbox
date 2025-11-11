@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JamKit;
 using UnityEngine;
 
 namespace ProceduralPrimitivesUtil.Demo
@@ -7,7 +8,7 @@ namespace ProceduralPrimitivesUtil.Demo
     public class DemoManager : MonoBehaviour
     {
         static DemoManager instance;
-        public static DemoManager Instance { get { if (instance == null) instance = FindObjectOfType<DemoManager>(); return instance; } }
+        public static DemoManager Instance { get { if (instance == null) instance = CompaitibilityHelper.FindObjectOfType<DemoManager>(); return instance; } }
 
         public Material[] demoMaterials;
 

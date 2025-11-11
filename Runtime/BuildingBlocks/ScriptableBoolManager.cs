@@ -22,7 +22,7 @@ namespace JamKit
         public class State
         {
             public bool value;
-            public Action<bool> onValueChanged;
+            public Action  onValueChanged;
 
             public State(bool initialValue)
             {

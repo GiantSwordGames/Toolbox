@@ -17,9 +17,11 @@
             [SerializeField] private SmartFloat _value;
             [SerializeField] private float _increment = 0;
             [SerializeField] private float _multiplier = 1;
+            [FormerlySerializedAs("_abbreviatedMoney")]
             [FormerlySerializedAs("_abbreviate")]
             [Space]
-            [SerializeField] private bool _abbreviatedMoney = false;
+            [SerializeField] private bool _formatAsAbbreviatedMoney = false;
+            [SerializeField] private bool _formatAsTime = false;
             [SerializeField] private string _format = "F1";
             [SerializeField] [TextArea(1, 5)] private string _prefix;
             [SerializeField] [TextArea(1, 5)] private string _postFix;
@@ -28,7 +30,11 @@
             [SerializeField] private float _incrementOverDuration = 0;
             private float _previousValue;
 
-            public SmartFloat value => _value;
+            public float value
+            {
+                get => _value;
+                set => _value.value = value;
+            }
 
 
             private void OnValidate()
@@ -100,9 +106,13 @@
                 string formattedNumber = default;
 
                 var modifiedValue = (value + _increment)* _multiplier;
-                if (_abbreviatedMoney)
+                if (_formatAsAbbreviatedMoney)
                 {
                     formattedNumber = modifiedValue.ToAbbreviatedMoneyString();
+                }
+                else if (_formatAsTime)
+                {
+                    formattedNumber = TimeSpan.FromSeconds(modifiedValue).ToString(@"mm\:ss");
                 }
                 else
                 {
@@ -140,7 +150,7 @@
 
                 float duration = _incrementOverDuration;
                 float startValue = oldValue;
-                float endValue = value.value;
+                float endValue = value;
                 float elapsed = 0f;
 
                 while (elapsed < duration)

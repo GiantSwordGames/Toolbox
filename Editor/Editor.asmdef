@@ -1,6 +1,6 @@
 {
     "name": "Editor",
-    "rootNamespace": "RichardPieterse",
+    "rootNamespace": "JamKit",
     "references": [
         "Runtime",
         "Unity.Timeline",

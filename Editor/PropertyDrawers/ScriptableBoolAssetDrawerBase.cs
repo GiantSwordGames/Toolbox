@@ -5,7 +5,7 @@ using UnityEngine;
 namespace JamKit
 {
     [CustomPropertyDrawer(typeof(ScriptableBool))]
-    public  class BoolAssetDrawerBase : PropertyDrawer
+    public  class ScriptableBoolAssetDrawerBase : PropertyDrawer
     {
         private string fallbackPath =>  MenuPaths.CONFIGURATIONS_PATH;
 
@@ -89,13 +89,13 @@ namespace JamKit
                 {
                     ScriptableBool newAsset = ScriptableObject.CreateInstance<ScriptableBool>();
                     string folderPath = RuntimeEditorHelper.GetMostCommonDirectoryForAssetType<ScriptableBool>() +"/";
-                    if (folderPath == "")
+                    if (folderPath == "/")
                     {
                         folderPath = fallbackPath;
                     }
                     RuntimeEditorHelper.CreateFoldersIfNeeded(folderPath);
 
-                    string assetName =  "Bool_" + label.text;
+                    string assetName =  "Bool_" + label.text.ToUpperCamelCase();
                     string newPath = folderPath  + assetName + ".asset";
                     AssetDatabase.CreateAsset(newAsset, newPath);
                     var loadAssetAtPath = AssetDatabase.LoadAssetAtPath<ScriptableBool>(newPath);

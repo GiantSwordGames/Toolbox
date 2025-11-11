@@ -19,9 +19,9 @@ namespace JamKit
             UpdateBar(_value.normalizedValue);
         }
 
-        public SmartFloat value
+        public float value
         {
-            get => _value;
+            get => _value.value;
             set => SetValue(value);
         }
 
@@ -53,7 +53,7 @@ namespace JamKit
             //     _secondaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
             // }
 
-            transform.SetLocalScaleX(value.normalizedValue);
+            transform.SetLocalScaleX(_value.normalizedValue);
         }
 
         public void SetValue(float newValue)

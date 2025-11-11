@@ -45,7 +45,7 @@ namespace JamKit
             }
         }
 
-        private void OnValueChanged(bool state)
+        private void OnValueChanged( )
         {
             Evaluate();
         }

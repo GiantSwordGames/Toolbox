@@ -13,10 +13,10 @@ namespace JamKit
         void Start()
         {
             isNotMuted.onValueChanged += UpdateMusicMute;
-            UpdateMusicMute(false);
+            UpdateMusicMute();
         }
 
-        void UpdateMusicMute(bool b)
+        void UpdateMusicMute( )
         {
             if (isNotMuted.value)
             {

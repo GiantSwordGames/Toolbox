@@ -1,6 +1,6 @@
 {
     "name": "Runtime",
-    "rootNamespace": "GiantSword",
+    "rootNamespace": "JamKit",
     "references": [
         "NaughtyAttributes.Core",
         "Unity.Timeline",

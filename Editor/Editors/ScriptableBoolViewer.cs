@@ -2,10 +2,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-  using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-
 namespace JamKit
 {
     public class ScriptableBoolViewer : EditorWindow
@@ -20,7 +16,7 @@ namespace JamKit
         private List<ScriptableBool> foundAssets = new List<ScriptableBool>();
         private readonly List<SerializedObject> wrappers = new List<SerializedObject>();
 
-        [MenuItem("Tools/Find All ScriptableBools")]
+        // [MenuItem("Tools/Find All ScriptableBools")]
         public static void ShowWindow()
         {
             GetWindow<ScriptableBoolViewer>("ScriptableBool Viewer");
