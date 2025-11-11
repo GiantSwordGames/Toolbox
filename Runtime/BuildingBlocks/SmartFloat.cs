@@ -170,7 +170,7 @@ public class SmartFloat
             switch (_mode)
             {
                 case Mode.Variable:
-                    return _variable != null ? _variable.name : "";
+                    return _variable != null ? _variable.name.Replace("Float_", "") : "";
                 case Mode.MonoFloat:
                     return _monoFloat != null ? _monoFloat.name : "";
                 case Mode.ConfigurationFloat:

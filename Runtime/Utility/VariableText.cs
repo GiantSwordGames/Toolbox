@@ -135,7 +135,7 @@
                 string valueName = _value.name;
                 if(valueName == "")
                     valueName = _text.text;
-                name = name = "Stat_" + valueName;
+                name = name = "" + valueName;
 
             }
 
