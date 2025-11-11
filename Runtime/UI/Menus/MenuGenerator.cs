@@ -63,19 +63,19 @@ namespace RichardPieterse
         {
             if (Application.isPlaying && _isOpen)
             {
-                if (_menuDefinition.upKey.IsDown())
+                if (_menuDefinition.up.IsDown())
                 {
                     SelectPrevious();
                     _menuDefinition.styleDefinition.selectionSound?.Play();
                 }
 
-                if (_menuDefinition.downKey.IsDown())
+                if (_menuDefinition.down.IsDown())
                 {
                     SelectNext();
                     _menuDefinition.styleDefinition.selectionSound?.Play();
                 }
 
-                if (_menuDefinition.acceptKey.IsDown())
+                if (_menuDefinition.accept.IsDown())
                 {
                     ClickOnSelected();
                     _menuDefinition.styleDefinition.clickSound?.Play();

@@ -8,7 +8,7 @@ namespace JamKit
     public class ReloadLevel : MonoBehaviour
     {
 
-        [SerializeField] private InputKeyAsset _asset;
+        [SerializeField] private InputAsset _asset;
         [SerializeField] private KeyCode _reloadKey = KeyCode.R;
         
         [Button]

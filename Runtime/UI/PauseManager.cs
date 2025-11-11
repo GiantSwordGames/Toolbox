@@ -6,7 +6,7 @@ namespace JamKit
 {
     public class PauseManager : MonoBehaviour
     {
-        [SerializeField] private InputKeyAsset _pause;
+        [SerializeField] private InputAsset _pause;
         [SerializeField] private GameObject _pauseMenuRoot;
         [SerializeField] private MenuOptionAsset _resume;
         

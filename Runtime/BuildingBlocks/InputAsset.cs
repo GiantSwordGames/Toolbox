@@ -5,13 +5,13 @@ using UnityEngine.Serialization;
 
 namespace JamKit
 {
-    public class InputKeyAsset : ScriptableObject
+    public class InputAsset : ScriptableObject
     {
         [SerializeField] private KeyCode _keyCode;
         [SerializeField] private KeyCode _secondaryKeyCode;
         [SerializeField] private KeyCode[] _otherKeyCodes = { };
         [SerializeField] private InputActionReference _actionAsset;
-        [SerializeField] private InputKeyAsset[] _compositeKeys = { };
+        [SerializeField] private InputAsset[] _compositeKeys = { };
         [SerializeField] private bool _editorOnly =false;
 
         private void Awake()
@@ -59,7 +59,7 @@ namespace JamKit
                 }
             }
             
-            foreach (InputKeyAsset keyAsset in _compositeKeys)
+            foreach (InputAsset keyAsset in _compositeKeys)
             {
                 if (keyAsset != this && keyAsset.IsDown())
                 {
@@ -110,7 +110,7 @@ namespace JamKit
                 }
             }
             
-            foreach (InputKeyAsset keyAsset in _compositeKeys)
+            foreach (InputAsset keyAsset in _compositeKeys)
             {
                 if (keyAsset != this && keyAsset.IsUp())
                 {
@@ -161,7 +161,7 @@ namespace JamKit
                 }
             }
                         
-            foreach (InputKeyAsset keyAsset in _compositeKeys)
+            foreach (InputAsset keyAsset in _compositeKeys)
             {
                 if (keyAsset != this && keyAsset.IsHeld())
                 {

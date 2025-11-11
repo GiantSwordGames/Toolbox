@@ -9,7 +9,7 @@ public class InputEvent : MonoBehaviour
 {
     [SerializeField] private UnityEvent _onPressed;
     [SerializeField]  [FormerlySerializedAs("inputAction")] private InputActionReference _inputAction;
-    [SerializeField] private InputKeyAsset _asset;
+    [SerializeField] private InputAsset _asset;
     [SerializeField] KeyCode _keyCode = KeyCode.None;
     [SerializeField] bool _skipFirstFrame = false;
     [FormerlySerializedAs("_acceptDelayAfterAppearing")] [SerializeField] float _ignoreInitialInputDelay = -1f;

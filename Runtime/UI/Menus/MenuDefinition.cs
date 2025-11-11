@@ -33,11 +33,11 @@ namespace JamKit
             set => _onClose = value;
         }
 
-        public InputKeyAsset upKey => _styleDefinition.upKey;
+        public InputAsset up => _styleDefinition.up;
 
-        public InputKeyAsset downKey => _styleDefinition.downKey;
+        public InputAsset down => _styleDefinition.down;
 
-        public InputKeyAsset acceptKey => _styleDefinition.acceptKey;
+        public InputAsset accept => _styleDefinition.accept;
 
         public MenuOption optionPrefab => _styleDefinition.optionPrefab;
 
@@ -49,7 +49,7 @@ namespace JamKit
 
         public MenuDefinition openedBy => _openedBy;
 
-        public InputKeyAsset backButton => _styleDefinition.backButton;
+        public InputAsset backButton => _styleDefinition.backButton;
 
         public MenuStyleDefinition styleDefinition => _styleDefinition;
 
