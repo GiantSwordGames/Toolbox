@@ -98,12 +98,12 @@ namespace JamKit
             return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Unscaled));
         }
         
-        public static Coroutine LerpRoutine( float duration, Action<float> lerpFunction)
+        public static Coroutine LerpRoutine(float duration, Action<float> lerpFunction, Action onComplete = null)
         {
-            return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Scaled));
+            return SafeCoroutineRunner.StartCoroutine(IELerp(duration, lerpFunction, TimeScale.Scaled, onComplete));
         }
         
-        private static IEnumerator IELerp( float duration, Action<float> lerpFunction, TimeScale scale)
+        private static IEnumerator IELerp( float duration, Action<float> lerpFunction, TimeScale scale, Action onComplete = null)
         {
             float timer = 0;
             while (timer < duration)
@@ -115,6 +115,7 @@ namespace JamKit
                 yield return null;
             }
             lerpFunction(1);
+            onComplete?.Invoke();
         }
 
         public static void Flash(float duration, GameObject gameObject)

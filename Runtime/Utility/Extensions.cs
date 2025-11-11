@@ -145,6 +145,24 @@ namespace JamKit
         }
         
         
+        public static Coroutine DoFade(this AudioSource audioSource, float targetVolume, float duration)
+        {
+            return AsyncHelper.StartCoroutine(IEAudioFade(audioSource, targetVolume, duration));
+        }
+
+        private static IEnumerator IEAudioFade(AudioSource audioSource, float targetVolume, float duration)
+        {
+            float startVolume = audioSource.volume;
+            float timer = 0;
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                float lerp = Mathf.Clamp01(timer / duration);
+                audioSource.volume = Mathf.Lerp(startVolume, targetVolume, lerp);
+                yield return null;
+            }
+            audioSource.volume = targetVolume;
+        }
 
 
         public static void AddForceAtLocalPosition(this Rigidbody rigidbody, Vector3 localPosition, Vector3 worldForce, bool debugDraw =false)
@@ -393,6 +411,16 @@ namespace JamKit
             }
             
             return array[(i+array.Count) % array.Count];
+        }
+        
+        public static T GetElementSafe<T>(this List<T> array, int i) where T : class
+        {
+            if (array.Count == 0 || i < 0 || i >= array.Count)
+            {
+                return null;
+            }
+            
+            return array[i];
         }
 
         public static void Encapsulate(this BoxCollider2D boxCollider2D, BoxCollider2D other)

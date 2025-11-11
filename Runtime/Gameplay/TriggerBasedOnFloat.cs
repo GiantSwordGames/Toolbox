@@ -19,13 +19,18 @@ namespace JamKit
         [SerializeField] private SmartFloat _compareTo;
         [SerializeField] private Comparison _comparison = Comparison.GreaterThan;
         [SerializeField] private UnityEvent _onTrigger;
+        [SerializeField] private bool _evaluateOnAwake = true;
 
 
 
         void Awake()
         {
             _value.onValueChanged += OnValueChanged;
-            Rrefresh();
+
+            if (_evaluateOnAwake)
+            {
+                Refresh();
+            }
         }
 
         private void OnDestroy()
@@ -53,7 +58,7 @@ namespace JamKit
 
         }
 
-        private void Rrefresh()
+        private void Refresh()
         {
             if (enabled == false) return;
 
@@ -71,7 +76,7 @@ namespace JamKit
 
         private void OnValueChanged(float f)
         {
-            Rrefresh();
+            Refresh();
         }
 
         private void Start()

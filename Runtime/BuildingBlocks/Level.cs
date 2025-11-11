@@ -7,6 +7,7 @@ using UnityEditor.SceneManagement;
 #endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace JamKit
 {
@@ -14,6 +15,8 @@ namespace JamKit
     // [CreateAssetMenu(menuName = MenuPaths.CREATE_ASSET_MENU +"Level", fileName = "Level_NewLevel")]
     public class Level : ScriptableObject
     {
+        [TextArea(1,5)]
+        [SerializeField]  private string _levelName;
         [SerializeField]  private SceneReference _scene;
         [SerializeField]  private SceneReference[] _additionalScene;
         [SerializeField]  private SceneReference[] _persistentScene;
@@ -21,6 +24,21 @@ namespace JamKit
         [SerializeField]  private bool _hardLoad = false;
 
         public SceneReference scene => _scene;
+
+        public string levelName
+        {
+            get
+            {
+                if (_levelName.IsNotEmpty())
+                {
+                    return _levelName;
+                }
+                else
+                {
+                    return name.Split(' ').Last().Split('_').Last();
+                }
+            }
+        }
 
         public  List<SceneReference> GetAllSceneReferences()
         {

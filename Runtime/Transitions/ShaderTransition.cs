@@ -36,12 +36,7 @@ public class ShaderTransition : TransitionBase
     
         protected override IEnumerator IETransitionIn(Action onComplete)
         {
-            if (_startDelay > 0)
-            {
-                yield return new WaitForSecondsRealtime(_startDelay);
-            }
-            _onTransitionInBegin?.Invoke();
-
+        
             float lerp = 0;
             if (_durationIn > 0)
             {
@@ -56,13 +51,11 @@ public class ShaderTransition : TransitionBase
             }
 
             onComplete?.Invoke();
-            _onTransitionInComplete?.Invoke();
         }
 
         protected override IEnumerator IETransitionOut(Action onComplete)
         {
             
-            _onTransitionOutBegin?.Invoke();
             float lerp = 0;
             if (_durationOut > 0)
             {
@@ -77,7 +70,6 @@ public class ShaderTransition : TransitionBase
             }
 
             onComplete?.Invoke();
-            _onTransitionOutComplete?.Invoke();
         }
 
         protected override IEnumerator IEDoFullTransition(Action onTransitionInComplete,
@@ -87,15 +79,24 @@ public class ShaderTransition : TransitionBase
             {
                 DontDestroyOnLoad(gameObject);
             }
+            if (_startDelay > 0)
+            {
+                yield return new WaitForSecondsRealtime(_startDelay);
+            }
+            yield return null;
+
+            _onTransitionInBegin?.Invoke();
             yield return null;
 
             yield return DoTransitionIn();
             yield return null;
-            if(_holdAfterAction > 0)
+            _onTransitionInComplete?.Invoke();
+
+            if(_holdBeforeAction > 0)
             {
-                yield return new WaitForSecondsRealtime(_holdAfterAction);
+                yield return new WaitForSecondsRealtime(_holdBeforeAction);
             }
-            
+
             float holdStart = Time.realtimeSinceStartup;
 
             onTransitionInComplete?.Invoke();
@@ -108,13 +109,18 @@ public class ShaderTransition : TransitionBase
                 yield return null;
             }
             yield return null;
-            if (_holdBeforeAction > 0)
+            if (_holdAfterAction > 0)
             {
-                yield return new WaitForSecondsRealtime(_holdBeforeAction);
+                yield return new WaitForSecondsRealtime(_holdAfterAction);
             }
+            
+            _mainAction?.Invoke();
+            _onTransitionOutBegin?.Invoke();
             yield return DoTransitionOut();
             yield return null;
             onTransitionOutComplete?.Invoke();
+            _onTransitionOutComplete?.Invoke();
+
             yield return null;
 
             if (_autoDestroy)

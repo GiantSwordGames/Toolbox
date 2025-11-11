@@ -19,6 +19,7 @@ namespace JamKit
 
         [SerializeField] protected UnityEvent _onTransitionInBegin = default;
         [SerializeField] protected UnityEvent _onTransitionInComplete = default;
+        [SerializeField] protected UnityEvent _mainAction = default;
         [SerializeField] protected UnityEvent _onTransitionOutBegin = default;
         [SerializeField] protected UnityEvent _onTransitionOutComplete = default;
 

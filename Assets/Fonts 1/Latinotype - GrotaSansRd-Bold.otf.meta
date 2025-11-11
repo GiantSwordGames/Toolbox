@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: e4f932a67286746e0b89bc0740b37a07
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Grota Sans Rd
+  fontNames:
+  - Grota Sans Rd
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: f00f69fd9c508c041985a35d3062a91b, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
