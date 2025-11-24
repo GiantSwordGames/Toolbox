@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace JamKit
 {
@@ -20,7 +21,7 @@ namespace JamKit
         [SerializeField] private float _distance = 1;
         [Min(0)]
         [SerializeField] private float _thickness = 0;
-        [SerializeField] private LayermaskAsset _layermask;
+        [FormerlySerializedAs("_layermask")] [SerializeField] private LayerMaskAsset _layerMask;
 
         [SerializeField] private UnityEvent<Collider2D> _onEnter;
         [SerializeField] private UnityEvent<Collider2D> _onExit;
@@ -99,11 +100,11 @@ namespace JamKit
        
             if (_thickness == 0)
             {
-                _raycastHits = Physics2D.RaycastAll(transform.position, worldDirection, _distance, _layermask);
+                _raycastHits = Physics2D.RaycastAll(transform.position, worldDirection, _distance, _layerMask);
             }
             else
             {
-                _raycastHits = Physics2D.CircleCastAll(transform.position, _thickness, worldDirection, _distance, _layermask);
+                _raycastHits = Physics2D.CircleCastAll(transform.position, _thickness, worldDirection, _distance, _layerMask);
             }
                
             

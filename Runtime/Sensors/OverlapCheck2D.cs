@@ -9,7 +9,7 @@ namespace JamKit
     {
         [SerializeField] private bool _debugDraw;
         [SerializeField] private bool _debugAlwayEvaluate;
-        [FormerlySerializedAs("_layermaskAsset")] [SerializeField] private LayermaskAsset _layermask;
+        [FormerlySerializedAs("_layermask")] [FormerlySerializedAs("_layermaskAsset")] [SerializeField] private LayerMaskAsset _layerMask;
         [SerializeField] List<Collider2D> _colliders = new List<Collider2D>();
         private List<Collider2D> _results = new List<Collider2D>();
        [ShowNativeProperty]  int overlapCount => _results.Count;
@@ -31,9 +31,9 @@ namespace JamKit
                         continue;
                     }
                     
-                    if (_layermask)
+                    if (_layerMask)
                     {
-                        if (_layermask.Contains(overlappingCollider) == false)
+                        if (_layerMask.Contains(overlappingCollider) == false)
                         {
                             continue;
                         }

@@ -5,7 +5,7 @@ namespace RichardPieterse
 {
     
     [ExecuteInEditMode]
-    public class VerticalLayout : MonoBehaviour
+    public class VerticalTransformLayout : MonoBehaviour
     {
         [SerializeField] private float _spacing = 1;
 

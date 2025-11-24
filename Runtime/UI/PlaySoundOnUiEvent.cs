@@ -6,9 +6,9 @@ namespace JamKit
 {
     public class PlaySoundOnUiEvent : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler
     {
-        // [SerializeField] private SoundAsset _onPointerEnter;
-        // [SerializeField] private SoundAsset _onPointerExit;
-        // [SerializeField] private SoundAsset _onPointerClick;
+        // [SerializeField] private EffectSoundBank_onPointerEnter;
+        // [SerializeField] private EffectSoundBank_onPointerExit;
+        // [SerializeField] private EffectSoundBank_onPointerClick;
         //
         public void OnPointerEnter(PointerEventData eventData)
         {

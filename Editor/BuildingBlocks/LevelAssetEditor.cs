@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
+using Framework;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -123,7 +124,7 @@ namespace JamKit.EditorTools
             List<SceneReference> allSceneReferences = level.GetAllSceneReferences();
             foreach (SceneReference sceneReference in allSceneReferences)
             {
-                string path = sceneReference.EditorAssetPath;
+                string path = sceneReference.GetEditorAssetPath();
                 if (!string.IsNullOrEmpty(path) && path.EndsWith(".unity"))
                 {
                     scenePaths.Add(path);

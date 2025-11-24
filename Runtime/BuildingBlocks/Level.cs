@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Framework;
 using NaughtyAttributes;
 #if UNITY_EDITOR
 using UnityEditor.SceneManagement;
@@ -58,7 +59,7 @@ namespace JamKit
 
         private void RuntimeLoadStep()
         {
-            if (_scene.isLoaded == false)
+            if (_scene.IsLoaded() == false)
             {
                 if(SceneManager.sceneCount > 1)
                 {
@@ -72,7 +73,7 @@ namespace JamKit
             
             foreach (var scene in _additionalScene)
             {
-                if (scene.isLoaded == false)
+                if (scene.IsLoaded() == false)
                 {
                     Debug.Log("Laoding additional scene: " + scene);
                     scene.Load(LoadSceneMode.Additive);
@@ -81,7 +82,7 @@ namespace JamKit
                 
             foreach (var scene in _persistentScene)
             {
-                if (scene.isLoaded == false)
+                if (scene.IsLoaded() == false)
                 {
                     
                     scene.Load(LoadSceneMode.Additive);
@@ -199,7 +200,7 @@ namespace JamKit
                     }
                 }
 
-                if (scene.isLoaded)
+                if (scene.IsLoaded())
                 {
                     if (SceneManager.sceneCount > 1)
                     {
@@ -231,7 +232,7 @@ namespace JamKit
                 
                 foreach (var scene in _persistentScene)
                 {
-                    if (scene.isOpen == false)
+                    if (scene.IsOpen() == false)
                     {
                         scene.Open(  UnityEditor.SceneManagement.OpenSceneMode.Additive);
                     }

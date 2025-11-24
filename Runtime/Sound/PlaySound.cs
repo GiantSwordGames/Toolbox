@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using NaughtyAttributes;
+using SoundManager;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -26,9 +27,9 @@ namespace JamKit
 
 
         [InlineScriptableObject] [SerializeField]
-        SoundAsset _soundAsset;
+        EffectSoundBank _soundAsset;
 
-        [ShowNonSerializedField] private SoundInstance _soundInstance;
+        [ShowNonSerializedField] private EffectSoundInstance _soundInstance;
 
         [SerializeField] Behaviour _behaviour = Behaviour.Manual;
         [SerializeField] Parenting _parenting = Parenting.NoParent;
@@ -75,12 +76,6 @@ namespace JamKit
             }
         }
 
-        [Button]
-        public void ToggleAutoDestroy()
-        {
-            SoundInstance.dontDestroySounds.Toggle();
-            Debug.Log("DontDestroySounds: " + SoundInstance.dontDestroySounds.value);
-        }
 
         [Button]
         public void Trigger()
@@ -116,48 +111,25 @@ namespace JamKit
             {
                 if (_parenting == Parenting.ParentToThisTransform)
                 {
-                    _soundInstance = _soundAsset.Play(transform, transform.position);
+                    _soundInstance = _soundAsset.Play(transform);
                 }
                 else if (_parenting == Parenting.ParentToListenerAtCurrentPosition)
                 {
-                    _soundInstance = _soundAsset.Play(Camera.main.transform, transform.position);
+                    _soundInstance = _soundAsset.Play(Camera.main.transform);
                 }
                 else if (_parenting == Parenting.ParentToListenerAtPositionZero)
                 {
-                    _soundInstance = _soundAsset.Play(Camera.main.transform, Camera.main.transform.position);
+                    _soundInstance = _soundAsset.Play(Camera.main.transform);
                 }
                 else if (_parenting == Parenting.NoParent)
                 {
-                    _soundInstance = _soundAsset.Play(null, transform.position);
+                    _soundInstance = _soundAsset.Play( transform.position);
                 }
 
             }
 
         }
 
-        public void FadeIn(float duration)
-        {
-            Trigger();
-            if (_soundInstance != null)
-            {
-                _soundInstance.FadeIn(duration);
-            }
-            else
-            {
-                Debug.LogWarning("SoundInstance is null, cannot fade in.");
-            }
-        }
-
-        public void FadeOut(float duration)
-        {
-            if (_soundInstance != null)
-            {
-                _soundInstance.FadeOut(duration);
-            }
-            else
-            {
-                Debug.LogWarning("SoundInstance is null, cannot fade out.");
-            }
-        }
+    
     }
 }

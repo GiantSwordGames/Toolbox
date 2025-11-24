@@ -14,7 +14,7 @@ namespace JamKit
         [SerializeField] private Transform[] _ignoreNestedColliders;
         [SerializeField] private bool _dontClearUntilDisable =false;
         [FormerlySerializedAs("_occludedByLayers")] 
-        [SerializeField] private LayermaskAsset _layerMask;
+        [SerializeField] private LayerMaskAsset _layerMask;
 
         [Space]
         private List<Collider2D> _contactingColliders = new List<Collider2D>();

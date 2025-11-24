@@ -20,7 +20,7 @@ public class SmartFloat
     public float _constantValue;
     public ConfigurationFloat _configurationFloat; // Assuming this has a "value" field or property
     public ScriptableFloat _variable;
-    public MonoFloat _monoFloat;
+    public MonoFloatBase _monoFloat;
     public FloatRange _floatRange;
     public FloatVariance _floatVariance;
 

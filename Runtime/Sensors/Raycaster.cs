@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace JamKit
 {
@@ -11,7 +12,7 @@ namespace JamKit
         [SerializeField] private float _distance = 1;
         [Min(0)]
         [SerializeField] private float _thickness = 0;
-        [SerializeField] private LayermaskAsset _layermask;
+        [FormerlySerializedAs("_layermask")] [SerializeField] private LayerMaskAsset _layerMask;
         [SerializeField] private bool _raycastTriggers = false;
 
         [SerializeField] private UnityEvent<Collider> _onEnter;
@@ -87,9 +88,9 @@ namespace JamKit
             
 
             int layerMask = 1;
-            if (_layermask != null)
+            if (_layerMask != null)
             {
-                layerMask = _layermask.value;
+                layerMask = _layerMask.value;
             }
             
             if (_thickness == 0)

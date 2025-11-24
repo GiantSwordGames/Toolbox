@@ -516,7 +516,7 @@ namespace JamKit
                 if (directory.Contains("com.unity") || directory == "Resources")
                 {
                 
-                    directory =     MenuPaths.DEFAULT_PROJECT_PATH +"/Materials";
+                    directory =     MenuPaths.DEFAULT_PROJECT_PATH +"Materials";
                 }
                 
                 // create each directory if it does not exist 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace JamKit
 {
-    public class FindMyMonoSingleton<T> : MonoBehaviour where T : FindMyMonoSingleton<T>
+    public class FindMonoBehaviourSingleton<T> : MonoBehaviour where T : FindMonoBehaviourSingleton<T>
     {
         private static T _instance;
 

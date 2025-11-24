@@ -1,5 +1,6 @@
 using System;
 using NaughtyAttributes;
+using SoundManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;

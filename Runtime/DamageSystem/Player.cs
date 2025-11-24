@@ -29,5 +29,10 @@ namespace JamKit
         {
             _instance = this;
         }
+
+        public static Vector3 DirectionFrom(Vector3 position)
+        {
+            return (instance.bodyTransform.position - position).normalized;
+        }
     }
 }

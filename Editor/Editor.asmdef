@@ -4,7 +4,8 @@
     "references": [
         "Runtime",
         "Unity.Timeline",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "Framework"
     ],
     "includePlatforms": [
         "Editor"

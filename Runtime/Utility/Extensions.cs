@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using Framework;
 using HotWings;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -144,6 +146,12 @@ namespace JamKit
             return Mathf.Pow(number, power);
         }
         
+        public static void StretchScaleBetween(this Transform transform, Vector3 from, Vector3 to)
+        {
+            transform.position = Vector3.Lerp(from, to, 0.5f);
+            transform.LookAt(to);
+            transform.SetLocalScaleZ(from.DistanceTo(to));
+        }
         
         public static Coroutine DoFade(this AudioSource audioSource, float targetVolume, float duration)
         {
@@ -890,6 +898,12 @@ namespace JamKit
         public static string ToBold(this string str)
         {
             return "<b>" + str + "</b>";
+        }
+        
+        public static string WithColor(this string str, Color color)
+        {
+            string hexColor = ColorUtility.ToHtmlStringRGBA(color);
+            return "<color=#" + hexColor + ">" + str + "</color>";
         }
    
         public static float TimeSince(this float timeStamp, float currentTime)
@@ -1859,7 +1873,7 @@ namespace JamKit
         
         public static string RemoveAllWhiteSpace(this string input)
         {
-            return input.Replace("_", " ").Trim();
+            return input.Replace(" ", "").Trim();
         }
 
         public static StringBuilder AppendNewline(this StringBuilder sb, string text)
@@ -1971,7 +1985,18 @@ namespace JamKit
                 }
             }
         }
+        
 
+        public static void SortChildren(this Transform transform,  Comparison<Transform> comparer)
+        {
+            List<Transform> list = transform.GetDirectChildren();
+            list.Sort(comparer);
+            for (int i = 0; i < list.Count; i++)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(list[i], "Sort Children");
+                list[i].SetSiblingIndex(i);
+            }
+        }
         public static Transform SetLossyScale(this Transform transform, Vector3 scale)
         {
             if (transform.parent)

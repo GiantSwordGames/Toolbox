@@ -9,7 +9,6 @@ using UnityEngine;
 public class PopUpText : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_Text _textMeshPro;
-    [SerializeField] private Transform _target;
     [Space]
     [SerializeField] private float _lifetime = 1;
     [Space]
@@ -24,7 +23,7 @@ public class PopUpText : MonoBehaviour
     [SerializeField] private AnimationCurve _alphaOverLifeTime = AnimationCurve.Linear(0,1,1,1);
     [Space]
     [SerializeField] private bool _autoDestroy = true;
-    [SerializeField] private bool _loop = true;
+    [SerializeField] private bool _loop = false;
 
     private Vector3 positionOffset;
     private Vector3 scaleOffset;
@@ -33,8 +32,8 @@ public class PopUpText : MonoBehaviour
 
     private void Start()
     {
-        if(_target!=null)
-            transform.position = _target.position;
+
+        gameObject.AddComponent<FaceCamera>();
     }
 
     public void Setup  (string text)
@@ -70,14 +69,14 @@ public class PopUpText : MonoBehaviour
         color.a *= _alphaOverLifeTime.Evaluate(_lerp);
         _textMeshPro.color = color;
         
-        _target.localPosition -= positionOffset;
-        _target.localScale -= scaleOffset;
+        transform.localPosition -= positionOffset;
+        transform.localScale -= scaleOffset;
         
         scaleOffset = Vector3.one * (_scaleOverLifeTime.Evaluate(_lerp) * _scaleMultiplier);
         positionOffset.y = _yPositionOverLifeTime.Evaluate(_lerp)*_positionMultiplier;
 
-        _target.localPosition += positionOffset;
-        _target.localScale +=   scaleOffset;
+        transform.localPosition += positionOffset;
+        transform.localScale +=   scaleOffset;
     }
 
     [Button]
@@ -93,7 +92,7 @@ public class PopUpText : MonoBehaviour
     }
     
     [Button]
-    public void Instantiate(string text)
+    public void Instantiate(string text, Vector3 position)
     {
         GameObject instantiate = RuntimeEditorHelper.SmartInstantiate( gameObject);
         instantiate.GetComponent<PopUpText>().Setup(text);

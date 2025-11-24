@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JamKit;
 using NaughtyAttributes;
+using SoundManager;
 using UnityEngine;
 using UnityEngine.Events;
 

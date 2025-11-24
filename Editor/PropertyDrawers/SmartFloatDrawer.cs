@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace JamKitEditor
-{   
+{
     [CustomPropertyDrawer(typeof(SmartFloat))]
     public class SmartFloatDrawer : PropertyDrawer
     {
@@ -10,84 +10,89 @@ namespace JamKitEditor
         {
             EditorGUI.BeginProperty(position, label, property);
 
-            // Find the properties
             SerializedProperty modeProp = property.FindPropertyRelative("_mode");
             SerializedProperty constantValueProp = property.FindPropertyRelative("_constantValue");
             SerializedProperty variableProp = property.FindPropertyRelative("_variable");
-            SerializedProperty monoFloatProp = property.FindPropertyRelative("_monoFloat"); // Renamed from floatRangeProp
-            SerializedProperty configurationFloatProp = property.FindPropertyRelative("_configurationFloat"); // New property for ConfigurationFloat
-            SerializedProperty floatRange = property.FindPropertyRelative("_floatRange"); // New property for ConfigurationFloat
-            SerializedProperty floatVariance = property.FindPropertyRelative("_floatVariance"); // New property for ConfigurationFloat
+            SerializedProperty monoFloatProp = property.FindPropertyRelative("_monoFloat");
+            SerializedProperty configurationFloatProp = property.FindPropertyRelative("_configurationFloat");
+            SerializedProperty floatRange = property.FindPropertyRelative("_floatRange");
+            SerializedProperty floatVariance = property.FindPropertyRelative("_floatVariance");
 
-            // Draw the label
-            position = EditorGUI.PrefixLabel(position, label);
+            float dropdownButtonWidth = 20f;
 
-            // Calculate the width of the dropdown button
-            float dropdownButtonWidth = 24f;
-            Rect buttonRect = new Rect(position.xMax - dropdownButtonWidth, position.y, dropdownButtonWidth, position.height);
-            Rect objectRect = new Rect(position.x, position.y, position.width - dropdownButtonWidth, position.height);
+            // Reserve space for the dropdown on the right
+            Rect fieldRect = new Rect(position.x, position.y, position.width - dropdownButtonWidth, position.height);
+            Rect buttonRect = new Rect(fieldRect.xMax, position.y, dropdownButtonWidth, position.height);
 
-            // Draw the main property field based on the selected mode
             switch ((SmartFloat.Mode)modeProp.enumValueIndex)
             {
                 case SmartFloat.Mode.Constant:
-                    EditorGUI.PropertyField(objectRect, constantValueProp, GUIContent.none);
+                    // IMPORTANT: give the label to the constantValueProp,
+                    // not to the parent, so label-drag scrubbing works.
+                    EditorGUI.PropertyField(fieldRect, constantValueProp, label);
                     break;
+
                 case SmartFloat.Mode.Variable:
-                    EditorGUI.PropertyField(objectRect, variableProp, GUIContent.none);
+                    DrawWithOuterLabel(fieldRect, label, variableProp);
                     break;
+
                 case SmartFloat.Mode.MonoFloat:
-                    EditorGUI.PropertyField(objectRect, monoFloatProp, GUIContent.none); // Using renamed monoFloatProp
+                    DrawWithOuterLabel(fieldRect, label, monoFloatProp);
                     break;
-                case SmartFloat.Mode.ConfigurationFloat: // New case for ConfigurationFloat
-                    EditorGUI.PropertyField(objectRect, configurationFloatProp, GUIContent.none); // Drawing _configurationFloat
+
+                case SmartFloat.Mode.ConfigurationFloat:
+                    DrawWithOuterLabel(fieldRect, label, configurationFloatProp);
                     break;
+
                 case SmartFloat.Mode.FloatRange:
-                    EditorGUI.PropertyField(objectRect, floatRange, GUIContent.none);
+                    DrawWithOuterLabel(fieldRect, label, floatRange);
                     break;
+
                 case SmartFloat.Mode.FloatVariance:
-                    EditorGUI.PropertyField(objectRect, floatVariance, GUIContent.none);
+                    DrawWithOuterLabel(fieldRect, label, floatVariance);
                     break;
             }
 
-            // Draw the dropdown button
-            if (GUI.Button(buttonRect, "▼"))
+            if (GUI.Button(buttonRect, "..."))
             {
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Use Constant"), modeProp.enumValueIndex == (int)SmartFloat.Mode.Constant, () =>
+
+                void Add(string text, SmartFloat.Mode mode)
                 {
-                    modeProp.enumValueIndex = (int)SmartFloat.Mode.Constant;
-                    property.serializedObject.ApplyModifiedProperties();
-                });
-                menu.AddItem(new GUIContent("Use ScriptableFloat"), modeProp.enumValueIndex == (int)SmartFloat.Mode.Variable, () =>
-                {
-                    modeProp.enumValueIndex = (int)SmartFloat.Mode.Variable;
-                    property.serializedObject.ApplyModifiedProperties();
-                });
-                menu.AddItem(new GUIContent("Use MonoFloat"), modeProp.enumValueIndex == (int)SmartFloat.Mode.MonoFloat, () =>
-                {
-                    modeProp.enumValueIndex = (int)SmartFloat.Mode.MonoFloat;
-                    property.serializedObject.ApplyModifiedProperties();
-                });
-                menu.AddItem(new GUIContent("Use ConfigurationFloat"), modeProp.enumValueIndex == (int)SmartFloat.Mode.ConfigurationFloat, () =>
-                {
-                    modeProp.enumValueIndex = (int)SmartFloat.Mode.ConfigurationFloat;
-                    property.serializedObject.ApplyModifiedProperties();
-                });
-                menu.AddItem(new GUIContent("Use FloatRange"), modeProp.enumValueIndex == (int)SmartFloat.Mode.FloatRange, () =>
-                {
-                    modeProp.enumValueIndex = (int)SmartFloat.Mode.FloatRange;
-                    property.serializedObject.ApplyModifiedProperties();
-                });
-                menu.AddItem(new GUIContent("Use FloatVariance"), modeProp.enumValueIndex == (int)SmartFloat.Mode.FloatVariance, () =>
-                {
-                    modeProp.enumValueIndex = (int)SmartFloat.Mode.FloatVariance;
-                    property.serializedObject.ApplyModifiedProperties();
-                });
+                    menu.AddItem(
+                        new GUIContent(text),
+                        modeProp.enumValueIndex == (int)mode,
+                        () =>
+                        {
+                            modeProp.enumValueIndex = (int)mode;
+                            property.serializedObject.ApplyModifiedProperties();
+                        });
+                }
+
+                Add("Use Constant", SmartFloat.Mode.Constant);
+                Add("Use ScriptableFloat", SmartFloat.Mode.Variable);
+                Add("Use MonoFloat", SmartFloat.Mode.MonoFloat);
+                Add("Use ConfigurationFloat", SmartFloat.Mode.ConfigurationFloat);
+                Add("Use FloatRange", SmartFloat.Mode.FloatRange);
+                Add("Use FloatVariance", SmartFloat.Mode.FloatVariance);
+
                 menu.ShowAsContext();
             }
 
             EditorGUI.EndProperty();
+        }
+
+        private static void DrawWithOuterLabel(Rect position, GUIContent label, SerializedProperty innerProp)
+        {
+            // Manually split label + field so the label still shows,
+            // but the inner property doesn't get its own label.
+            float labelWidth = EditorGUIUtility.labelWidth;
+
+            Rect labelRect = new Rect(position.x, position.y, labelWidth, position.height);
+            Rect valueRect = new Rect(labelRect.xMax, position.y, position.width - labelWidth, position.height);
+
+            EditorGUI.LabelField(labelRect, label);
+            EditorGUI.PropertyField(valueRect, innerProp, GUIContent.none, true);
         }
     }
 }

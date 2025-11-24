@@ -27,17 +27,17 @@ namespace JamKit
 		public static readonly List<Action> rightOfPlayButton = new List<Action>();
 		public static readonly List<Action> leftOfPlayButton = new List<Action>();
 
-		[InitializeOnLoadMethod]
-		static void InitializeOnLoad()
-		{
-			EditorApplication.update -= OnUpdate;
-			EditorApplication.update += OnUpdate;
-
-			_onToolbarGUIFarLeft = DrawGUIFarLeft;
-			_onToolbarGUILeftOfPlayButton = DrawGUILeftOfPlayButton;
-			_onToolbarGUIFarRight = DrawGUIFarRight;
-			_onToolbarGUIRightOfPlayButton = DrawGUIRightOfPlayButton;
-		}
+		// [InitializeOnLoadMethod]
+		// static void InitializeOnLoad()
+		// {
+		// 	EditorApplication.update -= OnUpdate;
+		// 	EditorApplication.update += OnUpdate;
+		//
+		// 	_onToolbarGUIFarLeft = DrawGUIFarLeft;
+		// 	_onToolbarGUILeftOfPlayButton = DrawGUILeftOfPlayButton;
+		// 	_onToolbarGUIFarRight = DrawGUIFarRight;
+		// 	_onToolbarGUIRightOfPlayButton = DrawGUIRightOfPlayButton;
+		// }
 
 		private static void OnUpdate()
 		{

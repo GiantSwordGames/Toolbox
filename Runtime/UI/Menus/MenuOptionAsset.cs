@@ -1,6 +1,7 @@
     using System;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using SoundManager;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -11,7 +12,7 @@ namespace JamKit
     {
         [SerializeField] protected string _text;
         [SerializeField] private bool _interactable = true; // TO DO: move this state out of the scriptable object
-        [SerializeField] private SoundAsset _sound;
+        [SerializeField] private EffectSoundBank _sound;
         [FormerlySerializedAs("_openSubMenu")] 
         [SerializeField] private MenuDefinition _subMenu;
         [SerializeField] private bool _allowReClick = false; 
@@ -45,7 +46,7 @@ namespace JamKit
             set => _onDeselect = value;
         }
 
-        public SoundAsset sound => _sound;
+        public EffectSoundBank sound => _sound;
 
         public Action onClicked
         {

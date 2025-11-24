@@ -125,6 +125,10 @@ namespace JamKit
         {
             Time.timeScale = 1;
         }
-        
+
+        public static bool IsFirstFrame()
+        {
+            return Time.frameCount <= 1;
+        }
     }
 }

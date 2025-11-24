@@ -13,7 +13,7 @@ namespace JamKit
          [SerializeField] private TagAsset[] _filterIncludeTags;
         [SerializeField] private Transform[] _ignoreNestedColliders;
         [SerializeField] private bool _dontClearUntilDisable =false;
-        [FormerlySerializedAs("_filterLayer")] [SerializeField] private LayermaskAsset _layerMask;
+        [FormerlySerializedAs("_filterLayer")] [SerializeField] private LayerMaskAsset _layerMask;
 
         [Space]
         private List<Collider2D> _overlappingColliders = new List<Collider2D>();

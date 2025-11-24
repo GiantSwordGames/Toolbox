@@ -13,7 +13,7 @@ namespace JamKit
         [SerializeField]  private float _springDamper= 10;
         [SerializeField]  private float _targetHeight = 1;
         [SerializeField] private float _raycastOverShoot = 1.2f;
-        [SerializeField] private LayermaskAsset _raycastLayerMask;
+        [SerializeField] private LayerMaskAsset _raycastLayerMask;
         [FormerlySerializedAs("_applyGravityOnlyWhenOutOfRange")]
         [Space]
         [SerializeField] private bool _applyGravityOnlyWhenAboveTargetHeight = true;

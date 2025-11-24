@@ -1,3 +1,4 @@
+using SoundManager;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,8 +14,8 @@ namespace JamKit
         [SerializeField] private Color _deselectedColor = Color.Lerp(Color.white, Color.gray, .2f);
         [SerializeField] private Color _deactivatedColor = Color.grey;
         [Space] [SerializeField] private MenuOption _optionPrefab;
-        [Space] [SerializeField] SoundAsset _selectionSound;
-        [SerializeField] SoundAsset _clickSound;
+        [Space] [SerializeField] EffectSoundBank _selectionSound;
+        [SerializeField] EffectSoundBank _clickSound;
 
         public InputAsset up => _up;
         public InputAsset down => _down;
@@ -24,7 +25,7 @@ namespace JamKit
         public Color deselectedColor => _deselectedColor;
         public Color deactivatedColor => _deactivatedColor;
         public MenuOption optionPrefab => _optionPrefab;
-        public SoundAsset selectionSound => _selectionSound;
-        public SoundAsset clickSound => _clickSound;
+        public EffectSoundBank selectionSound => _selectionSound;
+        public EffectSoundBank clickSound => _clickSound;
     }
 }

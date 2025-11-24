@@ -347,7 +347,11 @@ namespace JamKit
 
                 public static void CreateFoldersIfNeeded(string path)
                 {
-                        string directory = Path.GetDirectoryName(path);
+                        string directory = path;
+                        if (directory.Contains("."))
+                        {
+                                directory = Path.GetDirectoryName(path);
+                        }
                         string[] directories = directory.Split('/');
                         string currentDirectory = "Assets";
                         foreach (string dir in directories)
@@ -865,6 +869,15 @@ namespace JamKit
                         RuntimeEditorHelper.RecordObjectUndo(gameObject);
                         string pattern = @"\s\(\d+\)$";
                         gameObject.name = Regex.Replace(gameObject.name, pattern, "");
+                }
+
+                public static void RenameAsset(Object asset, string newName)
+                {
+#if UNITY_EDITOR
+                        string assetPath = AssetDatabase.GetAssetPath(asset);
+                        AssetDatabase.RenameAsset(assetPath, newName);                          
+#endif
+                        
                 }
                 
                 public static void RenameToMatchPrefab(GameObject gameObject)

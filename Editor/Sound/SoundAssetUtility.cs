@@ -18,7 +18,7 @@ namespace JamKit
         {
             return;
             // List<SoundAsset> soundAssets = RuntimeEditorHelper.FindAssets<SoundAsset>();
-            // foreach (var soundAsset in soundAssets)
+            // foreach (var EffectSoundBankin soundAssets)
             // {
             //     soundAsset.ImportAudioClips();
             // }

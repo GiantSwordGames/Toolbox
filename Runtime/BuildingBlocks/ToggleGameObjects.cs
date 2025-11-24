@@ -9,6 +9,19 @@ namespace JamKit
         [SerializeField]   private bool _state = false;
         [SerializeField] private GameObject _on;
         [SerializeField] private GameObject _off;
+        public bool state
+        {
+            get => _state;
+            set
+            {
+                if(value != _state)
+                {
+                    _state = value;
+                    Refresh();
+                }
+            }
+        }
+
         void Start()
         {
             Refresh();

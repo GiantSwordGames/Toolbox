@@ -222,7 +222,6 @@ namespace JamKit.ClipboardImagePaste
             IntPtr pathPtr = GetClipboardImagePath();
             if (pathPtr == IntPtr.Zero)
             {
-                Debug.LogWarning("No image found in clipboard.");
                 return null;
             }
 

@@ -4,17 +4,17 @@ namespace JamKit
 {
     public static class LayermaskUtility 
     {
-        public static int NullSafe(this LayermaskAsset layermaskAsset)
+        public static int NullSafe(this LayerMaskAsset layerMaskAsset)
         {
-            if (layermaskAsset == null)
+            if (layerMaskAsset == null)
             {
                 return 1;
             }
-            return layermaskAsset.value;
+            return layerMaskAsset.value;
         }
     }
     
-    public class LayermaskAsset : ScriptableObject
+    public class LayerMaskAsset : ScriptableObject
     {
         [SerializeField] private LayerMask _layerMasks;
 
@@ -22,17 +22,17 @@ namespace JamKit
         public int value => layerMask;
 
         // implicit operator
-        public static implicit operator int(LayermaskAsset layermaskAsset)
+        public static implicit operator int(LayerMaskAsset layerMaskAsset)
         {
-            if(layermaskAsset == null)
+            if(layerMaskAsset == null)
             {
                 return 1; // Default layer mask value if null
             }
-            return layermaskAsset.layerMask;
+            return layerMaskAsset.layerMask;
         }
-        public static implicit operator bool(LayermaskAsset layermaskAsset)
+        public static implicit operator bool(LayerMaskAsset layerMaskAsset)
         {
-            return layermaskAsset != null;
+            return layerMaskAsset != null;
         }
 
         public bool Contains(int layer)
@@ -87,6 +87,12 @@ namespace JamKit
             {
                 hit = default;
             }
+        }
+
+        public RaycastHit LineCast(Vector3 prevPos, Vector3 newPos)
+        {
+              Physics.Linecast(prevPos, newPos, out RaycastHit hit,  layerMask.value);
+              return hit;
         }
     }
 }

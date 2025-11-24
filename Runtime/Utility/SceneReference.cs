@@ -1,5 +1,6 @@
 
 using System;
+using Framework;
 #if UNITY_EDITOR
 using UnityEditor.SceneManagement;
 #endif
@@ -10,13 +11,50 @@ using UnityEngine.Serialization;
 
 namespace JamKit
 {
-   
+
+    public static class SceneReferenceExtension
+    {
+        
+        // public string EditorAssetPath { get { return UnityEditor.AssetDatabase.GetAssetPath(_sceneAsset); } }
+        public static bool IsOpen(this SceneReference sceneReference)
+        {
+            return sceneReference.IsLoaded();
+        }
+
+        
+#if UNITY_EDITOR
+        public static void Open(this SceneReference sceneReference, UnityEditor.SceneManagement.OpenSceneMode openSceneMode =  UnityEditor.SceneManagement.OpenSceneMode.Single)
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(sceneReference.GetEditorAssetPath(), openSceneMode);  
+        }
+#endif    
+
+
+        public static AsyncOperation UnlaodAsync(this SceneReference sceneReference)
+        {
+            if (sceneReference.IsLoaded())
+            {
+                Scene scene = SceneManager.GetSceneByName(sceneReference.SceneName);
+                AsyncOperation sceneAsync = SceneManager.UnloadSceneAsync(scene);
+                return sceneAsync;
+            }
+
+            return null;
+        }
+
+        public static void OpenAdditive(this SceneReference sceneReference)
+        {
+#if UNITY_EDITOR
+            sceneReference.Open(OpenSceneMode.Additive);
+#endif
+        }
+    }
 
     /// <summary>
     /// Class that makes it possible to serialize a reference to a scene object. Note that it will be serialized as a string name in builds.
     /// </summary>
     [Serializable]
-    public class SceneReference : ISerializationCallbackReceiver
+    public class SceneReference2 : ISerializationCallbackReceiver
     {
         /// <summary>
         /// Whether or not this contains a valid reference to a scene.
@@ -43,7 +81,6 @@ namespace JamKit
     #if UNITY_EDITOR
     
         public UnityEditor.SceneAsset EditorSceneAsset { get { return _sceneAsset; } }
-        public string EditorAssetPath { get { return UnityEditor.AssetDatabase.GetAssetPath(_sceneAsset); } }
     
         [SerializeField]
         private UnityEditor.SceneAsset _sceneAsset;
@@ -143,31 +180,5 @@ namespace JamKit
       
         }
 
-#if UNITY_EDITOR
-        public void Open( UnityEditor.SceneManagement.OpenSceneMode openSceneMode =  UnityEditor.SceneManagement.OpenSceneMode.Single)
-        {
-            UnityEditor.SceneManagement.EditorSceneManager.OpenScene(EditorAssetPath, openSceneMode);  
-        }
-#endif    
-
-
-        public AsyncOperation UnlaodAsync()
-        {
-            if (isLoaded)
-            {
-                Scene scene = SceneManager.GetSceneByName(SceneName);
-                AsyncOperation sceneAsync = SceneManager.UnloadSceneAsync(scene);
-                return sceneAsync;
-            }
-
-            return null;
-        }
-
-        public void OpenAdditive()
-        {
-#if UNITY_EDITOR
-            Open(OpenSceneMode.Additive);
-#endif
-        }
     }
 }

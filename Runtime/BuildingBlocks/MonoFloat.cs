@@ -6,10 +6,8 @@ using UnityEngine.Events;
 
 namespace JamKit
 {
-    
-    public class MonoFloat : MonoBehaviour
+    public class MonoFloat : MonoFloatBase
     {
-
         public enum WrapBehaviour
         {
             Clamp,
@@ -17,12 +15,11 @@ namespace JamKit
             Unlimited,
         }
 
-
         [SerializeField] private WrapBehaviour _wrapBehaviour;
         [SerializeField] private SmartFloat _value;
-        [SerializeField] private SmartFloat _max = new SmartFloat(100); 
-        [SerializeField] private Action<float> _onValueChangedAction;
-       
+        [SerializeField] private SmartFloat _max = new SmartFloat(100);
+        private Action<float> _onValueChangedAction;
+
         [Foldout("Events")] [SerializeField] private UnityEvent _onValueChanged;
         [Foldout("Events")]  [SerializeField] private UnityEvent _onValueDecreasedUnclamped;
         [Foldout("Events")]  [SerializeField] private UnityEvent _onValueDecreased;
@@ -55,7 +52,7 @@ namespace JamKit
 
         }
 
-        public float value
+        public override float value
         {
             get => _value;
             set
@@ -111,6 +108,10 @@ namespace JamKit
                 
             }
         }
+
+        public new Action<float> onValueChangedAction { get; set; }
+
+
         public float max
         {
             get => _max;
@@ -127,11 +128,7 @@ namespace JamKit
         }
 
 
-        public event Action<float> onValueChangedAction
-        {
-            add => _onValueChangedAction += value;
-            remove => _onValueChangedAction -= value;
-        }
+
 
         public UnityEvent onValueChanged => _onValueChanged;
 
@@ -150,7 +147,7 @@ namespace JamKit
             return variable.value;
         } 
         
-        public float GetNormalizedValue( bool clampMinToZero = false)
+        public override float GetNormalizedValue( bool clampMinToZero = false)
         {
             float min = 0;
             if (clampMinToZero)
