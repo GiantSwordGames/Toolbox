@@ -4,7 +4,11 @@ namespace JamKit
 {
     public abstract class AlignRigidBodyToDirectionBase : MonoBehaviour
     {
-        protected virtual Vector3 direction  => Vector3.forward;
+        public virtual Vector3 direction
+        {
+            get => Vector3.forward;
+            set => throw new System.NotImplementedException();
+        }
 
         [SerializeField]  private Rigidbody _rigidbody;
 

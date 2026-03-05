@@ -1,10 +1,15 @@
+#if ENABLE_TIMELINE
+
+
+
+/*
 using System.Collections.Generic;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
 namespace JamKit
 {
-    
+
     using UnityEngine;
 
     [ExecuteInEditMode] // This attribute allows the script to run in Edit Mode
@@ -51,3 +56,5 @@ namespace JamKit
 
     }
 }
+*/
+#endif

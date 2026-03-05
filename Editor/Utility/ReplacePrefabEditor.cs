@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +10,8 @@ namespace JamKit
     public class ReplacePrefabEditor : CustomEditorBase<ReplacePrefab>
     {
         
-       static  Preference<bool> _copyScale = new Preference<bool>("ReplacePrefabEditor.CopyScale", true, PreferenceMode.Global);
+       static  Preference<bool> _copyScale = new Preference<bool>("CopyScale", true, PreferenceMode.Global);
+       static  Preference<bool> _deleteOriginal = new Preference<bool>("DeleteOriginal", true, PreferenceMode.Global);
         private Object _replaceWith;
         public override void OnInspectorGUI()
         {
@@ -17,9 +19,10 @@ namespace JamKit
 
             _replaceWith =  EditorGUILayout.ObjectField(_replaceWith, typeof(GameObject), false);
             _copyScale.DrawDefaultGUI();
-            
+            _deleteOriginal.DrawDefaultGUI();
             GUILayout.Space(5);
             GUI.enabled = _replaceWith != null && ValidationUtility.IsPrefabAsset((GameObject)_replaceWith);
+            List<GameObject> newSelection = new List<GameObject>();
 
             if(GUILayout.Button("Replace Selected") )
             {
@@ -38,7 +41,21 @@ namespace JamKit
                     }
                     RuntimeEditorHelper.RegisterCreatedObjectUndo(go);
                     RuntimeEditorHelper.RecordObjectUndo(selected);
-                    selected.gameObject.SetActive(false);
+
+                    if (_deleteOriginal)
+                    {
+                        Undo.DestroyObjectImmediate(selected);
+                        newSelection.Add(selected);
+                    }
+                    else
+                    {
+                        selected.gameObject.SetActive(false);
+                    }
+                }
+
+                if (newSelection.Count > 0)
+                {
+                    RuntimeEditorHelper.Select(newSelection);
                 }
             }
         }

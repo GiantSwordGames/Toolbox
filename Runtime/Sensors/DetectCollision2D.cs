@@ -19,7 +19,7 @@ namespace JamKit
         [Space]
         private List<Collider2D> _contactingColliders = new List<Collider2D>();
         private List<Rigidbody2D> _rigidbodies = new List<Rigidbody2D>();
-        private List<Health> _healths = new List<Health>();
+        private List<JamKitHealth> _healths = new List<JamKitHealth>();
 
         [ShowNativeProperty] public int contactingColliderCount => _contactingColliders.Count;
         [ShowNativeProperty]  private int contactingRigidBodies => _rigidbodies.Count;
@@ -36,10 +36,10 @@ namespace JamKit
         public UnityEvent<Rigidbody2D> onRigidbodyEnter;
        
         [Foldout("On Health Enter")]
-        public UnityEvent<Health> onHealthEnter;
+        public UnityEvent<JamKitHealth> onHealthEnter;
         
         [Foldout("On Player Enter")]
-        public UnityEvent<Player> onPlayerEnter;
+        public UnityEvent<JamKitPlayer> onPlayerEnter;
 
         private void OnDisable()
         {
@@ -68,20 +68,20 @@ namespace JamKit
                 }
             }
             
-            Health health = other.GetComponentInParent<Health>();
-            if (health)
+            JamKitHealth jamKitHealth = other.GetComponentInParent<JamKitHealth>();
+            if (jamKitHealth)
             {
-                if (_healths.Contains(health) == false)
+                if (_healths.Contains(jamKitHealth) == false)
                 {
-                    _healths.Add(health);
-                    onHealthEnter?.Invoke(health);
+                    _healths.Add(jamKitHealth);
+                    onHealthEnter?.Invoke(jamKitHealth);
                 }
             }
             
-            Player player = other.GetComponentInParent<Player>();
-            if (player)
+            JamKitPlayer jamKitPlayer = other.GetComponentInParent<JamKitPlayer>();
+            if (jamKitPlayer)
             {
-                onPlayerEnter?.Invoke(player);
+                onPlayerEnter?.Invoke(jamKitPlayer);
             }
 
         }
@@ -158,12 +158,12 @@ namespace JamKit
                 }
             }
             
-            Health health = other.GetComponentInParent<Health>();
-            if (health)
+            JamKitHealth jamKitHealth = other.GetComponentInParent<JamKitHealth>();
+            if (jamKitHealth)
             {
-                if (_healths.Contains(health))
+                if (_healths.Contains(jamKitHealth))
                 {
-                    _healths.Remove(health);
+                    _healths.Remove(jamKitHealth);
                 }
             }
         }

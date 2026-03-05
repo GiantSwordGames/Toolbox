@@ -8,6 +8,10 @@ namespace JamKit
         [SerializeField]
         private Vector3 _direction  = Vector3.forward;
 
-        protected override Vector3 direction => _direction;
+        public override Vector3 direction
+        {
+            get { return _direction; }
+            set { _direction = value; }
+        }
     }
 }

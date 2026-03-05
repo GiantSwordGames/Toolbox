@@ -65,7 +65,7 @@ public class PopUpText : MonoBehaviour
             }
         }
 
-        Color color = _colorOverLifeTime.Evaluate(_lerp * _colorSpeedMultiplier);
+        Color color = _colorOverLifeTime.Evaluate((_lerp * _colorSpeedMultiplier)%1);
         color.a *= _alphaOverLifeTime.Evaluate(_lerp);
         _textMeshPro.color = color;
         
@@ -91,7 +91,6 @@ public class PopUpText : MonoBehaviour
         RuntimeEditorHelper.SmartInstantiate( gameObject);
     }
     
-    [Button]
     public void Instantiate(string text, Vector3 position)
     {
         GameObject instantiate = RuntimeEditorHelper.SmartInstantiate( gameObject);

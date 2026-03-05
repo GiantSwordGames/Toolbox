@@ -1,27 +1,25 @@
+using Framework;
 using UnityEngine;
 
 namespace JamKit
 {
-    public class TransformProgressBar : ProgressBar
+    public class TransformProgressBar : NewProgressBarBase, IPropertyEditListener
     {
+        [SerializeField] private Vector3 _axis = Vector3.forward;
         [SerializeField] private Transform _primaryBar;
-        [SerializeField] private Transform _secondaryBar;
-
 
 
         protected override void UpdateBar(float value)
         {
             if (_primaryBar)
             {
-                _primaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
-            }
-            
-            if (_secondaryBar)
-            {
-                _secondaryBar.localScale = new Vector3( _value.normalizedValue, 1, 1);
+                _primaryBar.localScale = Vector3.one.Lerp(Vector3.one*_value.normalizedValue,_axis);
             }
         }
 
-     
+        public void OnPropertyEdited()
+        {
+            UpdateBar(0);
+        }
     }
 }

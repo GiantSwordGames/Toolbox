@@ -69,6 +69,20 @@ namespace JamKit
                 }
 #endif
 
+                
+#if UNITY_EDITOR
+                public static void SetSceneVisibility(this GameObject gameObject, bool visible)
+                {
+                        var svm = SceneVisibilityManager.instance;
+                        svm.Show(gameObject, false);
+
+                        if (visible)
+                                svm.Show(gameObject, true);
+                        else
+                                svm.Hide(gameObject, true);
+                }
+
+#endif
 
                 private static void OnApplicationQuitting()
                 {

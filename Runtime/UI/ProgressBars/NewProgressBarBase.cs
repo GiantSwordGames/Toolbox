@@ -8,7 +8,7 @@ namespace JamKit
     public class NewProgressBarBase : MonoBehaviour
     {
         [SerializeField] private  TimeScale _timeScale = TimeScale.Scaled;
-        [SerializeField] private SmartFloat _value;
+        [SerializeField] protected SmartFloat _value;
         [SerializeField] private float _tweenWhenIncreasing = 0;
         [SerializeField] private float _tweenWhenDecreasing = 0;
 

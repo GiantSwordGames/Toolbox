@@ -214,7 +214,7 @@ namespace JamKit
         }
 
       
-        [MenuItem("CONTEXT/Transform/Position/Center On Children")]
+        [MenuItem("CONTEXT/Transform/Freeze/Center On Children")]
         private static void CenterOnChildren(MenuCommand command)
         {
             Transform parent = (Transform)command.context;
@@ -493,7 +493,37 @@ namespace JamKit
             Debug.Log($"Reversed child order of '{parent.name}'");
         }
 
-        [MenuItem("CONTEXT/ParticleSystem/Assign Duplicate Material")]
+        
+        [MenuItem("CONTEXT/MeshRenderer/Rename Material To Match Game Object")]
+        static void RenameMaterialToMatchGameObject(MenuCommand command)
+        {
+            Renderer meshRenderer = command.context as Renderer;
+
+            if (meshRenderer != null && meshRenderer.sharedMaterial != null)
+            {
+                Material originalMaterial = meshRenderer.sharedMaterial;
+
+                string originalPath = AssetDatabase.GetAssetPath(originalMaterial);
+                string directory = Path.GetDirectoryName(originalPath);
+
+                string name = "M_" + meshRenderer.name + ".mat";
+                if (directory.Contains("com.unity") || directory == "Resources")
+                {
+
+                    directory = MenuPaths.DEFAULT_PROJECT_PATH + "Materials";
+                }
+
+                // create each directory if it does not exist 
+                RuntimeEditorHelper.CreateFoldersIfNeeded(directory);
+                string renamedPath = Path.Combine(directory, name);
+                AssetDatabase.RenameAsset(originalPath, name);
+                AssetDatabase.SaveAssets();
+
+            }
+
+        }
+
+        // [MenuItem("CONTEXT/ParticleSystem/Assign Duplicate Material")]
         [MenuItem("CONTEXT/SkinnedMeshRenderer/Assign Duplicate Material")]
         [MenuItem("CONTEXT/MeshRenderer/Assign Duplicate Material")]
         [MenuItem("CONTEXT/TrailRenderer/Assign Duplicate Material")]
@@ -512,7 +542,7 @@ namespace JamKit
                 string originalPath = AssetDatabase.GetAssetPath(originalMaterial);
                 string directory = Path.GetDirectoryName(originalPath);
 
-                string name = "M_" + meshRenderer.name + "2.mat";
+                string name = "M_" + meshRenderer.name + ".mat";
                 if (directory.Contains("com.unity") || directory == "Resources")
                 {
                 
@@ -659,8 +689,50 @@ namespace JamKit
             {
                 RuntimeEditorHelper.AddToSelection( spriteRenderer.sprite.texture);
             }
-        } 
-           
+        }
+
+        [MenuItem("CONTEXT/Rigidbody/Rig Selection With ConfigurableJoints")]
+        public static void RigSelection(MenuCommand command)
+        {
+            Rigidbody rigidbody = command.context as Rigidbody;
+            // foreach (var selection in Selection.gameObjects)
+            {
+                Rigidbody parent = rigidbody.transform.parent.gameObject.GetOrAddComponent<Rigidbody>();
+                ConfigurableJoint joint = rigidbody.gameObject.GetOrAddComponent<ConfigurableJoint>();
+                joint.connectedBody = parent;
+                joint.xMotion = ConfigurableJointMotion.Locked;
+                joint.yMotion = ConfigurableJointMotion.Locked;
+                joint.zMotion = ConfigurableJointMotion.Locked;
+                
+                joint.angularXMotion = ConfigurableJointMotion.Limited;
+                joint.angularYMotion = ConfigurableJointMotion.Limited;
+                joint.angularZMotion = ConfigurableJointMotion.Limited;
+                
+                joint.SetAngularLimitX(45);
+                joint.SetAngularLimitY(45);
+                joint.SetAngularLimitZ(45);
+                
+                
+            }
+        }
+        
+        // [MenuItem("CONTEXT/Rigidbody/Rig Selection With ConfigurableJoints")]
+        // public static void AddCapsuleCol(MenuCommand command)
+        // {
+        //     Rigidbody rigidbody = command.context as Rigidbody;
+        //     // foreach (var selection in Selection.gameObjects)
+        //     {
+        //         Rigidbody parent = rigidbody.transform.parent.gameObject.GetOrAddComponent<Rigidbody>();
+        //         ConfigurableJoint joint = rigidbody.gameObject.GetOrAddComponent<ConfigurableJoint>();
+        //         joint.connectedBody = parent;
+        //         joint.xMotion = ConfigurableJointMotion.Locked;
+        //         joint.yMotion = ConfigurableJointMotion.Locked;
+        //         joint.zMotion = ConfigurableJointMotion.Locked;
+        //     }
+        // }
+        
+        
+
         // [MenuItem("GameObject/Set As First Sibling", false, 18)]
         // public static void SetAsFirstSibling(MenuCommand command)
         // {

@@ -26,7 +26,8 @@ namespace JamKit
         }
 
 
-        [InlineScriptableObject] [SerializeField]
+        [InlineScriptableObject]
+        [SerializeField]
         EffectSoundBank _soundAsset;
 
         [ShowNonSerializedField] private EffectSoundInstance _soundInstance;
@@ -36,6 +37,7 @@ namespace JamKit
         [SerializeField] bool _playOnEnable = false;
         [SerializeField] bool _stopOnDisable = false;
         [SerializeField] float _delay;
+        [SerializeField] private bool _looping;
 
         private int _enableCount;
 
@@ -97,7 +99,7 @@ namespace JamKit
 
             if (_soundInstance)
             {
-                _soundInstance.Stop();
+                // _soundInstance.Stop();
             }
 
         }
@@ -123,13 +125,15 @@ namespace JamKit
                 }
                 else if (_parenting == Parenting.NoParent)
                 {
-                    _soundInstance = _soundAsset.Play( transform.position);
+                    _soundInstance = _soundAsset.Play(transform.position);
                 }
+
+                if (_soundInstance != null) _soundInstance.IsLooping = _looping;
 
             }
 
         }
 
-    
+
     }
 }

@@ -1,22 +1,23 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace JamKit
 {
-    public class Player : MonoBehaviour
+    public class JamKitPlayer : MonoBehaviour
     {
-        private static Player _instance;
+        private static JamKitPlayer _instance;
         [SerializeField]    private  Transform _bodyTransform;
-        [SerializeField] private Health _health;
+        [FormerlySerializedAs("_health")] [SerializeField] private JamKitHealth _jamKitHealth;
 
-        public Health health => _health;
+        public JamKitHealth jamKitHealth => _jamKitHealth;
 
-        public static Player instance
+        public static JamKitPlayer instance
         {
             get
             {
                 if(_instance == null)
                 {
-                    _instance = CompaitibilityHelper.FindObjectOfType<Player>();
+                    _instance = CompaitibilityHelper.FindObjectOfType<JamKitPlayer>();
                 }
                 return _instance;
             }

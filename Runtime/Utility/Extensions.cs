@@ -146,7 +146,7 @@ namespace JamKit
             return Mathf.Pow(number, power);
         }
         
-        public static void StretchScaleBetween(this Transform transform, Vector3 from, Vector3 to)
+        public static void StretchBetween(this Transform transform, Vector3 from, Vector3 to)
         {
             transform.position = Vector3.Lerp(from, to, 0.5f);
             transform.LookAt(to);
@@ -208,6 +208,26 @@ namespace JamKit
             }
 
             return children;
+        }
+
+
+        public static Vector3 GetCenterOfChildren(this Transform transform)
+        {
+            Vector3 center = Vector3.zero;
+            int count = 0;
+            foreach (Transform child in transform)
+            {
+                center += child.position;
+                count++;
+            }
+
+            if (count > 0)
+            {
+                center /= count;
+            }
+
+            return center;
+            
         }
 
         public static Vector3 MultiplyComponentWise(this Vector3 vector, Vector3 operand)
@@ -338,6 +358,16 @@ namespace JamKit
             return Vector3.Lerp(from, to, lerp);
         }
         
+        public static Vector3 Lerp(this Vector3 from, Vector3 to, Vector3 lerp)
+        {
+            return new Vector3(
+                Mathf.Lerp(from.x, to.x, lerp.x),
+                Mathf.Lerp(from.y, to.y, lerp.y),
+                Mathf.Lerp(from.z, to.z, lerp.z)
+            );
+        }
+
+        
         public static Vector2 Rotate(this Vector2 from, float min, float max)
         {
             float degrees = Random.Range(min, max);
@@ -368,8 +398,23 @@ namespace JamKit
             return (float)index / (count - 1);
         }
 
+        public static void SetMaterialAtIndex(this Renderer renderer, int index, Material newMaterial)
+        {
+            if (renderer == null || newMaterial == null)
+                return;
 
-        public static Vector3 Rotate(this Vector3 from, float min, float max)
+            var mats = renderer.materials;  // Unity returns a COPY
+
+            if (index < 0 || index >= mats.Length)
+            {
+                Debug.LogWarning($"SetMaterialAtIndex: Index {index} is out of range. Renderer has {mats.Length} materials.");
+                return;
+            }
+
+            mats[index] = newMaterial;
+            renderer.materials = mats;      // Must assign back to apply
+        }
+        public static Vector3 RandomRotate(this Vector3 from, float min, float max)
         {
             return Quaternion.Euler( Random.Range(min, max), Random.Range(min, max), Random.Range(min, max))*from;
         }
@@ -379,6 +424,8 @@ namespace JamKit
             ParticleSystem.EmissionModule emission = particleSystem.emission;
             emission.rateOverTime = rate;
         }
+        
+        
         public static Vector2 Round(this Vector2 from)
         {
             return new Vector2(Mathf.Round(from.x), Mathf.Round(from.y));
@@ -394,6 +441,8 @@ namespace JamKit
             float cos = Mathf.Cos(radians);
             return new Vector2(cos * from.x - sin * from.y, sin * from.x + cos * from.y);
         }
+        
+        
         public static T GetRandomElement<T>(this T[] array)
         {
             return array[Random.Range(0, array.Length)];
@@ -523,7 +572,10 @@ namespace JamKit
         {
             return collision.contacts[0].normal;
         }
-       
+        public static Vector3 GetContactNormal2(this Collision collision)
+        {
+            return collision.contacts[0].normal;
+        }
         public static List<T> ExtractElementsOfType<T, T2>(this IEnumerable<T2> collection)
         {
             List<T> clips = new List<T>();
@@ -545,7 +597,10 @@ namespace JamKit
                 return component;
             }
 
-            return uo.AddComponent<T>();
+
+            T addComponent = uo.AddComponent<T>();
+            RuntimeEditorHelper.RegisterCreatedObjectUndo(addComponent);
+            return addComponent;
         }
 
         public static T GetOrAddComponent<T>(this Component uo) where T : Component
@@ -959,10 +1014,12 @@ namespace JamKit
         {
             if (obj is MonoBehaviour comp)
             {
+                if(comp.enabled == enabled) return;
                 comp.enabled = enabled;
             }
             else if (obj is GameObject go)
             {
+                if(go.activeSelf == enabled) return;
                 go.SetActive(enabled);
 
             }
@@ -1831,6 +1888,11 @@ namespace JamKit
             return obj.ToString().ToTitleCase();
         }
         
+        public static float WithVariance(this  float value, float range)
+        {
+            return (value * Random.Range(1 -range, 1f + range));
+        }
+        
         public static string ToTitleCase(this string text)
         {
             text=text.Replace("_", " ").Trim();
@@ -2047,6 +2109,32 @@ namespace JamKit
         {
             transform.localPosition = transform.localPosition.WithX(value);
         }
+        
+        public static void SetLocalRotationX(this Transform transform, float value)
+        {
+            Vector3 euler = transform.localEulerAngles;
+            euler.x = value;
+            transform.localEulerAngles = euler;
+        }
+        
+        
+        public static void SetLocalRotationY(this Transform transform, float value)
+        {
+            Vector3 euler = transform.localEulerAngles;
+            euler.y = value;
+            transform.localEulerAngles = euler;
+        }
+        
+        public static void SetLocalRotationZ(this Transform transform, float value)
+        {
+            Vector3 euler = transform.localEulerAngles;
+            euler.z = value;
+            transform.localEulerAngles = euler;
+        }
+
+
+        
+
         
         public static void SetLocalY(this Transform transform, float value)
         {

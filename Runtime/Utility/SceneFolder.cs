@@ -126,7 +126,6 @@ namespace JamKit
                 }
                 if (bounds.Contains(rootObject.transform.position))
                 {
-                    Debug.Log(rootObject,rootObject);
                     _objectsToEncapsulate.Add(rootObject);
                 }
             }

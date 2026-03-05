@@ -1,13 +1,27 @@
+using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace JamKit
 {
-    public class FilledImageProgressBar : ProgressBar
+    public class FilledImageProgressBar : ProgressBar, IPropertyEditListener
     {
         [SerializeField] private Image _primaryRenderer;
-        [SerializeField] private Image _secondaryRenderer;
-   
+
+        public Color color
+        {
+            get => _primaryRenderer ? _primaryRenderer.color : Color.white;
+            set
+            {
+                if (_primaryRenderer)
+                {
+                    _primaryRenderer.color = value;
+                }
+            }
+            
+        }
+
+
         protected override void UpdateBar(float value)
         {
             if (_primaryRenderer)
@@ -15,10 +29,11 @@ namespace JamKit
                 _primaryRenderer.fillAmount = value;
             }
 
-            if (_secondaryRenderer)
-            {
-                _secondaryRenderer.fillAmount = value;
-            }
+        }
+
+        public void OnPropertyEdited()
+        {
+            UpdateBar(_value.normalizedValue);
         }
     }
 }

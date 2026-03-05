@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace JamKit
 {
     public class HealthMonitor : MonoBehaviour
     {
-        [SerializeField] private Health _health;
+        [FormerlySerializedAs("_health")] [SerializeField] private JamKitHealth _jamKitHealth;
         [SerializeField] private float _value;
         [SerializeField] private UnityEvent _onTrigger;
         private float previousValue;
@@ -20,28 +21,28 @@ namespace JamKit
 
         private void Start()
         {
-            previousValue = _health.currentHealth;
-            _health.onDamageTaken.AddListener(Reevaluate);
+            previousValue = _jamKitHealth.currentHealth;
+            _jamKitHealth.onDamageTaken.AddListener(Reevaluate);
         }
 
         void Reevaluate()
         {
             if (_state == State.LessThan)
             {
-                if (_health.currentHealth < _value && previousValue >= _value)
+                if (_jamKitHealth.currentHealth < _value && previousValue >= _value)
                 {
                     _onTrigger?.Invoke();
                 }
             }
             else
             {
-                if (_health.currentHealth > _value && previousValue <= _value)
+                if (_jamKitHealth.currentHealth > _value && previousValue <= _value)
                 {
                     _onTrigger?.Invoke();
                 }
             }
 
-            previousValue = _health.currentHealth;
+            previousValue = _jamKitHealth.currentHealth;
         }
     }
 }

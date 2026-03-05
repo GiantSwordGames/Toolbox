@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 namespace JamKit
 {
-    public class Health : MonoBehaviour
+    public class JamKitHealth : MonoBehaviour
     {
         [FormerlySerializedAs("_value")] [SerializeField] private SmartFloat _health = new SmartFloat( 1f);
         [SerializeField] private float _maxHealth = 100;        

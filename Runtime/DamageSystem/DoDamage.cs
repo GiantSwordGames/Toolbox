@@ -18,13 +18,13 @@ namespace JamKit
                 return;
             }
             lastTimeStamp = Time.time;
-            Health health = collider.GetComponentInParent<Health>();
-            if (health)
+            JamKitHealth jamKitHealth = collider.GetComponentInParent<JamKitHealth>();
+            if (jamKitHealth)
             {
-                ApplyDamageTo(health);
+                ApplyDamageTo(jamKitHealth);
             }
         }
-        public void ApplyDamageTo(Health health)
+        public void ApplyDamageTo(JamKitHealth jamKitHealth)
         {
             MonoBehaviour sender = _sender;
             if (sender == null)
@@ -32,8 +32,8 @@ namespace JamKit
                 sender = this;
             }
             
-            Vector3 direction = transform.position.To(health.transform.position);
-            _lastDamageIncident = DamageIncident.Create(_damage, sender, health, transform.position,  transform.forward, direction);
+            Vector3 direction = transform.position.To(jamKitHealth.transform.position);
+            _lastDamageIncident = DamageIncident.Create(_damage, sender, jamKitHealth, transform.position,  transform.forward, direction);
         }
     }
 }

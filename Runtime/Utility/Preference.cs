@@ -259,7 +259,7 @@ namespace JamKit
             if (this is Preference<float> floatPref)
             {
                 EditorGUI.BeginChangeCheck();
-                var newValue =  EditorGUILayout.FloatField(floatPref.value, label);
+                var newValue =  EditorGUILayout.FloatField( label,floatPref.value);
                 if (EditorGUI.EndChangeCheck())
                 {
                     floatPref.value = newValue;
@@ -304,7 +304,7 @@ namespace JamKit
 #if UNITY_EDITOR
             using (var changeCheck = new EditorGUI.ChangeCheckScope())
             {
-                EditorGUILayout.LabelField("Spatial Blend:");
+                EditorGUILayout.LabelField(guiLabel);
                 float newValue = EditorGUILayout.Slider((float) this, min, max);
                 if (changeCheck.changed)
                 {

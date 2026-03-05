@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEditor;
 
 namespace GiantSword
 {
-    public class CheckIfSnapped : MonoBehaviour
+    public class CheckIfAligned : MonoBehaviour
     {
         public enum PositionSpace
         {
@@ -11,15 +12,25 @@ namespace GiantSword
             Local
         }
 
-        [SerializeField] private Vector3 snapInterval = Vector3.one;
-        [SerializeField] private PositionSpace positionSpace = PositionSpace.World;
+        [SerializeField] private bool _drawPivot;
 
-        public Vector3 SnapInterval => snapInterval;
-        public PositionSpace Space => positionSpace;
+        [SerializeField] private Vector3 _snapInterval = Vector3.one;
+        [SerializeField] private PositionSpace _positionSpace = PositionSpace.World;
+
+        public Vector3 snapInterval => _snapInterval;
+        public PositionSpace positionSpace => _positionSpace;
+
+        private void OnDrawGizmosSelected()
+        {
+            if (_drawPivot)
+            {
+                Gizmos.DrawSphere(transform.position, 0.05f);
+            }
+        }
     }
 
 #if UNITY_EDITOR
-    [CustomEditor(typeof(CheckIfSnapped))]
+    [CustomEditor(typeof(CheckIfAligned))]
     [CanEditMultipleObjects]
     public class CheckIfSnappedEditor : Editor
     {
@@ -31,8 +42,8 @@ namespace GiantSword
             {
                 foreach (var t in targets)
                 {
-                    var comp = (CheckIfSnapped)t;
-                    ApplySnap(comp.gameObject, comp.SnapInterval, comp.Space);
+                    var comp = (CheckIfAligned)t;
+                    ApplySnap(comp.gameObject, comp.snapInterval, comp.positionSpace);
                 }
 
                 // Refresh hierarchy icons
@@ -40,11 +51,11 @@ namespace GiantSword
             }
         }
 
-        private void ApplySnap(GameObject go, Vector3 interval, CheckIfSnapped.PositionSpace space)
+        private void ApplySnap(GameObject go, Vector3 interval, CheckIfAligned.PositionSpace space)
         {
             Undo.RecordObject(go.transform, "Snap Transform");
 
-            if (space == CheckIfSnapped.PositionSpace.World)
+            if (space == CheckIfAligned.PositionSpace.World)
             {
                 // Snap world position
                 Vector3 pos = go.transform.position;
@@ -81,25 +92,28 @@ namespace GiantSword
         {
             EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
 
-            // snapIcon = EditorGUIUtility.IconContent("SceneViewSnap-Off");
+            // icons/processed/unityengine/
+            // icons/processed/unityengine/d_meshcollider icon.asset
+
+            snapIcon = EditorGUIUtility.IconContent("icons/collaberror.png");
             // snapIcon.tooltip = "This object is not snapped to its interval";
         }
 
         private static void OnHierarchyGUI(int instanceID, Rect selectionRect)
         {
-            GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+            GameObject go = EditorUtility.EntityIdToObject(instanceID) as GameObject;
             if (go == null) return;
 
-            var snapComp = go.GetComponent<CheckIfSnapped>();
+            var snapComp = go.GetComponent<CheckIfAligned>();
             if (snapComp == null) return;
 
             // Pick local or world
-            Vector3 pos = (snapComp.Space == CheckIfSnapped.PositionSpace.World)
+            Vector3 pos = (snapComp.positionSpace == CheckIfAligned.PositionSpace.World)
                 ? go.transform.position
                 : go.transform.localPosition;
 
-            if (!IsSnapped(pos, snapComp.SnapInterval) ||
-                !IsSnapped(go.transform.eulerAngles, snapComp.SnapInterval))
+            if (!IsSnapped(pos, snapComp.snapInterval) ||
+                !IsSnapped(go.transform.eulerAngles, snapComp.snapInterval))
             {
                 Rect r = new Rect(selectionRect);
                 r.x = r.xMax - 18;

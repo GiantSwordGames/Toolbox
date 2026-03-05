@@ -4,10 +4,11 @@
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.Serialization;
+    using Framework;
 
     namespace JamKit
     {
-        public class VariableText : MonoBehaviour
+        public class VariableText : MonoBehaviour, IPropertyEditListener
         {
             [SerializeField] private TMPro.TMP_Text _text;
             
@@ -37,12 +38,11 @@
             }
 
 
-            private void OnValidate()
+            
+            public void OnPropertyEdited()
             {
-                if (Application.isPlaying == false)
-                {
-                    Refresh();
-                }
+                Refresh();
+
             }
 
             void OnEnable()
@@ -164,5 +164,7 @@
 
                 Refresh();
             }
+
+        
         }
     }

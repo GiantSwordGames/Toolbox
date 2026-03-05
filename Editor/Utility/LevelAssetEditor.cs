@@ -10,7 +10,7 @@ namespace JamKit
         public static bool OnOpenAsset(int instanceID, int line)
         {
             // Check if the asset being opened is a Level asset
-            Level level = EditorUtility.InstanceIDToObject(instanceID) as Level;
+            Level level = EditorUtility.EntityIdToObject(instanceID) as Level;
             if (level != null)
             {
                 level.OpenLevel();

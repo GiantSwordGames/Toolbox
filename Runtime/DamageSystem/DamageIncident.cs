@@ -46,7 +46,7 @@ namespace JamKit
         [ShowNonSerializedField] private int _framw;
         [ShowNonSerializedField] private float _timestamp;
         [ShowNonSerializedField] private Vector3 _normal;
-        [ShowNonSerializedField] private Health _toHealth;
+        [ShowNonSerializedField] private JamKitHealth _toJamKitHealth;
         [ShowNonSerializedField] private Rigidbody _toRigidbody;
 
         public Vector3 normal => _normal;
@@ -96,12 +96,12 @@ namespace JamKit
         [Button("Replay")]
         public void Apply()
         {
-            _toHealth = receiver.GetComponentInParent<Health>();
+            _toJamKitHealth = receiver.GetComponentInParent<JamKitHealth>();
             _toRigidbody = receiver.GetComponentInParent<Rigidbody>();
 
-            if (_toHealth)
+            if (_toJamKitHealth)
             {
-                _toHealth.ApplyDamage(this);
+                _toJamKitHealth.ApplyDamage(this);
             }
 
             if (_toRigidbody)
