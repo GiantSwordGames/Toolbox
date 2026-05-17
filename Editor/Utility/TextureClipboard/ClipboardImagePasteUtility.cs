@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Framework;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -20,8 +21,13 @@ namespace JamKit.ClipboardImagePaste
         private static void Initialize()
         {
             EditorApplication.projectWindowItemOnGUI += OnProjectViewUpdate;
-            EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyUpdate;
+            EditorApplication.hierarchyWindowItemByEntityIdOnGUI += OnHierarchyUpdate;
             SceneView.duringSceneGui += OnSceneViewUpdate;
+        }
+
+        private static void OnHierarchyUpdate(EntityId entityid, Rect selectionrect)
+        {
+            TryPasteIntoScene();
         }
 
         private static void OnSceneViewUpdate(SceneView obj)

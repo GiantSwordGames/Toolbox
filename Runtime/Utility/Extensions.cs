@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Framework;
-using HotWings;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -43,10 +42,174 @@ namespace JamKit
                 Debug.LogException(e);
             }
         }
+        public static List<T> ExtractComponents<T, T1>(this T1[] colliders) where T : Component where T1 : Component
+        {
+            List<T> uniqueComponents = new List<T>();
+            foreach (T1 collider in colliders)
+            {
+                if (collider)
+                {
+                    T rigidbody = collider.GetComponentInParent<T>();
+                    if (uniqueComponents.Contains(rigidbody) == false)
+                    {
+                        uniqueComponents.Add(rigidbody);
+                    }
+                }
+            }
 
+            return uniqueComponents;
+        }
+        
+        public static List<Rigidbody> ExtractRigidbodies(this Collider[] colliders)
+        {
+            List<Rigidbody> rigidbodies = new List<Rigidbody>();
+            foreach (Collider collider in colliders)
+            {
+                Rigidbody rigidbody = collider.GetComponentInParent<Rigidbody>();
+                if (rigidbodies.Contains(rigidbody) == false)
+                {
+                    rigidbodies.Add(rigidbody);
+                }
+            }
+
+            return rigidbodies;
+        }
+
+        public static T Cast<T>(this object obj) where T : class
+        {
+            return obj as T;
+        }
+
+        public static void PunchScale(this Transform transform, Vector3 frequency, Vector3 amplitude, float duration)
+        {
+
+            Vector3 offset = default;
+
+            AsyncHelper.LerpRoutine(
+                duration,
+                lerp =>
+                {
+                    transform.localScale -= offset;
+                    float time = lerp*duration;
+
+                    offset. x = Mathf.Sin(time * frequency.x*Mathf.PI*2) * amplitude.x;
+                    offset. y = Mathf.Sin(time* frequency.y*Mathf.PI*2) * amplitude.y;
+                    offset. z = Mathf.Sin(time * frequency.z*Mathf.PI*2) * amplitude.z;
+                    offset *= (1 - lerp);
+                    transform.localScale += offset;
+                });
+        }
+
+        public static void PunchPosition(this Transform transform, Vector3 frequency, Vector3 amplitude, float duration)
+        {
+
+            Vector3 offset = default;
+            AsyncHelper.LerpRoutine(
+                duration,
+                lerp =>
+                {
+                    transform.localPosition -= offset;
+                    
+                    offset. x = Mathf.Sin(Time.time * frequency.x*Mathf.PI*2) * amplitude.x;
+                    offset. y = Mathf.Sin(Time.time * frequency.y*Mathf.PI*2) * amplitude.y;
+                    offset. z = Mathf.Sin(Time.time * frequency.z*Mathf.PI*2) * amplitude.z;
+                    offset *= (1 - lerp);
+                    transform.localPosition += offset;
+                });
+        }
+        
+        public static void PunchRotation(this Transform transform, Vector3 frequency, Vector3 amplitude, float duration)
+        {
+
+            Vector3 offset = default;
+            
+            AsyncHelper.LerpRoutine(
+                duration,
+                lerp =>
+                {
+                    transform.localRotation *= Quaternion.Euler(offset).Inverse();
+                    
+                    offset. x = Mathf.Sin(Time.time * frequency.x*Mathf.PI*2) * amplitude.x;
+                    offset. y = Mathf.Sin(Time.time * frequency.y*Mathf.PI*2) * amplitude.y;
+                    offset. z = Mathf.Sin(Time.time * frequency.z*Mathf.PI*2) * amplitude.z;
+                    offset *= (1 - lerp);
+                    
+                    transform.localRotation *= Quaternion.Euler(offset);
+
+                });
+        }
+
+
+
+      
+        public static void SetScreenPosition(this RectTransform rect, Vector3 screenPoint)
+        {
+            Vector2 localPoint;
+            Canvas canvas = rect.GetComponentInParent<Canvas>();
+            var canvasRect = canvas.GetComponent<RectTransform>();
+
+            Camera cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay 
+                ? null 
+                : canvas.worldCamera;
+
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                    canvasRect,
+                    screenPoint,
+                    cam,
+                    out localPoint))
+            {
+                
+                rect.anchoredPosition = localPoint;
+            }
+        }
+       
         public static bool IsHeld(this InputAction action)
         {
             return action.ReadValue<float>() > 0;
+        }
+        
+        private static Rect GetViewportRect(RectTransform rectTransform, Canvas canvas)
+        {
+            Vector3[] worldCorners = new Vector3[4];
+            rectTransform.GetWorldCorners(worldCorners);
+
+            Camera cam = null;
+
+            // Screen Space - Camera needs the canvas camera.
+            // Screen Space - Overlay uses null.
+            if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
+                cam = canvas.worldCamera;
+            else if (canvas.renderMode == RenderMode.WorldSpace)
+                cam = canvas.worldCamera;
+
+            Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+            Vector2 max = new Vector2(float.MinValue, float.MinValue);
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 screen = RectTransformUtility.WorldToScreenPoint(cam, worldCorners[i]);
+
+                Vector2 viewport = new Vector2(
+                    screen.x / Screen.width,
+                    screen.y / Screen.height
+                );
+
+                min = Vector2.Min(min, viewport);
+                max = Vector2.Max(max, viewport);
+            }
+
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
+        
+        public static RectTransform GetRectTransform(this MonoBehaviour gameObject)
+        {
+            return gameObject.transform as RectTransform;
+        }
+
+        public static Vector2 GetViewportPosition(this RectTransform rectTransform, Canvas canvas)
+        {
+            Rect rect = GetViewportRect(rectTransform, canvas);
+            return rect.center;
         }
         
         public static Vector3 RandomLocalPoint(this BoxCollider boxCollider)
@@ -60,6 +223,12 @@ namespace JamKit
             localPoint += boxCollider.center;
 
             return localPoint;
+        }
+        
+        public static string FormatTime( this float totalSeconds)
+        {
+            System.TimeSpan t = System.TimeSpan.FromSeconds(totalSeconds);
+            return string.Format("{0}:{1:00}", (int)t.TotalMinutes, t.Seconds);
         }
         
         /// <summary>
@@ -266,10 +435,6 @@ namespace JamKit
         }
         
 
-        public static Vector3 To(this Vector3 from, Vector3 to)
-        {
-            return to - from;
-        }
 
         public static Vector2 To(this Vector2 from, Vector2 to)
         {
@@ -414,11 +579,22 @@ namespace JamKit
             mats[index] = newMaterial;
             renderer.materials = mats;      // Must assign back to apply
         }
-        public static Vector3 RandomRotate(this Vector3 from, float min, float max)
+        public static Vector3 RandomizeRotation(this Vector3 from, float min, float max)
         {
             return Quaternion.Euler( Random.Range(min, max), Random.Range(min, max), Random.Range(min, max))*from;
         }
         
+        public static Vector3 RandomizeRotation(this Vector3 from, float floatRange)
+        {
+            return Quaternion.Euler( Random.Range(-floatRange, floatRange), Random.Range(-floatRange, floatRange), Random.Range(-floatRange, floatRange))*from;
+        }
+        
+        
+        public static Vector3 RandomizeRotation(this Vector3 from, Vector3 eulerRange)
+        {
+            return Quaternion.Euler( Random.Range(-eulerRange.x, eulerRange.x), Random.Range(-eulerRange.y, eulerRange.y), Random.Range(-eulerRange.z, eulerRange.z))*from;
+        }
+
         public static void SetEmissionRate(this ParticleSystem particleSystem, float rate)
         {
             ParticleSystem.EmissionModule emission = particleSystem.emission;
@@ -480,6 +656,17 @@ namespace JamKit
             return array[i];
         }
 
+        public static void SetActiveChildren(this Transform transform, int count)
+        {
+            count = Mathf.Min(transform.childCount, count);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(transform.GetChild(i).gameObject);
+                transform.GetChild(i).gameObject.SetActive(i < count);
+            }
+            
+        }
+        
         public static void Encapsulate(this BoxCollider2D boxCollider2D, BoxCollider2D other)
         {
             // Calculate bounds for the current box collider
@@ -501,6 +688,21 @@ namespace JamKit
             boxCollider2D.offset = localCenter;
             boxCollider2D.size = newSize;
         }
+        
+        public static void IgnoreCollisions(this IList<Collider> colliders, bool ignore = true)
+        {
+            for (int i = 0; i < colliders.Count; i++)
+            {
+                for (int j = 0; j < colliders.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        Physics.IgnoreCollision(colliders[i], colliders[j], ignore);
+                    }
+                }
+            }
+        }
+
 
         public static void IgnoreCollisions(this IList<Collider> colliders, IList<Collider> otherColliders, bool ignore = true)
         {
@@ -588,19 +790,60 @@ namespace JamKit
             }
             return clips;
         }
-        
-        public static T GetOrAddComponent<T>(this GameObject uo) where T : Component
+
+        public static Gradient SetAlpha(this Gradient gradient, float alpha)
         {
-            var component = uo.GetComponent<T>();
-            if (component != null)
+            if (gradient == null)
+                return null;
+
+            GradientColorKey[] colorKeys = gradient.colorKeys;
+            GradientAlphaKey[] alphaKeys = gradient.alphaKeys;
+
+            // Update all alpha keys
+            for (int i = 0; i < alphaKeys.Length; i++)
             {
-                return component;
+                alphaKeys[i].alpha = alpha;
             }
 
+            // If there are no alpha keys, create them from color keys
+            if (alphaKeys.Length == 0 && colorKeys.Length > 0)
+            {
+                alphaKeys = new GradientAlphaKey[colorKeys.Length];
+                for (int i = 0; i < colorKeys.Length; i++)
+                {
+                    alphaKeys[i] = new GradientAlphaKey(alpha, colorKeys[i].time);
+                }
+            }
 
-            T addComponent = uo.AddComponent<T>();
-            RuntimeEditorHelper.RegisterCreatedObjectUndo(addComponent);
-            return addComponent;
+            gradient.SetKeys(colorKeys, alphaKeys);
+            return gradient;
+        }
+        public static Gradient SetColor(this Gradient gradient, Color rgb)
+        {
+            if (gradient == null)
+                return null;
+
+            GradientColorKey[] colorKeys = gradient.colorKeys;
+            GradientAlphaKey[] alphaKeys = gradient.alphaKeys;
+
+            // Update all alpha keys
+            for (int i = 0; i < colorKeys.Length; i++)
+            {
+                colorKeys[i].color = rgb;
+            }
+
+            // If there are no alpha keys, create them from color keys
+            // if (alphaKeys.Length == 0 && colorKeys.Length > 0)
+            // {
+            //     alphaKeys = new GradientAlphaKey[colorKeys.Length];
+            //     for (int i = 0; i < colorKeys.Length; i++)
+            //     {
+            //         alphaKeys[i] = new GradientAlphaKey(alpha, colorKeys[i].time);
+            //     }
+            // }
+
+            gradient.SetKeys(colorKeys, alphaKeys);
+            return gradient;
         }
 
         public static T GetOrAddComponent<T>(this Component uo) where T : Component
@@ -650,6 +893,11 @@ namespace JamKit
             return Color.Lerp(from, to, lerp);
         }
 
+        public static Color BlendBasedOnAlpha(this Color from, Color to)
+        {
+            return Color.Lerp(from, to, to.a).WithAlpha(from.a);
+        }
+        
         public static Vector3 WithXZ(this Vector3 vector, Vector3 value)
         {
             vector.x = value.x;
@@ -664,18 +912,7 @@ namespace JamKit
             return vector;
         }
 
-        public static Vector3 WithX(this Vector3 vector, float value)
-        {
-            vector.x = value;
-            return vector;
-        }
 
-        public static Vector3 WithY(this Vector3 vector, float value)
-        {
-            vector.y = value;
-            return vector;
-        }
-        
         public static Vector2 WithX(this Vector2 vector, float value)
         {
             vector.x = value;
@@ -688,17 +925,17 @@ namespace JamKit
             return vector;
         }
 
-        public static Vector3 WithZ(this Vector3 vector, float value)
-        {
-            vector.z = value;
-            return vector;
-        }
+
 
 
         public static Ray GetCenterRay(this Camera camera)
         {
             return camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         }
+        // public static Ray GetViewportRay(this Camera camera, Vector3 viewport)
+        // {
+        //     return camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        // }
 
         
         public static JointDrive WithPositionSpring(this JointDrive drive, float spring)
@@ -750,7 +987,7 @@ namespace JamKit
             return particleSystem;
         }
 
-        public static T Instantate<T>(this T prefab) where T : Object
+        public static T Instantiate<T>(this T prefab) where T : Object
         {
             return Object.Instantiate(prefab);
         }
@@ -766,7 +1003,7 @@ namespace JamKit
             return Object.Instantiate(prefab, parent);
         }
 
-        public static T Instantate<T>(this T prefab, Transform parent, Vector3 position) where T : Object
+        public static T Instantate<T>(this T prefab, Vector3 position, Transform parent) where T : Object
         {
             return Object.Instantiate(prefab, position, Quaternion.identity, parent);
         }
@@ -966,15 +1203,29 @@ namespace JamKit
             return currentTime - timeStamp;
         }
         
+        public  static void CrossFadeAlpha( this CanvasGroup canvasGroup, float from, float to, float duration)
+        {
+            AsyncHelper.LerpRoutine(duration, (lerp) =>
+            {
+                canvasGroup.alpha = Mathf.Lerp(from, to, lerp);
+            });
+        }
+        
         public static string GetFullHierachyPathIncludingSceneName(this Component component)
         {
             return component.gameObject.scene.name+ "/"+ component.transform.GetHierarchyPath() + "/" + component.GetType().Name;
         }
 
-        public static bool IsOutOfFrame(this Camera camera, Vector3 point, float marginInViewSpace = 0)
+        public static bool IsOutOfFrame(this Camera camera, Vector3 point, float outerMarginInViewSpace = 0)
         {
-            return IsVisible(camera, point, false, 0, marginInViewSpace) == false;
+            return IsVisible(camera, point, false, 0, outerMarginInViewSpace) == false;
         }
+        
+        public static bool IsInFrame(this Camera camera, Vector3 point, float outerMarginInViewSpace = 0)
+        {
+            return IsVisible(camera, point, false, 0, outerMarginInViewSpace) == true;
+        }
+
 
         public static bool IsVisible(this Camera camera, Vector3 point, float marginInViewSpace = 0)
         {
@@ -1001,7 +1252,12 @@ namespace JamKit
 
             return true;
         }
+        public static void MoveTowards(this Transform transform, Vector3 position, float maxDistanceDelta)
+        {
 
+            transform.position = Vector3.MoveTowards(transform.position, position, maxDistanceDelta);
+
+        }
 
         public static void SetEnabledIfNot(this MonoBehaviour obj, bool enabled)
         {
@@ -1084,7 +1340,7 @@ namespace JamKit
             );
         }
         
-        public static Vector3 Randomize(this Vector3 vector, float x, float y, float z)
+        public static Vector3 RandomizePosition(this Vector3 vector, float x, float y, float z)
         {
             return new Vector3(
                 vector.x + Random.Range(-x, x),
@@ -1093,7 +1349,7 @@ namespace JamKit
             );
         }
         
-        public static Vector3 Randomize(this Vector3 vector, Vector3 range)
+        public static Vector3 RandomizePosition(this Vector3 vector, Vector3 range)
         {
             return new Vector3(
                 vector.x + Random.Range(-range.x, range.x),
@@ -1524,6 +1780,17 @@ namespace JamKit
             return list[list.Count -1];
         }
 
+        public static T SecondLast<T>(this IList<T> list)
+        {
+            if (list == null || list.Count < 2)
+            {
+                return default;
+            }
+
+            return list[list.Count -2];
+        }
+
+        
         public static int GetRandomIndex<T>(this IList<T> list)
         {
             if (list == null || list.Count == 0)
@@ -1664,18 +1931,6 @@ namespace JamKit
             return formatted;
         }
 
-        public static IList<T> Shuffle<T>(this IList<T> list)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int j = Random.Range(0, i + 1);
-                // Swap elements
-                (list[i], list[j]) = (list[j], list[i]);
-            }
-
-            return list;
-        }
-
         public static int CountRegisteredListeners(this Action list)
         {
             if (list == null)
@@ -1700,24 +1955,7 @@ namespace JamKit
             return Mathf.Abs(value);
         }
         
-        public static void TriggerPunches(this GameObject go)
-        {
-            DoPunch[] doPunchScale = go.GetComponentsInChildren<DoPunch>();
-            foreach (var punch in doPunchScale)
-            {
-                punch.Trigger();
-            }
-        }
         
-        public static void TriggerShakeInChildren(this GameObject go)
-        {
-            DoShake[] doPunchScale = go.GetComponentsInChildren<DoShake>();
-            foreach (var punch in doPunchScale)
-            {
-                punch.Trigger();
-            }
-        }
-
         public static void SortBySiblingIndex<T>(this List<T> list) where T : Component
         {
             list.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
@@ -1771,6 +2009,15 @@ namespace JamKit
         public static int Floor(this float value)
         {
             return (int)Mathf.Floor(value);
+        }
+        public static float Remap(this float x, float inMin, float inMax, float outMin, float outMax)
+        {
+            return Mathf.Lerp(outMin, outMax, Mathf.InverseLerp(inMin, inMax, x));
+        }
+
+        public static float RemapUnclamped(this float x, float inMin, float inMax, float outMin, float outMax)
+        {
+            return outMin + (x - inMin) * (outMax - outMin) / (inMax - inMin);
         }
 
         public static float RoundToNearest(this float value, float increment)
@@ -1839,7 +2086,7 @@ namespace JamKit
         }
         
           
-        public static bool HasParent<T>(this Component component) where T : Component
+        public static bool HasComponentInParent<T>(this Component component) where T : Component
         {
             return component.gameObject.GetComponentInParent<T>() != null;
         }
@@ -1915,7 +2162,7 @@ namespace JamKit
                 }
             }
 
-            return result;
+            return result.Replace("  "," ");
         }
 
         public static string ToTitleCase(this string text, string remove)
@@ -2187,20 +2434,23 @@ namespace JamKit
             }
         }
         
-        public static void SetX(this Transform transform, float value)
-        {
-            transform.position = transform.position.WithX(value);
-        }
-        
-        public static void SetY(this Transform transform, float value)
-        {
-            transform.position = transform.position.WithY(value);
-        }
-        
-        public static void SetZ(this Transform transform, float value)
-        {
-            transform.position = transform.position.WithZ(value);
-        }
+        // public static void SetX(this Transform transform, float value)
+        // {
+        //     transform.position = transform.position.WithX(value);
+        // }
+        //
+        // public static void SetY(this Transform transform, float value)
+        // {
+        //     transform.position = transform.position.WithY(value);
+        // }
+        //
+        // public static void SetZ(this Transform transform, float value)
+        // {
+        //     transform.position = transform.position.WithZ(value);
+        // }
+
+
+
         
         public static Transform FlipX(this Transform transform, bool flip)
         {
@@ -2243,7 +2493,11 @@ namespace JamKit
                 yield return null;
             }
 
-            transform.localScale = finalScale; // Ensure final scale is set
+            if (transform)
+            {
+                transform.localScale = finalScale; // Ensure final scale is set
+            }
+
             onComplete?.Invoke();
         }
 
@@ -2314,7 +2568,29 @@ namespace JamKit
             onComplete?.Invoke();
         }
 
+        public static Coroutine TweenRotation(this Transform transform, Vector3 destination, float duration, Action onComplete = null)
+        {
+            return AsyncHelper.StartCoroutine(IETweenRotation(transform, destination, duration, onComplete));
+        }
 
+        private static IEnumerator IETweenRotation(Transform transform, Vector3 destination, float duration, Action onComplete)
+        {
+            Vector3 startRotation = transform.localRotation.eulerAngles;
+            Vector3 destinationEuler = destination;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsedTime / duration);
+                Vector3 lerp = Vector3.Lerp(startRotation, destinationEuler, t);
+                transform.localRotation = Quaternion.Euler( lerp);
+                yield return null;
+            }
+
+            transform.localRotation = Quaternion.Euler(destination); // Ensure final position is set
+            onComplete?.Invoke();
+        }
         public static Transform GetPreviousSibling(this Transform transform)
         {
             if (transform.parent == null)

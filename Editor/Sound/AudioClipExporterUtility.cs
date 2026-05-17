@@ -1,4 +1,3 @@
-/*
 
 using System;
 using System.Collections.Generic;
@@ -128,7 +127,7 @@ namespace JamKit
             {
                 Undo.DestroyObjectImmediate(playableDirector.gameObject);
                 RuntimeEditorHelper.EditorApplicationDelayCall(() =>
-                    Selection.activeObject = CompaitibilityHelper.FindObjectOfType<Transform>());
+                    Selection.activeObject = GameObject.FindAnyObjectByType<Transform>());
             }
 
             // Select new/overwritten clip(s) in Project window
@@ -228,4 +227,3 @@ namespace JamKit
     }
 }
 
-*/

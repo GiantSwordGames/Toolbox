@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+
 using UnityEngine;
 
 namespace JamKit
@@ -18,7 +18,6 @@ namespace JamKit
             endTime = Mathf.Min( endTime, originalClip.length );
         }
 
-        [Button]
         [ContextMenu("Trim")]
         void Trim()
         {

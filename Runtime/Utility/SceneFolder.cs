@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using NaughtyAttributes;
+
 using UnityEngine;
 
 namespace JamKit
@@ -35,7 +35,7 @@ namespace JamKit
 
             }
 
-            SceneFolder[] findObjectsOfType = CompaitibilityHelper.FindObjectsByType<SceneFolder>();
+            SceneFolder[] findObjectsOfType = CompatibilityHelper.FindObjectsByType<SceneFolder>();
             foreach (SceneFolder sceneFolder in findObjectsOfType)
             {
                 if (sceneFolder._folderAsset == folderAsset)
@@ -47,21 +47,18 @@ namespace JamKit
             return null;
         }
 
-        [Button]
         public void MoveToTopOfChildren()
         {
             RuntimeEditorHelper.RecordObjectUndo(transform);
             transform.SetSiblingIndex(0);
         }
 
-        [Button]
         public void ZeroTransform()
         {
             RuntimeEditorHelper.ZeroPositionWithoutMovingChildren(transform);
         }
 
 
-        [Button]
         public void CreateEmptyChild()
         {
             GameObject o = new GameObject("Child");
@@ -108,7 +105,6 @@ namespace JamKit
         }
 
 
-        [Button]
         private void FindItemsToEncapsulate()
         {
             // find all overlapping root objects in the scene by checking it transforms lie within the bounds
@@ -136,7 +132,6 @@ namespace JamKit
             return new Bounds(transform.position+ Vector3.up*(0.5f*_dimensions.y)+_offset , _dimensions );
         }
 
-        [Button]
         private void EncapsulateItems()
         {
             if (_objectsToEncapsulate == null || _objectsToEncapsulate.Count == 0)
@@ -152,7 +147,6 @@ namespace JamKit
             }
         }
         
-        [Button]
         private void EncapsulateAnyUnparentedItems()
         {
             GameObject[] rootObjects = gameObject.scene.GetRootGameObjects();
@@ -175,7 +169,6 @@ namespace JamKit
         }
 
 
-        [Button]
         private void EjectChildren()
         {
             List<Transform> directChildren = transform.GetDirectChildren();

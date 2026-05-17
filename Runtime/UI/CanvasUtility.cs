@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace RichardPieterse
+namespace JamKit
 {
     public static class CanvasUtility 
     {

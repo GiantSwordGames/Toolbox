@@ -11,7 +11,6 @@ namespace JamKit
         private static void Initialize()
         {
             EditorApplication.projectWindowItemOnGUI += OnEditorUpdate;
-
         }
 
         private static void OnEditorUpdate(string guid, Rect selectionRect)
@@ -20,82 +19,119 @@ namespace JamKit
 
             if (e != null)
             {
-                    if (e.type == EventType.KeyDown)
+                if (e.type == EventType.KeyDown)
+                {
+                    if (e.keyCode == KeyCode.V)
                     {
-                        if (e.keyCode == KeyCode.V)
+                        if (ClipboardToScript.CreateScriptFromClipboard())
                         {
-
-                            if (ClipboardToScript.CreateScriptFromClipboard())
-                            {
-                                e.Use();
-                            }
+                            e.Use();
                         }
                     }
+                }
             }
         }
-        
-        // [MenuItem("Assets/Create C# Script from Clipboard", priority = 0)]
+
         public static bool CreateScriptFromClipboard()
         {
-            // Get the text from the clipboard
             string clipboardText = GUIUtility.systemCopyBuffer;
 
-            // Validate the clipboard text
-            if (string.IsNullOrWhiteSpace(clipboardText) || !clipboardText.Contains("class "))
+            if (string.IsNullOrWhiteSpace(clipboardText))
+                return false;
+
+            // Try shader first, then C# class
+            if (IsShader(clipboardText))
+                return CreateShaderFromClipboard(clipboardText);
+
+            if (clipboardText.Contains("class "))
+                return CreateCSharpFromClipboard(clipboardText);
+
+            return false;
+        }
+
+        // ── Shader ────────────────────────────────────────────────────────────
+
+        private static bool IsShader(string text)
+        {
+            // A Unity shader file always opens with  Shader "Some/Name" {
+            return Regex.IsMatch(text, @"^\s*Shader\s+""", RegexOptions.Multiline);
+        }
+
+        private static bool CreateShaderFromClipboard(string clipboardText)
+        {
+            string shaderName = ExtractShaderName(clipboardText);
+            if (string.IsNullOrEmpty(shaderName))
             {
-                // Debug.LogWarning("Clipboard does not contain valid C# class text.");
+                Debug.LogWarning("ClipboardToScript: Could not determine shader name.");
                 return false;
             }
 
-            // Extract the class name from the clipboard text
+            string folderPath = GetSelectedFolderPath();
+            if (string.IsNullOrEmpty(folderPath))
+                return false;
+
+            // Use only the last segment of "Category/ShaderName" as the filename
+            string fileName = shaderName.Contains("/")
+                ? shaderName.Substring(shaderName.LastIndexOf('/') + 1)
+                : shaderName;
+
+            // Sanitise – strip characters that are illegal in filenames
+            fileName = Regex.Replace(fileName, @"[\\/:*?""<>|]", "_");
+
+            string scriptPath = Path.Combine(folderPath, $"{fileName}.shader");
+            File.WriteAllText(scriptPath, clipboardText);
+            AssetDatabase.Refresh();
+
+            Debug.Log($"Created new shader '{fileName}.shader' from clipboard in folder: {folderPath}");
+            return true;
+        }
+
+        /// <summary>
+        /// Pulls the name from:  Shader "Category/Name"  or  Shader 'Name'
+        /// </summary>
+        private static string ExtractShaderName(string text)
+        {
+            Match m = Regex.Match(text, @"Shader\s+[""']([^""']+)[""']");
+            return m.Success ? m.Groups[1].Value : null;
+        }
+
+        // ── C# class ──────────────────────────────────────────────────────────
+
+        private static bool CreateCSharpFromClipboard(string clipboardText)
+        {
             string className = ExtractClassName(clipboardText);
             if (string.IsNullOrEmpty(className))
             {
-                // Debug.LogWarning("Could not determine the class name from the clipboard content.");
+                Debug.LogWarning("ClipboardToScript: Could not determine class name.");
                 return false;
             }
 
-            // Get the selected folder path in the Project view
             string folderPath = GetSelectedFolderPath();
             if (string.IsNullOrEmpty(folderPath))
-            {
-                // Debug.LogWarning("Please right-click on a folder to use this action.");
                 return false;
-            }
 
-            // Construct the full path for the new script
             string scriptPath = Path.Combine(folderPath, $"{className}.cs");
-
-            // Write the clipboard text to the new file
             File.WriteAllText(scriptPath, clipboardText);
-
-            // Refresh the asset database to make the new script appear in Unity
             AssetDatabase.Refresh();
 
             Debug.Log($"Created new script '{className}.cs' from clipboard in folder: {folderPath}");
             return true;
-
         }
 
-        // Extracts the class name from the clipboard content
         private static string ExtractClassName(string clipboardText)
         {
-            // Use regex to find the class name (assuming a typical "class ClassName" structure)
             Match match = Regex.Match(clipboardText, @"\bclass\s+(\w+)");
             return match.Success ? match.Groups[1].Value : null;
         }
 
-        // Gets the path of the selected folder in the Project view
+        // ── Shared helpers ────────────────────────────────────────────────────
+
         private static string GetSelectedFolderPath()
         {
-            // Get the selected object in the Project view
             Object selected = Selection.activeObject;
             if (selected == null) return null;
 
-            // Get the path to the selected object
             string path = AssetDatabase.GetAssetPath(selected);
-
-            // Check if the selected object is a folder
             return Directory.Exists(path) ? path : Path.GetDirectoryName(path);
         }
     }

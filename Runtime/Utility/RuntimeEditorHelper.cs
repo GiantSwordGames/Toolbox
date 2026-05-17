@@ -756,6 +756,30 @@ namespace JamKit
                         }
                         
                 }
+                public static void ScaleToZeroAndDestroy(this GameObject gameObject, float duration)
+                {
+                        if (gameObject == null)
+                                return;
+                        
+                        gameObject.transform.TweenScale(Vector3.zero, duration);
+
+                        if (Application.isPlaying)
+                        {
+                                GameObject.Destroy(gameObject, duration);
+                        }
+                        
+                }
+                public static void AutoDestroy(this GameObject gameObject, float delay)
+                {
+                        if (gameObject == null)
+                                return;
+
+                        if (Application.isPlaying)
+                        {
+                                GameObject.Destroy(gameObject, delay);
+                        }
+                        
+                }
                 public static void SmartDestroy(this Component component)
                 {
                         if (component == null)

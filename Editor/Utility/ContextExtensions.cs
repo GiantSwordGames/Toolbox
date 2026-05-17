@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Framework;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 namespace JamKit
@@ -87,6 +89,21 @@ namespace JamKit
         }
          public static class TrimTextMeshProRect
     {
+     
+        
+        [MenuItem("CONTEXT/AudioSource/Play")]
+        private static void PlayAudioSource (MenuCommand command)
+        {
+            command.context.Cast<AudioSource>().Play();
+        }
+        [MenuItem("CONTEXT/AudioSource/Stop")]
+        private static void StopAudioSource (MenuCommand command)
+        {
+            command.context.Cast<AudioSource>().Stop();
+        }
+
+     
+
         [MenuItem("CONTEXT/TextMeshProUGUI/Trim Rect To Text Content")]
         private static void TrimRect(MenuCommand command)
         {
@@ -277,7 +294,7 @@ namespace JamKit
             }
         }
         
-        [MenuItem("CONTEXT/RectTransform/Encapsulate First Child")]
+        [MenuItem("CONTEXT/RectTransform/Encapsulate Size of First Child")]
         private static void EncapsulateFirstChild(MenuCommand command)
         {
             RectTransform parent = (RectTransform)command.context;
@@ -532,36 +549,57 @@ namespace JamKit
         {
             Renderer meshRenderer = command.context as Renderer;
 
-            if (meshRenderer != null && meshRenderer.sharedMaterial != null)
+            if (meshRenderer != null)
             {
                 // Duplicate the material
                 Material originalMaterial = meshRenderer.sharedMaterial;
-                Material duplicatedMaterial = new Material(originalMaterial);
+                Material newMaterial;
+
+                if (originalMaterial)
+                {
+                    newMaterial = new Material(originalMaterial);
+                }
+                else
+                {
+                    newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                }
 
                 // Get the path of the original material
-                string originalPath = AssetDatabase.GetAssetPath(originalMaterial);
-                string directory = Path.GetDirectoryName(originalPath);
+                string directory = "";
+
+                if (originalMaterial)
+                {
+                    string originalPath = AssetDatabase.GetAssetPath(originalMaterial);
+                    directory = Path.GetDirectoryName(originalPath);
+                }
 
                 string name = "M_" + meshRenderer.name + ".mat";
-                if (directory.Contains("com.unity") || directory == "Resources")
+                if (directory.Contains("com.unity") || directory == "Resources" || originalMaterial == null)
                 {
                 
                     directory =     MenuPaths.DEFAULT_PROJECT_PATH +"Materials";
                 }
+                
+                
                 
                 // create each directory if it does not exist 
                 RuntimeEditorHelper.CreateFoldersIfNeeded(directory);
 
 
                 string duplicatedPath = Path.Combine(directory, name);
+                
+                Debug.Log(duplicatedPath);
+                duplicatedPath = AssetDatabase.GenerateUniqueAssetPath(duplicatedPath);
+                Debug.Log(duplicatedPath);
+
 
                 // Save the duplicated material as an asset in the same directory as the original material
-                AssetDatabase.CreateAsset(duplicatedMaterial, duplicatedPath);
+                AssetDatabase.CreateAsset(newMaterial, duplicatedPath);
                 AssetDatabase.SaveAssets();
 
                 Undo.RecordObject(meshRenderer, "Duplicate");
                 // Assign the duplicated material to the MeshRenderer
-                meshRenderer.sharedMaterial = duplicatedMaterial;
+                meshRenderer.sharedMaterial = newMaterial;
 
                 // Set the duplicated material as the active object in the selection
                 // Selection.activeObject = duplicatedMaterial;
@@ -616,6 +654,35 @@ namespace JamKit
             }
         }
 
+        [MenuItem("GameObject/Hierarchy/Make First Sibling", false, -9)]
+        private static void MakeFirstSibling()
+        {
+            foreach (GameObject gameObject in Selection.gameObjects)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(gameObject.transform);
+                gameObject.transform.SetAsFirstSibling();
+            }
+        }
+        
+        [MenuItem("GameObject/Hierarchy/Make Last Sibling", false, -9)]
+        private static void MakeLastSibling()
+        {
+            foreach (GameObject gameObject in Selection.gameObjects)
+            {
+                RuntimeEditorHelper.RecordObjectUndo(gameObject.transform);
+                gameObject.transform.SetAsLastSibling();
+            }
+        }
+        
+        [MenuItem("GameObject/Hierarchy/Move To Root", false, -9)]
+        private static void MoveToRoot()
+        {
+            foreach (GameObject gameObject in Selection.gameObjects)
+            {
+                RuntimeEditorHelper.RecordSetTransformParent(gameObject.transform, null);
+            }
+        }
+        
         [MenuItem("GameObject/Rename Instance to Prefab Name", false, -9)]
         private static void RenameInstanceToPrefabName()
         {
@@ -691,30 +758,30 @@ namespace JamKit
             }
         }
 
-        [MenuItem("CONTEXT/Rigidbody/Rig Selection With ConfigurableJoints")]
-        public static void RigSelection(MenuCommand command)
-        {
-            Rigidbody rigidbody = command.context as Rigidbody;
-            // foreach (var selection in Selection.gameObjects)
-            {
-                Rigidbody parent = rigidbody.transform.parent.gameObject.GetOrAddComponent<Rigidbody>();
-                ConfigurableJoint joint = rigidbody.gameObject.GetOrAddComponent<ConfigurableJoint>();
-                joint.connectedBody = parent;
-                joint.xMotion = ConfigurableJointMotion.Locked;
-                joint.yMotion = ConfigurableJointMotion.Locked;
-                joint.zMotion = ConfigurableJointMotion.Locked;
-                
-                joint.angularXMotion = ConfigurableJointMotion.Limited;
-                joint.angularYMotion = ConfigurableJointMotion.Limited;
-                joint.angularZMotion = ConfigurableJointMotion.Limited;
-                
-                joint.SetAngularLimitX(45);
-                joint.SetAngularLimitY(45);
-                joint.SetAngularLimitZ(45);
-                
-                
-            }
-        }
+        // [MenuItem("CONTEXT/Rigidbody/Rig Selection With ConfigurableJoints")]
+        // public static void RigSelection(MenuCommand command)
+        // {
+        //     Rigidbody rigidbody = command.context as Rigidbody;
+        //     // foreach (var selection in Selection.gameObjects)
+        //     {
+        //         Rigidbody parent = rigidbody.transform.parent.gameObject.GetOrAddComponent<Rigidbody>();
+        //         ConfigurableJoint joint = rigidbody.gameObject.GetOrAddComponent<ConfigurableJoint>();
+        //         joint.connectedBody = parent;
+        //         joint.xMotion = ConfigurableJointMotion.Locked;
+        //         joint.yMotion = ConfigurableJointMotion.Locked;
+        //         joint.zMotion = ConfigurableJointMotion.Locked;
+        //         
+        //         joint.angularXMotion = ConfigurableJointMotion.Limited;
+        //         joint.angularYMotion = ConfigurableJointMotion.Limited;
+        //         joint.angularZMotion = ConfigurableJointMotion.Limited;
+        //         
+        //         joint.SetAngularLimitX(45);
+        //         joint.SetAngularLimitY(45);
+        //         joint.SetAngularLimitZ(45);
+        //         
+        //         
+        //     }
+        // }
         
         // [MenuItem("CONTEXT/Rigidbody/Rig Selection With ConfigurableJoints")]
         // public static void AddCapsuleCol(MenuCommand command)
@@ -780,11 +847,31 @@ namespace JamKit
                 });
             }
             
-           
-            
+        }
+
+
+        [MenuItem("CONTEXT/Canvas/Set Up As 4k")]
+        public static void SetTo4K(MenuCommand command)
+        {
+            Canvas canvas = (Canvas)command.context;
+
+            canvas.GetComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(3840, 2160);
+            canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
         }
 
         
+        [MenuItem("CONTEXT/Canvas/Set Up As 1080")]
+        public static void SetTo1080(MenuCommand command)
+        {
+            Canvas canvas = (Canvas)command.context;
+
+            canvas.GetComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvas.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1920, 1080);
+            canvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
+        }
+
+
     }
     
 }

@@ -5,9 +5,9 @@ namespace JamKit
 {
     public class CreateParticleMaterialContext
     {
-        private const string MaterialFolderPath = "Assets/Project/Materials";
+        private const string MaterialFolderPath = "Assets/Materials";
 
-        [MenuItem("CONTEXT/ParticleSystem/Duplicate Material")]
+        [MenuItem("CONTEXT/ParticleSystem/Assign Duplicate Material")]
         private static void CreateURPMaterial(MenuCommand command)
         {
             // Ensure the folder exists
@@ -32,8 +32,17 @@ namespace JamKit
 
             // Create a new URP-compatible material
 
-            Material material = new Material(renderer.sharedMaterial);
-            string path = AssetDatabase.GenerateUniqueAssetPath($"{MaterialFolderPath}/Material_{renderer.name.ToUpperCamelCase()}.mat");
+            Material material;
+            if (renderer.sharedMaterial)
+            {
+                material = new Material(renderer.sharedMaterial);
+            }
+            else
+            {
+                material = new Material(Shader.Find("Universal Render Pipeline/Particles/Unlit"));
+            }
+
+            string path = AssetDatabase.GenerateUniqueAssetPath($"{MaterialFolderPath}/{renderer.name.ToUpperCamelCase()}.mat");
 
             AssetDatabase.CreateAsset(material, path);
             AssetDatabase.SaveAssets();
@@ -43,8 +52,9 @@ namespace JamKit
             renderer.sharedMaterial = material;
 
             // Select the new material in the Project window
-            EditorUtility.FocusProjectWindow();
             Selection.activeObject = material;
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = particleSystem;
         }
 
         private static void EnsureFolderExists(string path)

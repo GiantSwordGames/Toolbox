@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Framework;
 using JamKit;
-using NaughtyAttributes;
+
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class MoveTransform : MonoBehaviour
 {
 	[SerializeField] private TimeScale _timeScale = TimeScale.Scaled;
-	[FormerlySerializedAs("_offset")] [SerializeField]
-	private Vector3 _positionOffset = Vector3.right * 10;
-
+	[SerializeField] private Vector3 _positionOffset = Vector3.right * 10;
 	[SerializeField] private Vector3 _rotationOffset = Vector3.zero;
 
-	[DisableSerializedField] [SerializeField]
-	private float _lerp;
-	[FormerlySerializedAs("_previousLerp")] [DisableSerializedField] [SerializeField]
-	private float _previousEvaluation;
+	 [SerializeField] private float _lerp;
+	 [SerializeField] private float _previousEvaluation;
 
 	[SerializeField] private float _duration = 1;
 	bool _isOn;
@@ -26,7 +23,8 @@ public class MoveTransform : MonoBehaviour
 	private Coroutine _lerpRoutine;
 
 
-	[SerializeField] EasingFunction.Ease _easing = EasingFunction.Ease.Linear;
+	[SerializeField]
+	private EasingType _easing = EasingType.Linear;
 	
 	public float lerp
 	{
@@ -34,7 +32,26 @@ public class MoveTransform : MonoBehaviour
 		set => SetLerp(value);
 	}
 
-	public bool isOn => _isOn;
+	public bool isOn
+	{
+		get { return _isOn; }
+		set
+		{
+			if (_isOn != value)
+			{
+				if (_isOn)
+				{
+					TweenOff();
+				}
+				else
+				{
+					TweenOn();
+				}
+				
+				_isOn = value;
+			}
+		}
+	}
 
 	private void OnValidate()
 	{
@@ -56,7 +73,9 @@ public class MoveTransform : MonoBehaviour
 		transform.localPosition -= _positionOffset * _previousEvaluation;
 		transform.localRotation *= Quaternion.Inverse(Quaternion.Euler(_rotationOffset * _previousEvaluation));
 		_lerp = newValue;
-		float evaluatedLerp = EasingFunction.GetEasingFunction(_easing)(0, 1, _lerp);
+
+		float evaluatedLerp = Easing.Ease(_lerp, _easing);
+
 		Vector3 newOffset = _positionOffset * evaluatedLerp;
 		transform.localPosition += newOffset;
 		transform.localRotation *= (Quaternion.Euler(_rotationOffset * evaluatedLerp));
@@ -101,7 +120,7 @@ public class MoveTransform : MonoBehaviour
 		_lerpRoutine = AsyncHelper.LerpRoutine(_duration, (l) => SetLerp(1 - l), null, _timeScale);
 	}
 
-	[Button]
+	
 	public void Trigger()
 	{
 		

@@ -10,7 +10,7 @@ namespace JamKit
         public static int textureHeight = 1024;
         
 
-        [MenuItem( MenuPaths.QUICK_CREATE + "Create Texture", false, MenuPaths.QUICK_CREATE_PRIORITY)]
+        [MenuItem( "Assets/Create/2D/" + "Create Texture", false, MenuPaths.QUICK_CREATE_PRIORITY)]
         public static void CreateWhiteTexture(MenuCommand menuCommand)
         {
             // Get the path of the selected folder in the Project window
@@ -33,7 +33,7 @@ namespace JamKit
             byte[] bytes = whiteTexture.EncodeToPNG();
 
             // Create a unique asset path in the selected folder
-            string path = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/NewWhiteTexture.png");
+            string path = AssetDatabase.GenerateUniqueAssetPath(folderPath + "/New Texture.png");
 
             // Write the PNG file
             System.IO.File.WriteAllBytes(path, bytes);

@@ -236,7 +236,7 @@ namespace JamKit
             {
                 EditorGUI.BeginChangeCheck();
                 // var newValue =  EditorGUILayout.Toggle(boolPref.value, label);
-                var newValue =  GUILayout.Toggle(boolPref.value,  label.ToTitleCase());
+                var newValue =  EditorGUILayout.Toggle(label.ToTitleCase(), boolPref.value  );
                 if (EditorGUI.EndChangeCheck())
                 {
                     boolPref.value = newValue;

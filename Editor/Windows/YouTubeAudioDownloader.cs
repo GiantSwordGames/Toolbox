@@ -12,7 +12,7 @@ namespace JamKit
         private bool useEndTime = false;
         private string startTime = "00:00:00";
         private string endTime = "00:01:00";
-        private string outputFolder = "Assets/Project/Audio/Clips";
+        private string outputFolder = "Assets/Sound/Clips";
 
         private const string ytDlpPath = "/opt/homebrew/bin/yt-dlp"; // Update if needed
         private const string ffmpegPath = "/opt/homebrew/bin/ffmpeg"; // Update if needed
